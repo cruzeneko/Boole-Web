@@ -1,0 +1,154 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+
+        <title>Boole Web</title>
+        <meta name="description" content="Boole Web">
+        <meta name="author" content="Weblab Deusto">
+        <link rel="stylesheet" href="css/styles.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="js/data-logic.js"></script>
+        <script src="js/tab-logic.js"></script>
+        <script src="js/solucion.js"></script>
+	<link rel="stylesheet" href="css/quill.snow.css">
+	<script src="js/quill.js"></script> 
+	<script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });</script>
+	<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/javascript" async src="path-to-mathjax/MathJax.js?config=TeX-AMS_CHTML"></script>
+        <link rel="stylesheet" type="text/css" href="slick/slick.css"/>
+        <link rel="stylesheet" type="text/css" href="slick/slick-theme.css"/>
+        <script src='./karnaughmap.js'></script>
+        <script src='./qmc.js'></script>
+
+</head>
+
+<body>
+<ul class="tab">
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Intro')" id="inicio">Inicio</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Statement')" id="enunciado">Enunciado y Configuración</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Table')" id="tabla">Tabla de Verdad</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'VK')" id="vk">Diagrama V-K</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Circuit')" id="circuito">Circuito</a></li>
+</ul>
+
+<div id="Intro" class="tabcontent">
+	<h3>Inicio</h3>
+	<p>Esta es la pestaña Inicio.</p>
+	<p>En esta pestaña se puede mostrar una pequeña introducción a Boole.</p>
+        <button id="btnNext" type="button" onclick="gotoTab('enunciado')">Siguiente</button>
+</div>
+
+<div id="Statement" class="tabcontent">
+	<h3>Enunciado</h3>
+	<div id="editor">
+		<p>Puedes escribir aquí el enunciado...</p>
+  		<p><br></p>
+	</div>
+	<script>
+  		var quill = new Quill('#editor', {theme: 'snow'});
+	</script>
+	<div class="wrap">
+		<div class="fleft">
+	    		<p>  Entradas</p>
+			<div class="input_fields_wrap" id="add_input_wrap">
+				<button class="add_field_button" id="add_input">Añadir entrada</button>
+				<div><input type="text" name="mytext[]" idx="0" id="input0"></div>
+			</div>
+		</div>
+		<div class="fright">
+			<p>  Salidas</p>
+                        <div class="input_fields_wrap" id="add_output_wrap">
+                                <button class="add_field_button" id="add_output">Añadir salida</button>
+                                <div><input type="text" name="mytext[]" idx="0" id="output0"></div>
+                        </div>
+		</div>
+	
+    
+	</div>
+	<button id="btnNext" type="button" onclick="gotoTab('tabla')">Siguiente</button>
+</div>
+
+<div id="Table" class="tabcontent">
+	<h3>Tabla de Verdad</h3>
+	
+	<div class="panel-container">
+
+	    <div id="panel-enunciado-capturado" class="panel-left">
+		left panel
+	    </div>
+
+	    <div class="splitter">
+	    </div>
+            
+            <div class="panel-right">
+	        <div id="truthtable-panel">
+	        </div>
+                <div>
+	            <button onclick="tableFillAllZeroes()">Rellenar con 0</button>
+                    <button onclick="tableFillAllOnes()">Rellenar con 1</button>
+                    <button onclick="tableFillAllIndeterminations()">Rellenar con X</button>
+                    <button onclick="tableClearAll()">Limpiar tabla</button>
+                </div>
+            </div>
+	</div>
+
+
+	<pre>
+
+        <script type="text/javascript" src="./slick/slick.min.js"></script>
+	<script src="js/jquery-resizable.js"></script>
+	<script>
+	    $(".panel-left").resizable({
+		handleSelector: ".splitter",
+		resizeHeight: false
+	    });
+	    $(".panel-top").resizable({
+		handleSelector: ".splitter-horizontal",
+		resizeWidth: false
+	    });
+	</script>
+	</pre>
+
+	<div>
+	    $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+	</div>
+
+        <button id="btnNext" type="button" onclick="gotoTab('VK')">Siguiente</button>
+</div>
+
+<div id="VK" class="tabcontent">
+        <h3>Diagrama V-K</h3>
+        <p>Esta es la pestaña Diagrama V-K.</p>
+        <div class="panel-container">
+            <div id="captured-truthtable-panel" class="panel-left">
+	    </div>
+
+	    <div class="splitter"></div>
+            
+            <div id="panel-vks" class="panel-right">
+	        <div id="vkSlider" class="slider">
+                    <div><p>Arrastrar</p></div>
+                </div> 
+            </div>
+        </div>
+
+
+        <button id="btnNext" type="button" onclick="gotoTab('circuito')">Reiniciar</button>
+</div>
+
+<div id="Circuit" class="tabcontent">
+        <h3>Circuito</h3>
+        <p>Esta es la pestaña Circuito.</p>
+        <button id="btnNext" type="button" onclick="gotoTab('enunciado')">Reiniciar</button>
+	<button id="btnPrintAll" type="button" onclick="printAll()">Imprimir</button>
+</div>
+
+<script>
+	document.getElementById("inicio").click();
+</script>
+
+</body>
+</html>
+

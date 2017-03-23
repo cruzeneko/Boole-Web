@@ -1,0 +1,94 @@
+var gDeclaredInputCount = 1;
+var gDefinedInputCount = 0;
+var gDeclaredOutputCount = 1;
+var gDefinedOutputCount = 0;
+var gInputHashmap = {};
+var gOutputHashmap = {};
+var gDuplicatedInputs = false;
+var gDuplicatedOutputs = false;
+var gQmcHashmap = {};
+var gKarnaughHashmap = {};
+var currentTab = "Intro";
+var validationFunctions = {
+                                "Intro":     {"Intro":validIntroIntro,     "Statement":validIntroStatement,     "Table":validIntroTable,       "VK": validIntroVK,   "Circuit":validIntroCircuit},
+                                "Statement": {"Intro":validStatementIntro, "Statement":validStatementStatement, "Table":validStatementTable,   "VK": validTableVK,   "Circuit":validTableCircuit},
+                                "Table":     {"Intro":validTableIntro,     "Statement":validTableStatement,     "Table":validTableTable,       "VK": validTableVK,   "Circuit":validTableCircuit},
+                                "VK":        {"Intro":validVKIntro,        "Statement":validVKStatement,        "Table":validVKTable,          "VK": validVKVK,      "Circuit":validVKCircuit},
+                                "Circuit":   {"Intro":validCircuitIntro,   "Statement":validCircuitStatement,   "Table":validCircuitTable,     "VK": validCircuitVK, "Circuit":validCircuitCircuit}
+                            };
+var preOperationFunctions = {
+                                "Intro":     {"Intro":preopIntroIntro,     "Statement":preopIntroStatement,     "Table":preopIntroTable,       "VK": preopIntroVK,       "Circuit":preopIntroCircuit},
+                                "Statement": {"Intro":preopStatementIntro, "Statement":preopStatementStatement, "Table":preopStatementTable,   "VK": preopStatementVK,   "Circuit":preopStatementCircuit},
+                                "Table":     {"Intro":preopTableIntro,     "Statement":preopTableStatement,     "Table":preopTableTable,       "VK": preopTableVK,       "Circuit":preopTableCircuit},
+                                "VK":        {"Intro":preopVKIntro,        "Statement":preopVKStatement,        "Table":preopVKTable,          "VK": preopVKVK,          "Circuit":preopVKCircuit},
+                                "Circuit":   {"Intro":preopCircuitIntro,   "Statement":preopCircuitStatement,   "Table":preopCircuitTable,     "VK": preopCircuitVK,     "Circuit":preopCircuitCircuit}
+                            };
+var postOperationFunctions = {
+                                "Intro":     {"Intro":posopIntroIntro,     "Statement":posopIntroStatement,     "Table":posopIntroTable,       "VK": posopIntroVK,   "Circuit":posopIntroCircuit},
+                                "Statement": {"Intro":posopStatementIntro, "Statement":posopStatementStatement, "Table":posopStatementTable,   "VK": posopTableVK,   "Circuit":posopTableCircuit},
+                                "Table":     {"Intro":posopTableIntro,     "Statement":posopTableStatement,     "Table":posopTableTable,       "VK": posopTableVK,   "Circuit":posopTableCircuit},
+                                "VK":        {"Intro":posopVKIntro,        "Statement":posopVKStatement,        "Table":posopVKTable,          "VK": posopVKVK,      "Circuit":posopVKCircuit},
+                                "Circuit":   {"Intro":posopCircuitIntro,   "Statement":posopCircuitStatement,   "Table":posopCircuitTable,     "VK": posopCircuitVK, "Circuit":posopCircuitCircuit}
+                            };
+
+function validateIntroIntro(){}
+
+function validateTabSwitch(TabName) {
+    var allowed;
+    allowed =  validationFunctions[currentTab][TabName]();
+    console.log("Validating: " + currentTab + " -> " + TabName + ": " + (allowed? "allowed":"not allowed"));
+    return allowed;
+}
+
+function preOperateOnTabSwitch(TabName) {
+    console.log("Pre-operating: " + currentTab + " -> " + TabName);
+    preOperationFunctions[currentTab][TabName]();
+}
+
+function postOperateOnTabSwitch(TabName) {
+    console.log("Post-operating: " + currentTab + " -> " + TabName);
+    postOperationFunctions[currentTab][TabName]();
+    currentTab = TabName;
+}
+
+
+function openTab(evt, TabName) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    //alert("Declared: " + gDeclaredOutputCount+ "Defined outputs: " + gDefinedOutputCount);
+    if(validateTabSwitch(TabName)){
+
+        //Pre-operate on the tab switch
+        preOperateOnTabSwitch(TabName);
+
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+    
+        // Show the current tab, and add an "active" class to the link that opened the tab
+        document.getElementById(TabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    
+        //Post-operate on the tab switch
+        postOperateOnTabSwitch(TabName);
+    }
+}
+
+function gotoTab(TabId) {
+    document.getElementById(TabId).click()
+}
+    
+
+$(document).ready(function() {
+	setupEventListeners();
+	
+});

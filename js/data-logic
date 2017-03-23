@@ -1,0 +1,57 @@
+function validateTabSwitchToTruthTable() {
+    if(gDefinedOutputCount < gDeclaredOutputCount && gDefinedInputCount < gDeclaredInputCount) {
+        alert("Error: Hay entradas y salidas no definidas!");
+        return false;
+    }
+    if(gDefinedInputCount < gDeclaredInputCount) {
+        alert("Error: Hay entradas no definidas!");
+        return false;
+    }
+    if(gDefinedOutputCount < gDeclaredOutputCount) {
+        alert("Error: Hay salidas no definidas!");
+        return false;
+    }
+    if(gDuplicatedOutputs && gDuplicatedInputs) {
+        alert("Error: Hay entradas y salidas duplicadas");
+        return false;
+    }
+    if(gDuplicatedInputs) {
+        alert("Error: Hay entradas duplicadas");
+        return false;
+    }
+    if(gDuplicatedOutputs) {
+        alert("Error: hay salidas duplicadas");
+        return false;
+    }
+    return true;
+}
+
+function createAndPopulateKMaps() {
+    $('.slider').not('.slick-initialized').slick();
+    //$('.slider').slick('unslick');
+    var kMapSlider = document.getElementById("vkSlider");
+    for(var i = gDefinedOutputCount - 1; i >=0 ; i--) {
+        //createAndPopulateSingleKMap(kMapSlider, gOutputHashmap[i]);
+        $('.slider').slick('slickAdd','<div id="vkdiv'+i+'"><p>'+gOutputHashmap[i]+'</p></div>', 0);
+        createAndPopulateSingleKMap(document.getElementById("vkdiv"+i), "vk"+i);
+    }
+    $('.slider').slick('slickGoTo', 0);
+}
+
+function createAndPopulateSingleKMap(parentDiv, outputName) {
+    var newDiv = document.createElement('div');
+    var intDiv = document.createElement('div');
+
+    newDiv.id = "vk-"+outputName+"-div";
+    intDiv.id = "vk-"+outputName+"-intdiv";
+
+    parentDiv.appendChild(newDiv);
+    // newDiv.className =  something?
+
+    // Create the KMAP and the underlying QMC. The first parameter to the 
+    // QMC constructor should only be a existing div when debugging.
+    var qmc = new QuineMcCluskey("thiswillneverexist", 2, 4, 0);
+    qmc.init();
+    var karnaugh = new KarnaughMap("vk-"+outputName+"-div", "vk-"+outputName+"-intdiv", qmc);
+    karnaugh.init();
+}
