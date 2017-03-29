@@ -1,3 +1,5 @@
+var gKarnaughMapObjects = {};
+
 
 function validateTabSwitchToTruthTable() {
     if(gDefinedOutputCount < gDeclaredOutputCount && gDefinedInputCount < gDeclaredInputCount) {
@@ -36,7 +38,7 @@ function createAndPopulateKMaps() {
     for(var i = gDefinedOutputCount - 1; i >=0 ; i--) {
         //createAndPopulateSingleKMap(kMapSlider, gOutputHashmap[i]);
         $('.slider').slick('slickAdd','<div id="vkdiv'+i+'"><p>'+gOutputHashmap[i]+'</p></div>', 0);
-        createAndPopulateSingleKMap(document.getElementById("vkdiv"+i), "vk"+i, i);
+        createAndPopulateSingleKMap(document.getElementById("vkdiv"+i), gOutputHashmap[i], i);
     }
     $('.slider').slick('slickGoTo', 0);
 }
@@ -44,25 +46,53 @@ function createAndPopulateKMaps() {
 function createAndPopulateSingleKMap(parentDiv, outputName, outputOrdinal) {
     var newDiv = document.createElement('div');
     var intDiv = document.createElement('div');
+    var topDiv = document.createElement('div');
 
     newDiv.id = "vk-"+outputName+"-div";
     intDiv.id = "vk-"+outputName+"-intdiv";
+    topDiv.id = "vk-"+outputName+"-topdiv";
 
-    parentDiv.appendChild(newDiv);
+    topDiv.appendChild(newDiv);
+    parentDiv.appendChild(topDiv);
     // newDiv.className =  something?
 
     // Create the KMAP and the underlying QMC. The first parameter to the 
     // QMC constructor should only be a existing div when debugging.
     var qmc = new QuineMcCluskey("thiswillneverexist", 2, 4, 0);
     qmc.init();
-    var karnaugh = new KarnaughMap("vk-"+outputName+"-div", "vk-"+outputName+"-intdiv", qmc, gDeclaredInputCount);    
+    var karnaugh = new KarnaughMap("vk-"+outputName+"-div", "vk-"+outputName+"-intdiv", qmc, gDeclaredInputCount, outputName, gInputHashmap);    
     karnaugh.init();
     karnaugh.allowDontCares(1);
+    karnaugh.setDontShowResult(1);
 
     for(var i = 0; i< truthTable.length ; i++) {
         karnaugh.setFnValue(i, truthTable[i][gDeclaredInputCount+outputOrdinal]);
     }
+    
+    var solveHideButton = document.createElement("input");
+    solveHideButton.type = "button";
+    solveHideButton.value = "Resolver"
+    solveHideButton.onclick = showHideSolution;
+    solveHideButton.setAttribute("associatedKMapIdx",outputOrdinal);
 
+    topDiv.appendChild(solveHideButton);
+    gKarnaughMapObjects[outputOrdinal] = karnaugh;
+}
+
+function showHideSolution() {
+    var karnaugh = gKarnaughMapObjects[this.getAttribute("associatedKMapIdx")];
+    //if(karnaugh == null) throw "Did not expect Karnaugh Map object to be NULL";
+    //if(typeof karnaugh === 'undefined') throw "Did not expect Karnaugh Map object to be undefined";
+
+    if(this.value == "Resolver") {
+        this.value = "Ocultar";
+        karnaugh.setDontShowResult(0);
+    }
+    else if (this.value == "Ocultar"){
+        this.value = "Resolver";
+        karnaugh.setDontShowResult(1);
+    }
+    else throw("Unexpected value");
 }
 
 function printAll() {

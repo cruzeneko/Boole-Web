@@ -150,6 +150,10 @@ function KarnaughMapDataCtrl(qmcRef) {
     this.compute();
   };
 
+
+  /* Sets function data but does not compute the boolean expression.
+   * 
+   */
   this.setFuncData = function(fieldId, val) {
     if(val != 0 && val != 1 && val != 2) {
       throw "Unexpected truth value";
@@ -260,7 +264,7 @@ function KarnaughMapDataCtrl(qmcRef) {
   };
 }
 
-function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount) {
+function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount, kMapOutputName, kMapInputNames) {
   var data = new KarnaughMapDataCtrl(qmcRef);
   var qmc = qmcRef;
   var svg;
@@ -277,8 +281,11 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
   var overlayStyle = 'position:absolute; font-family:"Times New Roman",Georgia,Serif; visibility:inherit;';
   var overlayStyle2 = overlayStyle + 'border: 1px solid gray; background:white; pointer-events:none;';
   var resultStyle = 'position:inline; font-family:"Times New Roman",Georgia,Serif; visibility:inherit;';
-  var dontShowResult = false;
+  var dontShowResult = true;
   var inputCount = inputVarCount;
+
+  this.outputName = kMapOutputName;
+  this.inputNames = kMapInputNames;
 
   this.init = function () {
 
@@ -355,6 +362,7 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
   };
   
   this.setDontShowResult = function (type) {
+    //console.log("Updating don't show!");
     if (type > 0) {
       dontShowResult = true;
     } else {
@@ -377,6 +385,14 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
     //console.log("Trying to set item " + ordinal + " to \"" + value +"\"");
     var LUT = {"0": 0, "1": 1, "X": 2};
     data.setFuncData(ordinal, LUT[value]);
+  };
+
+  this.setUpdateSolutionOnChange = function (updateOnChange) {
+    data.setUpdateOnChange(updateOnChange);
+  };
+
+  this.recomputeSolution = function() {
+    data.solveMap();
   };
 
   function createOverlays() {
@@ -714,9 +730,17 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
     var labelNum = 1;
     var labelPos = 10;
     var k = 0;
+    
+    //TODO
+    console.log("Declared: " + data.noOfVars);
+    console.log("Input names: " + Object.keys(this.inputNames).length);
+
+    if(data.noOfVars != Object.keys(this.inputNames).length) {
+      throw "Declared input count and input list length don't match";
+    }
     while (k < data.noOfVars) {
 
-      overlays[k].innerHTML = "<i>x</i><sub><small>" + k + "</small></sub>"
+      overlays[k].innerHTML = this.inputNames[k];
 
       for (var x = 0; x < data.fieldPerLine; x++) {
         var bits = data.getKVFieldTruthmapID(x);
@@ -747,7 +771,7 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
       k++;
       if (k < data.noOfVars) {
 
-        overlays[k].innerHTML = "<i>x</i><sub><small>" + k + "</small></sub>";
+        overlays[k].innerHTML = this.inputNames[k];
 
         labelNum = labelNum << 1; // move bit to left
 
@@ -818,9 +842,9 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
     var termStyle = resultStyle + 'max-width:' + data.fieldPerLine * data.fieldWidth + 'px;';
     overlays[data.noOfVars + 1].setAttribute('style', termStyle);
     if(!dontShowResult) {
-      overlays[data.noOfVars + 1].innerHTML = "<span class='qmcMathFont'><i>y</i>&nbsp;=&nbsp;" + qmc.data.coloredMinimalTerm + "</span></p>";
+      overlays[data.noOfVars + 1].innerHTML = "<span class='qmcMathFont'><i>"+this.outputName+"</i>&nbsp;=&nbsp;" + qmc.data.coloredMinimalTerm + "</span></p>";
     }else{
-      overlays[data.noOfVars + 1].innerHTML = "<span class='qmcMathFont'><i>y</i>&nbsp;=&nbsp;" + "<span style='color:rgb(255,0,0)'>hidden</span>"+ "</span></p>";
+      overlays[data.noOfVars + 1].innerHTML = "<span class='qmcMathFont'><i>"+this.outputName+"</i>&nbsp;=&nbsp;" + "<span></span>"+ "</span></p>";
     }
   };
   
