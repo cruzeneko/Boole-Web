@@ -15,3 +15,5 @@ cd bower_components/bootstrap
 npm install
 npm test
 
+# Slick
+bower install kenwheeler/slick
