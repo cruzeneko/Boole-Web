@@ -5,6 +5,20 @@
 // There is no warranty or other guarantee of fitness for this software, 
 // it is provided solely "as is". 
 
+var _1VarKMapFillingLUT = [0,1];
+var _2VarKMapFillingLUT = [0, 2, 1, 3];
+var _3VarKMapFillingLUT = [0, 1, 4, 5, 3, 2, 7, 6];
+var _4VarKMapFillingLUT = [0, 1, 4, 5, 3, 2, 7, 6, 12, 13, 8, 9, 15, 14, 11, 10];
+
+var KMapFillingLUTs = [null, _1VarKMapFillingLUT, _2VarKMapFillingLUT, _3VarKMapFillingLUT, _4VarKMapFillingLUT];
+
+function getKMapIndexByInput(ordinal, noOfVars) {
+  var LUT = KMapFillingLUTs[noOfVars];
+  console.log("Ordinal " + ordinal + " gets mapped to " + LUT[ordinal] );
+  alert("Called motherfucker!");
+  return LUT[ordinal];
+}
+
 function UIElement(x, y, width, height, type, ref, subref, slotType) {
   this.x = x;
   this.y = y;
@@ -163,6 +177,7 @@ function KarnaughMapDataCtrl(qmcRef) {
     }
     this.fields[fieldId].value = val;
     
+    //this.qmc.setInputVarNames(inputNames)//TODO
     this.qmc.data.setFuncData(this.fields[fieldId].truthmapID, this.fields[fieldId].value);
     this.qmc.data.compute();
     this.qmc.update();
@@ -285,8 +300,11 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
   var inputCount = inputVarCount;
 
   this.outputName = kMapOutputName;
-  this.inputNames = kMapInputNames;
-
+  this.inputNames = [];
+  //debugger;
+  for(var i = 0; i< Object.keys(kMapInputNames).length; i++){
+    this.inputNames[i] = kMapInputNames[Object.keys(kMapInputNames).length - i - 1];
+  }
   this.init = function () {
 
     data.init(inputCount);
@@ -311,25 +329,25 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
 
     svg.onmousedown = function (event) {
       canvasMouseDown(event);
-      console.log("mouse down");
+      //console.log("mouse down");
       event.stopPropagation();
     };
     svg.onmousemove = function (event) {
       canvasMouseMove(event);
-      console.log("mouse move");
+      //console.log("mouse move");
       event.stopPropagation();
     };
     svg.onmouseup = function (event) {
       canvasMouseUp(event);
-      console.log("mouse up");
+      //console.log("mouse up");
       event.stopPropagation();
     };
     svg.onmouseup = function (event) {
       canvasMouseUp(event);
-      console.log("mouse up 2");
+      //console.log("mouse up 2");
       event.stopPropagation();
     };
-
+    qmc.setInputVarNames(this.inputNames) //todo
     createOverlays();
     this.update();
   };
@@ -383,8 +401,10 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
 
   this.setFnValue = function (ordinal, value) {
     //console.log("Trying to set item " + ordinal + " to \"" + value +"\"");
-    var LUT = {"0": 0, "1": 1, "X": 2};
-    data.setFuncData(ordinal, LUT[value]);
+    var LUT1 = {"0": 0, "1": 1, "X": 2};
+    var idx = getKMapIndexByInput(ordinal, inputCount);
+    data.setFuncData(idx, LUT1[value]);
+    console.log("Set item " + idx + " to value "+ LUT1[value]);
   };
 
   this.setUpdateSolutionOnChange = function (updateOnChange) {
@@ -733,10 +753,10 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
     
     //TODO
     console.log("Declared: " + data.noOfVars);
-    console.log("Input names: " + Object.keys(this.inputNames).length);
+    console.log("Input names: " + this.inputNames.length);
 
-    if(data.noOfVars != Object.keys(this.inputNames).length) {
-      throw "Declared input count and input list length don't match";
+    if(data.noOfVars != this.inputNames.length) {
+      //throw "Declared input count and input list length don't match";
     }
     while (k < data.noOfVars) {
 
@@ -892,7 +912,7 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
     hooveredKVField = -1;
     var oldHooveredElement = hooveredElement;
     hooveredElement = mouseOverElement(pos);
-    console.log("Hoovered element: "+hooveredElement);
+    //console.log("Hoovered element: "+hooveredElement);
     if (hooveredElement !== -1) {
       hooveredKVField = uiElements[hooveredElement].ref;
     }
@@ -919,12 +939,12 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
     mx = e.pageX - offsetX;
     my = e.pageY - offsetY;
     
-    console.log("Hey, element "+divId+" is at offset: ("+offsetX+","+offsetY+")");
-    console.log("your mouse is at ("+e.pageX+","+e.pageY+")");
-    console.log("and at ("+mx+","+my+") wrt to the div");
-    console.log("intermediate is at "+elementMed.offsetLeft+","+elementMed.offset+") wrt to the div");
+    //console.log("Hey, element "+divId+" is at offset: ("+offsetX+","+offsetY+")");
+    //console.log("your mouse is at ("+e.pageX+","+e.pageY+")");
+    //console.log("and at ("+mx+","+my+") wrt to the div");
+    //console.log("intermediate is at "+elementMed.offsetLeft+","+elementMed.offset+") wrt to the div");
 
-    console.log(mx + " " + my);
+    //console.log(mx + " " + my);
     return {x: mx, y: my};
   }
 }

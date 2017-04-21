@@ -321,6 +321,7 @@ function QuineMcCluskeyDataCtrl() {
   this.petrickSolver = new PetrickMethod();
   this.petrickTermPrims = new Array;
   this.allowDontCare = false;
+  this.varNames = [];
   
   this.init = function(no) {
     this.noOfVars = no;
@@ -523,16 +524,22 @@ function QuineMcCluskeyDataCtrl() {
             for (var thisVal in primTerm.implicant.imp) {
               var minTerm = "";
               var one = 1;
+              var append = "&middot;";
               var needed = (~primTerm.implicant.bitMask);
               for (var v = 0; v < this.noOfVars; v++) {
                 if ((needed & one) === one) {
                   if ((thisVal & one) === one) {
-                    minTerm = "<i>x</i><sub><small>" + v + "</small></sub>" + minTerm;
+                    //minTerm = "<i>x</i><sub><small>" + this.varNames[v] + "</small></sub>" + minTerm;
+                    minTerm = "<i>" + this.varNames[v] + "</i>" + append + minTerm;
                   } else {
-                    minTerm = "<i>x&#772;</i><sub><small>" + v + "</small></sub>" + minTerm;
+                    //minTerm = "<i>x&#772;</i><sub><small>" + this.varNames[v] + "</small></sub>" + minTerm;           
+                    minTerm = "<i style=\"text-decoration: overline;\">" + this.varNames[v] + "</i>" + append + minTerm;
                   }
                 }
                 one = one << 1;
+              }
+              if(minTerm.endsWith(append)) {
+                minTerm = minTerm.substring(0,minTerm.length-append.length);
               }
               minTerm = "(" + minTerm + ")";
               if (primTerm.implicant.bitMask === Math.pow(2, this.noOfVars) - 1)
@@ -809,6 +816,7 @@ function QuineMcCluskey(parentDivId, columns, language) {
   this.rows = Math.pow(2, columns);
   this.data =  new QuineMcCluskeyDataCtrl();
   var that = this;
+  //var varNames = [];
 
   var labels;
   if(language === 0) {
@@ -857,6 +865,12 @@ function QuineMcCluskey(parentDivId, columns, language) {
     }
     this.update();
   };
+
+  this.setInputVarNames = function(names) {
+    console.log("Called bitch!");
+    console.log(names);
+    this.data.varNames = names;
+  }
 
   this.setNoOfVars = function(vars) {
     var c = parseInt(vars);
