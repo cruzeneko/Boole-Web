@@ -13,6 +13,7 @@
         <script src="js/tab-logic.js"></script>
         <script src="js/solucion.js"></script>
 	<link rel="stylesheet" href="bower_components/quill/dist/quill.snow.css">
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 	<script src="bower_components/quill/dist/quill.js"></script> 
 	<script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });</script>
 	<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -37,7 +38,7 @@
 	<h3>Inicio</h3>
 	<p>Esta es la pestaña Inicio.</p>
 	<p>En esta pestaña se puede mostrar una pequeña introducción a Boole.</p>
-        <button id="btnNext" type="button" onclick="gotoTab('enunciado')">Siguiente</button>
+        <button id="btnNext" class="btn-primary" type="button" onclick="gotoTab('enunciado')">Siguiente</button>
 </div>
 
 <div id="Statement" class="tabcontent">
@@ -54,14 +55,14 @@
 	    		<p>  Entradas</p>
 			<div class="input_fields_wrap" id="add_input_wrap">
 				<button class="add_field_button" id="add_input">Añadir entrada</button>
-				<div><input type="text" name="mytext[]" idx="0" id="input0"></div>
+				<div><input type="text" class="form-control" name="mytext[]" idx="0" id="input0"></div>
 			</div>
 		</div>
 		<div class="fright">
 			<p>  Salidas</p>
                         <div class="input_fields_wrap" id="add_output_wrap">
                                 <button class="add_field_button" id="add_output">Añadir salida</button>
-                                <div><input type="text" name="mytext[]" idx="0" id="output0"></div>
+                                <div><input type="text" class="form-control" name="mytext[]" idx="0" id="output0"></div>
                         </div>
 		</div>
 	

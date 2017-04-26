@@ -287,7 +287,7 @@ function setupInputOutputControlListeners() {
         if(inputs < max_in_fields-1){ //max input box allowed
             inputs++; //text box increment
             gDeclaredInputCount++;
-            $("#add_input_wrap").append('<div><input type="text" name="mytext[]" idx='+inputs+' id="input'+inputs+'"/><a href="#" class="remove_input">Eliminar</a></div>');
+            $("#add_input_wrap").append('<div><input type="text" class="form-control" name="mytext[]" idx='+inputs+' id="input'+inputs+'"/><a href="#" class="remove_input">Eliminar</a></div>');
             addIndividualInputDataListener('input'+inputs);
         }
     });
@@ -299,7 +299,7 @@ function setupInputOutputControlListeners() {
         if(outputs < max_out_fields-1){ //max input box allowed
             outputs++; //text box increment
             gDeclaredOutputCount++;
-            $("#add_output_wrap").append('<div><input type="text" name="mytext[]" idx='+outputs+' id="output'+outputs+'"/><a href="#" class="remove_output">Eliminar</a></div>');
+            $("#add_output_wrap").append('<div><input type="text" class="form-control" name="mytext[]" idx='+outputs+' id="output'+outputs+'"/><a href="#" class="remove_output">Eliminar</a></div>');
             addIndividualOutputDataListener('output'+outputs);
         }
     });
