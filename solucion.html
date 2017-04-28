@@ -50,7 +50,7 @@
 <div id="Statement" class="tabcontent">
 	<div class="container">
 		<h3>Enunciado</h3>
-		<div class="row">
+		<div  class="row">
 			<div id="editor" class="row-sm-6">
 				<p>Puedes escribir aquí el enunciado...</p>
   				<p><br></p>
@@ -170,30 +170,9 @@
 	<div class="container">
         	<h3>Circuito</h3>
         	<p>Esta es la pestaña Circuito.</p>
-                <div id = "holaz"></div>
-		<script>
-    console.log("Ready!");
-    ready = true;
-
-  var dat = {
-      'and'  : [['x', ['&', 'a', 'b']]],
-      'and5' : [['x', ['&', 'a', 'b', 'c', 'd', 'e']]],
-      'or'   : [['x', ['|', 'a', 'b']]],
-      'xor'  : [['x', ['^', 'a', 'b']]],
-      'nand' : [['x', ['~&', 'a', 'b']]],
-      'nor'  : [['x', ['~|', 'a', 'b']]],
-      'oa1'  : [['x', ['~|', 'a0', 'a1', 'a2', ['~&', 'a3', 'a4', 'a5']]]],
-  };
-
-  Object.keys(dat).forEach(function (t, index) {
-    test("holaz", dat[t]);
-  });
-
-
-
-		</script>
-        	<button id="btnNext" type="button" onclick="gotoTab('enunciado')">Reiniciar</button>
-		<button id="btnPrintAll" type="button" onclick="printAll()">Imprimir</button>
+		<div class="panel panel-default">
+			<div class="panel-body" id="holaz">A Basic Panel</div>
+  		</div>
 	</div>
 </div>
 

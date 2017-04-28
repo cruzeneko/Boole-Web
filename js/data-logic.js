@@ -113,7 +113,7 @@ function printAll() {
         'width': 170, 
         'elementHandlers': specialElementHandlers
     });
-    var editorChildren = document.getElementById("editor").childNodes;
+    var editorChildren = document.getElementById("panel-enunciado-capturado").childNodes;
     for(var i = 0; i<editorChildren; i++){
         nextY += editorChildren[i].clientHeight;
     }

@@ -19,7 +19,7 @@ function validIntroVK(){
 
 
 function validIntroCircuit(){
-    return false;
+    return true;
 }
 
 
@@ -158,7 +158,7 @@ function preopIntroVK(){
 
 
 function preopIntroCircuit(){
-    throw "Transición no permitida realizada.";
+    //throw "Transición no permitida realizada.";
 }
 
 
@@ -243,11 +243,15 @@ function preopVKVK(){
 
 function preopVKCircuit(){
     debugger;
+    var inputs = [];
+    for(var i = 0; i< Object.keys(gInputHashmap).length; i++) {
+        inputs[i] = gInputHashmap[i];
+    }
     for(var i = 0; i<gKarnaughMapObjects.length; i++) {
         var formula = gKarnaughMapObjects[i].getLastSolution();
         console.log("Dealing with formula " + formula);
-        var sol = tokenizeAndDisplayNewFormula(formula, ["e0", "e1", "e2"], ["s0"]);
-        test("holaz",[["s0",sol]]);
+        var sol = tokenizeAndDisplayNewFormula(formula, inputs, [gOutputHashmap[i]]);
+        test("holaz",[[gOutputHashmap[i],sol]]);
         console.log("Solution is: " + sol);
     }
 }
@@ -299,7 +303,7 @@ function posopIntroVK(){
 
 
 function posopIntroCircuit(){
-    throw "Transición no permitida realizada";
+    //throw "Transición no permitida realizada";
 }
 
 
