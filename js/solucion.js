@@ -44,6 +44,7 @@ function validateTabSwitch(TabName) {
 function preOperateOnTabSwitch(TabName) {
     console.log("Pre-operating: " + currentTab + " -> " + TabName);
     preOperationFunctions[currentTab][TabName]();
+    console.log("Done, theoretically");
 }
 
 function postOperateOnTabSwitch(TabName) {

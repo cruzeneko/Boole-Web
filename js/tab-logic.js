@@ -98,7 +98,13 @@ function validVKVK(){
 
 
 function validVKCircuit(){
-    return true;
+    var allowed = true;
+    console.log("Have to check " + gKarnaughMapObjects.length + " objects to validate");
+    for(var i = 0; i<gKarnaughMapObjects.length; i++) {
+        allowed = allowed && gKarnaughMapObjects[i].hasKnownSolution();
+        console.log("Checkin'");
+    }
+    return allowed;
 }
 
 
@@ -236,7 +242,14 @@ function preopVKVK(){
 
 
 function preopVKCircuit(){
-    //Nothing (yet)
+    debugger;
+    for(var i = 0; i<gKarnaughMapObjects.length; i++) {
+        var formula = gKarnaughMapObjects[i].getLastSolution();
+        console.log("Dealing with formula " + formula);
+        var sol = tokenizeAndDisplayNewFormula(formula, ["e0", "e1", "e2"], ["s0"]);
+        test("holaz",[["s0",sol]]);
+        console.log("Solution is: " + sol);
+    }
 }
 
 

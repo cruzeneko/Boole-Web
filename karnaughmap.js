@@ -184,6 +184,14 @@ function KarnaughMapDataCtrl(qmcRef) {
     this.compute();
   };
 
+  this.isSolutionKnown = function() {
+    return this.qmc.data.isSolutionKnown();
+  }
+
+  this.getLastSolution = function() {
+    return this.qmc.data.getLastSolution();
+  }
+
   this.random = function () {
     for (var i in this.fields) {
       if (this.allowDontCare) {
@@ -398,6 +406,16 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
     data.clear();
     this.update();
   };
+
+  this.hasKnownSolution = function ( ) {
+    var solutionIsKnown;
+    solutionIsKnown = data.isSolutionKnown();
+    return solutionIsKnown;
+  }
+
+  this.getLastSolution = function () {
+    return data.getLastSolution();
+  }
 
   this.setFnValue = function (ordinal, value) {
     //console.log("Trying to set item " + ordinal + " to \"" + value +"\"");

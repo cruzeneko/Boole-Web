@@ -1,4 +1,4 @@
-var gKarnaughMapObjects = {};
+var gKarnaughMapObjects = [];
 
 
 function validateTabSwitchToTruthTable() {
@@ -96,7 +96,30 @@ function showHideSolution() {
 }
 
 function printAll() {
-	alert("No implementado!");
+    var doc = new jsPDF();
+    var interSectionSpacing = 20;
+    var sectionTitleToSectionSpacing = 10;
+    var nextY, nextX; nextY = 35; nextX = 15;
+    
+    var specialElementHandlers = {
+	'#editor': function(element, renderer){
+		return true;
+	}
+    };
+
+    doc.text(nextX, nextY, "Octonyan loves jsPDF");
+    nextY += sectionTitleToSectionSpacing;
+    doc.fromHTML(document.getElementById("editor"), nextX, nextY, {
+        'width': 170, 
+        'elementHandlers': specialElementHandlers
+    });
+    var editorChildren = document.getElementById("editor").childNodes;
+    for(var i = 0; i<editorChildren; i++){
+        nextY += editorChildren[i].clientHeight;
+    }
+
+    doc.text(nextX, nextY, "Hola holita!");
+    doc.save('sample-file.pdf');
 }
 
 function setupEventListeners() {
@@ -313,3 +336,107 @@ function setupInputOutputControlListeners() {
         e.preventDefault(); $(this).parent('div').remove(); gOutputHashmap[outputs]=null; outputs--; gDeclaredOutputCount--; 
     })
 }
+
+function tokenizeAndDisplayNewFormula(expr, ins, out) {
+//(~e2·~e3) ∨ (~e1·e2·e3) ∨ (~e0·e1·e2)
+
+//1-  Expr -> 0
+//2-  Expr -> 1
+//3-  Expr -> (in-0 | ... | in-n)
+//4-  Expr -> ~Expr
+//5-  Expr -> ( Expr )
+//6-  Expr -> Expr & Expr
+//7-  Expr -> Expr | Expr
+//function parse(expr, ins, out) {
+
+    var ret = [];
+    //Some preprocessing
+    //First get rid of spaces and adapt symbols:
+    expr = expr.replace(/\u2228/g, "|");//Logical disjunction
+    expr = expr.replace(/\u00B7/g, "&");//Logical conjunction
+    expr = expr.replace(/ /g, "" );     //Spaces    
+
+    console.log("Sanitized expression: " + expr);
+
+    //First build a regex that will accept input names only
+    var inputRegexStr = "^(";
+    for(var i = 0; i<ins.length; i++) {
+        inputRegexStr += ins[i]
+        if(i < ins.length-1){
+            inputRegexStr+="|";
+        }
+    }    
+    inputRegexStr += ")$";
+    var inputRegex = new RegExp(inputRegexStr);
+    console.log("var name regex: " + inputRegex);
+
+    //Then work out how many parentheses are in each token if the expression is split in "|" and "&"
+    var tokensAnd = expr.split("&"); var numParenthesesAnd = 0; var couldBeAndExpr = true;
+    var tokensOr = expr.split("|"); var numParenthesesOr = 0; var couldBeOrExpr = true;
+
+    console.log("Checking for and");
+    if(tokensAnd.length <= 1) couldBeAndExpr = false;
+    for (var i = 0; i<tokensAnd.length; i++) {
+        var token = tokensAnd[i];
+        console.log("token " + token + "has " + (token.match(/[(]/g) || []).length + "(s");
+        console.log("token " + token + "has " + (token.match(/[)]/g) || []).length + ")s");
+        if( (token.match(/[(]/g) || []).length != (token.match(/[)]/g) || []).length ) {
+            couldBeAndExpr = false;
+            break;
+        }
+    }
+
+    if(tokensOr.length <= 1) couldBeOrExpr = false;
+    for (var i = 0; i<tokensOr.length; i++) {
+        var token = tokensOr[i];
+        if( (token.match(/[(]/g) || []).length != (token.match(/[)]/g) || []).length ) {
+            couldBeOrExpr = false;
+            break;
+        }
+    }
+
+    //Finally check if there is only one "(" and one ")"
+    var isParenExpr = false;
+    if((expr.match(/[(]/g) || []).length == 1 && (expr.match(/[)]/g) || []).length == 1) {
+        isParenExpr = true;
+    }
+
+    if(isParenExpr) {
+        console.log("expr -> ( expr )");
+        ret = tokenizeAndDisplayNewFormula(expr.substring(1, expr.length-1), ins, out)
+    }
+    else if(couldBeAndExpr){
+        console.log("expr -> expr & expr");
+        var tokens = expr.split("&");
+        ret[0] = "&";
+        for(var i = 0; i<tokens.length; i++){
+            ret[i+1] = tokenizeAndDisplayNewFormula(tokens[i], ins, out);
+        }
+    }
+    else if(couldBeOrExpr){
+        console.log("expr -> expr | expr");
+        var tokens = expr.split("|");
+        ret[0] = "|";
+        for(var i = 0; i<tokens.length; i++){
+            ret[i+1] = tokenizeAndDisplayNewFormula(tokens[i], ins, out);
+        }
+    }
+    else if(expr.charAt(0) == "~"){
+        console.log("expr -> ~Expr");
+        ret = ["~", tokenizeAndDisplayNewFormula(expr.substring(1), ins, out)];
+    }
+    else if(expr.charAt(0) == "0") {
+        console.log("Expr -> 0")
+        ret = "0";
+    }
+    else if(inputRegex.test(expr)){
+        console.log("expr -> (in-0 | ... | in-n)")
+        ret = expr;
+    }
+    else if(expr.charAt(0) == "1") {
+        console.log("Expr -> 1")
+        ret = "1";
+    }
+    return ret;
+}
+

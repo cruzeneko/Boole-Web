@@ -21,3 +21,16 @@ cd $wd
 
 # Slick
 bower install kenwheeler/slick
+
+# Drom/Logidrom
+bower install drom/logidrom
+cd bower_components/logidrom
+npm install
+cd $wd
+
+# Browserify
+npm install -g browserify
+browserify js/logidrom.js > js/logidrom_b.js
+
+# JSPdf
+bower install MrRio/jsPDF

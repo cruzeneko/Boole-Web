@@ -322,6 +322,7 @@ function QuineMcCluskeyDataCtrl() {
   this.petrickTermPrims = new Array;
   this.allowDontCare = false;
   this.varNames = [];
+  this.lastKnownSolution = "";
   
   this.init = function(no) {
     this.noOfVars = no;
@@ -393,6 +394,20 @@ function QuineMcCluskeyDataCtrl() {
     return counter;
   }
   
+  this.isSolutionKnown = function() {
+   //debugger;
+   console.log("Queried if solution is known: "+this.lastKnownSolution); 
+   if (this.lastKnownSolution != "") {
+      return true;
+    }
+    else return false;
+  };
+
+  this.getLastSolution = function() {
+    console.log("Queried for last known solution");
+    return this.lastKnownSolution;
+  };
+
   this.compute = function() {
     this.primTerms.length = 0;
     this.implicantGroups.length = 0;
@@ -533,7 +548,7 @@ function QuineMcCluskeyDataCtrl() {
                     minTerm = "<i>" + this.varNames[v] + "</i>" + append + minTerm;
                   } else {
                     //minTerm = "<i>x&#772;</i><sub><small>" + this.varNames[v] + "</small></sub>" + minTerm;           
-                    minTerm = "<i style=\"text-decoration: overline;\">" + this.varNames[v] + "</i>" + append + minTerm;
+                    minTerm = "<i style=\"text-decoration: overline;\">" + "&zwnj;" + this.varNames[v] + "</i>" + append + minTerm;
                   }
                 }
                 one = one << 1;
@@ -803,10 +818,21 @@ function QuineMcCluskeyDataCtrl() {
        this.minimalTerm = 'Error: The cyclic covering problem is too large (increase the "maxProblemSize" parameter)';
        this.coloredMinimalTerm = 'Error: The cyclic covering problem is too large (increase the "maxProblemSize" parameter)';
     }
+
+    var formula = this.minimalTerm.replace(/&zwnj;/g,"~");
+  
+    console.log("Final solution is " + strip(formula));
+    this.lastKnownSolution = strip(formula);
+    //debugger;
   };
 }
 
-
+function strip(html)
+{
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = html;
+   return tmp.textContent||tmp.innerText;
+}
 
 
 function QuineMcCluskey(parentDivId, columns, language) {

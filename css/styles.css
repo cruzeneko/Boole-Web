@@ -1,6 +1,9 @@
-html, body {
+html {
   height: 100%;
-  margin: 0;
+}
+
+body {
+  height: 100%;
 }
 
 .weblab_big_button {
@@ -75,6 +78,7 @@ ul.tab li a:focus, .active {background-color: #ccc;}
     padding: 6px 12px;
     border: 10px solid #ccc;
     border-top: none;
+    min-height: 90%;
 }
 
 .tabcontent {
@@ -157,6 +161,7 @@ overflow:auo;
     border: 1px solid silver;         
     overflow: hidden;
 }
+
 .panel-left {
     flex: 0 0 auto;  /* only manually resize */
     padding: 10px;
@@ -210,4 +215,3 @@ overflow:auo;
 .tv-td-mod {
 
 }
-
