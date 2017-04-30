@@ -95,30 +95,144 @@ function showHideSolution() {
     else throw("Unexpected value");
 }
 
-function printAll() {
-    var doc = new jsPDF();
-    var interSectionSpacing = 20;
-    var sectionTitleToSectionSpacing = 10;
-    var nextY, nextX; nextY = 35; nextX = 15;
+function placeInSingleCellTable(doc, html) {
+    //Create a fake table that contains the only element in its only cell
+
+    var newElement = document.createElement("div");
+    newElement.innerHTML = "<table><tr><td></b>"+ html+"<b></td></tr></table>";
+    var htmlElement = newElement.firstChild;
+
+    //Produce an autotable table from the fake table
+    var res = doc.autoTableHtmlToJson(htmlElement);
+
+    //Render the autotable and place it in the document, with 
+    doc.autoTable(res.columns, res.rows, 
+    {
+        startY: doc.autoTableEndPosY() + 10,
+        pageBreak: 'auto',
+        theme: 'plain',
+        headerStyles: {fontStyle: 'normal'}
+    });
+}
+
+function getStatementPrintableHtml() {
+    var ret = "";
     
+    //Actual statement text
+    ret+="<h3>Enunciado</h3>";
+    ret+=document.getElementById("panel-enunciado-capturado").innerHTML;
+
+
+    //Table containing inputs/outputs
+    ret+="<h3>Entradas y Salidas</h3>"
+    ret+="<div>";
+    ret+="<p>";
+    ret+="<b>" +" Entradas: " + "</b> ";
+    for(var i = 0; i<Object.keys(gInputHashmap).length; i++) {
+        ret+="<tt>" + gInputHashmap[i] + "</tt>";
+        if(i < Object.keys(gInputHashmap).length-1) {
+            ret+=" , ";
+        }
+    }
+    ret+="</p>";
+    ret+="</div>";
+    ret+="<div>";
+    ret+="<p>";
+    ret+="<b>" +" Salidas: " + "</b> ";
+    for(var i = 0; i<Object.keys(gOutputHashmap).length; i++) {
+        ret+="<tt>" + gOutputHashmap[i] + "</tt>";
+        if(i < Object.keys(gOutputHashmap).length-1) {
+            ret+=" , ";
+        }
+    }
+    ret+="</p>";
+    ret+="</div>";
+    return ret;
+}
+
+function getTruthTablePrintableHtml() {
+    var ret = "";
+    var table = document.getElementById("tablaVerdad");
+    ret+="<table style=\"font-size:9px;\">"
+    ret+=table.innerHTML;
+    ret+="</table>"
+    return ret;
+}
+
+function centeredText(doc, yOffset, text) {
+    var xOffset = (doc.internal.pageSize.width / 2) - (doc.getStringUnitWidth(text) * doc.internal.getFontSize() / 2); 
+    doc.text(text, xOffset, yOffset);
+}
+
+function printAll() {
+    var doc = new jsPDF('p', 'pt');
+    var title, date, titleSize, subtitleSize, startY, nextX, nextY, interSectionSpacing, dateOptions;
     var specialElementHandlers = {
 	'#editor': function(element, renderer){
 		return true;
 	}
     };
+    date = new Date();
+    dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    startY = 150;
+    nextX = 36;
+    titleSize = 20;
+    subtitleSize = 11;
+    defaultFontSize = 11;
+    sectionHeadingSize = 14;
+    interSectionSpacing = 32;
 
-    doc.text(nextX, nextY, "Octonyan loves jsPDF");
-    nextY += sectionTitleToSectionSpacing;
-    doc.fromHTML(document.getElementById("editor"), nextX, nextY, {
-        'width': 170, 
+    doc.setFontSize(titleSize);
+    centeredText(doc, startY, "Titulo del Problema");
+    doc.setFontSize(subtitleSize);
+    nextY = startY + 4*subtitleSize;
+    centeredText(doc, nextY, "subtitulo");
+    nextY += interSectionSpacing;
+
+    //Actual content starts here:
+    doc.setFontSize(sectionHeadingSize);					// Render section heading for statement section
+    doc.text("Enunciado", nextX, nextY);
+    nextY+=sectionHeadingSize/2;
+
+    doc.fromHTML(document.getElementById('panel-enunciado-capturado').innerHTML, nextX, nextY, {
+        'width': doc.internal.pageSize.width - 2 * nextX, 
         'elementHandlers': specialElementHandlers
     });
-    var editorChildren = document.getElementById("panel-enunciado-capturado").childNodes;
-    for(var i = 0; i<editorChildren; i++){
-        nextY += editorChildren[i].clientHeight;
-    }
+    nextY += 0.45 * statementHeight + interSectionSpacing;
 
-    doc.text(nextX, nextY, "Hola holita!");
+    doc.setFontSize(sectionHeadingSize);
+    nextY+=sectionHeadingSize/2;
+    doc.text("Entradas y Salidas", nextX, nextY);
+    nextY += sectionHeadingSize*2;
+
+    var inputs, outputs;
+    inputs = outputs = "";
+    for(var i = 0; i< Object.keys(gInputHashmap).length; i++) {
+        inputs+=gInputHashmap[i];
+        if(i < Object.keys(gInputHashmap).length - 1){
+            inputs+=",";
+        }
+    }
+    for(var i = 0; i< Object.keys(gOutputHashmap).length; i++) {
+        outputs+=gOutputHashmap[i]; 
+        if(i < Object.keys(gOutputHashmap).length - 1){
+            outputs+=",";
+        }
+    }
+    
+    doc.setFontSize(defaultFontSize);
+    doc.setFontType("bold");
+    var inY, outY;
+    inY = nextY;
+    doc.text("Entradas: ", nextX, nextY);
+    nextY+=defaultFontSize*2;
+    outY = nextY;
+    doc.text("Salidas: ", nextX, nextY);
+    doc.setFont("courier");
+    doc.text(inputs, nextX + 100, inY);
+    doc.text(outputs, nextX + 100, outY);
+
+    //placeInSingleCellTable(doc, docHtml)
     doc.save('sample-file.pdf');
 }
 

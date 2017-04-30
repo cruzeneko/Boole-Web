@@ -27,20 +27,16 @@ var dat = {
 };
 
 function test(targetDivId, formula) {
-        var src = formula;
-        var index = 1;
-        var res = '';
-            res += '<pre>' + JSON.stringify(src) + '</pre>\n';
-            // res += '<pre>' + src + '</pre>\n';
-            // var ast = esprima.parse(src);
-            // var dst = lib(ast, {index: index});
-            var dst = lib(index, {assign: src });
-            var svg = ['svg', {id: 'svgcontent_' + index, xmlns: w3.svg, 'xmlns:xlink': w3.xlink, overflow:'hidden'}, ['style', '.pinname {font-size:12px; font-style:normal; font-variant:normal; font-weight:500; font-stretch:normal; text-align:center; text-anchor:end; font-family:Helvetica} .wirename {font-size:12px; font-style:normal; font-variant:normal; font-weight:500; font-stretch:normal; text-align:center; text-anchor:start; font-family:Helvetica} .wirename:hover {fill:blue} .gate {color:#000; fill:#ffc; fill-opacity: 1;stroke:#000; stroke-width:1; stroke-opacity:1} .gate:hover {fill:red !important; } .wire {fill:none; stroke:#000; stroke-width:1; stroke-opacity:1} .grid {fill:#fff; fill-opacity:1; stroke:none}'], dst];
-	    debugger;
-            newDiv.innerHTML+=onml.stringify(svg)+"\n";
-            res += onml.stringify(svg) + '\n';
-            document.getElementById(targetDivId).innerHTML+=res;
-            return;
+    var src = formula;
+    var index = 1;
+    var res = '';
+    //res += '<pre>' + JSON.stringify(src) + '</pre>\n';
+
+    var svg = lib(index, {assign: formula });
+
+    res += onml.stringify(svg) + '\n';
+    document.getElementById(targetDivId).innerHTML+=res;
+    return;
 }
 
 window.test = test;

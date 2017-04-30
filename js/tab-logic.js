@@ -242,11 +242,19 @@ function preopVKVK(){
 
 
 function preopVKCircuit(){
-    debugger;
+    //debugger;
     var inputs = [];
+    var formulae = [];
     for(var i = 0; i< Object.keys(gInputHashmap).length; i++) {
         inputs[i] = gInputHashmap[i];
     }
+    for(var i = 0; i<gKarnaughMapObjects.length; i++){
+        var currentFormula = gKarnaughMapObjects[i].getLastSolution();
+        var prefixNotationFormula = tokenizeAndDisplayNewFormula(currentFormula, inputs, [gOutputHashmap[i]]);
+        formulae[i] = [gOutputHashmap[i], prefixNotationFormula];
+    }
+    test("holaz", formulae);
+    /*
     for(var i = 0; i<gKarnaughMapObjects.length; i++) {
         var formula = gKarnaughMapObjects[i].getLastSolution();
         console.log("Dealing with formula " + formula);
@@ -254,6 +262,7 @@ function preopVKCircuit(){
         test("holaz",[[gOutputHashmap[i],sol]]);
         console.log("Solution is: " + sol);
     }
+    */
 }
 
 
@@ -318,7 +327,7 @@ function posopStatementStatement(){
 
 
 function posopStatementTable(){
-    //Nothing
+    statementHeight = document.getElementById('panel-enunciado-capturado').clientHeight;
 }
 
 

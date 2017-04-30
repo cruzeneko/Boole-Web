@@ -5442,6 +5442,12 @@ module.exports = draw_gate;
 var render = require('./render'),
     draw_boxes = require('./draw_boxes');
 
+var w3 = {
+    svg: 'http://www.w3.org/2000/svg',
+    xlink: 'http://www.w3.org/1999/xlink',
+    xmlns: 'http://www.w3.org/XML/1998/namespace'
+};
+
 function renderAssign (index, source) {
     var tree,
         state,
@@ -5449,8 +5455,8 @@ function renderAssign (index, source) {
         svg = ['g'],
         grid = ['g'],
         // svgcontent,
-        // width,
-        // height,
+        width,
+        height,
         i,
         ilen,
         j,
@@ -5468,8 +5474,8 @@ function renderAssign (index, source) {
     for (i = 0; i < ilen; i++) {
         svg.push(draw_boxes(tree[i], xmax));
     }
-    // width  = 32 * (xmax + 1) + 1;
-    // height = 8 * (state.y + 1) - 7;
+    width  = 32 * (xmax + 1) + 1;
+    height = 8 * (state.y + 1) - 7;
     ilen = 4 * (xmax + 1);
     jlen = state.y + 1;
     for (i = 0; i <= ilen; i++) {
@@ -5483,7 +5489,7 @@ function renderAssign (index, source) {
             }]);
         }
     }
-    return ['g', {transform:'translate(0.5, 0.5)'}, grid, svg];
+    return ['svg', {id: 'svgcontent_' + index, height: height, width: width,  xmlns: w3.svg, 'xmlns:xlink': w3.xlink, overflow:'hidden'}, ['style', '.pinname {font-size:12px; font-style:normal; font-variant:normal; font-weight:500; font-stretch:normal; text-align:center; text-anchor:end; font-family:Helvetica} .wirename {font-size:12px; font-style:normal; font-variant:normal; font-weight:500; font-stretch:normal; text-align:center; text-anchor:start; font-family:Helvetica} .wirename:hover {fill:blue} .gate {color:#000; fill:#ffc; fill-opacity: 1;stroke:#000; stroke-width:1; stroke-opacity:1} .gate:hover {fill:red !important; } .wire {fill:none; stroke:#000; stroke-width:1; stroke-opacity:1} .grid {fill:#fff; fill-opacity:1; stroke:none}'], ['g', {transform:'translate(0.5, 0.5)'}, grid, svg]];
 }
 
 module.exports = renderAssign;
@@ -19297,20 +19303,16 @@ var dat = {
 };
 
 function test(targetDivId, formula) {
-        var src = formula;
-        var index = 1;
-        var res = '';
-            res += '<pre>' + JSON.stringify(src) + '</pre>\n';
-            // res += '<pre>' + src + '</pre>\n';
-            // var ast = esprima.parse(src);
-            // var dst = lib(ast, {index: index});
-            var dst = lib(index, {assign: src });
-            var svg = ['svg', {id: 'svgcontent_' + index, xmlns: w3.svg, 'xmlns:xlink': w3.xlink, overflow:'hidden'}, ['style', '.pinname {font-size:12px; font-style:normal; font-variant:normal; font-weight:500; font-stretch:normal; text-align:center; text-anchor:end; font-family:Helvetica} .wirename {font-size:12px; font-style:normal; font-variant:normal; font-weight:500; font-stretch:normal; text-align:center; text-anchor:start; font-family:Helvetica} .wirename:hover {fill:blue} .gate {color:#000; fill:#ffc; fill-opacity: 1;stroke:#000; stroke-width:1; stroke-opacity:1} .gate:hover {fill:red !important; } .wire {fill:none; stroke:#000; stroke-width:1; stroke-opacity:1} .grid {fill:#fff; fill-opacity:1; stroke:none}'], dst];
-	    debugger;
-            newDiv.innerHTML+=onml.stringify(svg)+"\n";
-            res += onml.stringify(svg) + '\n';
-            document.getElementById(targetDivId).innerHTML+=res;
-            return;
+    var src = formula;
+    var index = 1;
+    var res = '';
+    //res += '<pre>' + JSON.stringify(src) + '</pre>\n';
+
+    var svg = lib(index, {assign: formula });
+
+    res += onml.stringify(svg) + '\n';
+    document.getElementById(targetDivId).innerHTML+=res;
+    return;
 }
 
 window.test = test;

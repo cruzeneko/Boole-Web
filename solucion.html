@@ -16,7 +16,9 @@
 	<link rel="stylesheet" href="bower_components/quill/dist/quill.snow.css">
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
 	<script src="bower_components/jspdf/dist/jspdf.min.js"></script>
+	<script src="bower_components/jspdf-autotable/dist/jspdf.plugin.autotable.js"></script>
 	<script src="bower_components/quill/dist/quill.js"></script> 
+	<script src="bower_components/dom-to-image/dist/dom-to-image.min.js"></script>
 	<script type="text/x-mathjax-config">MathJax.Hub.Config({ tex2jax: { inlineMath: [['$','$'], ["\\(","\\)"]] } });</script>
 	<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
         <script type="text/javascript" async src="path-to-mathjax/MathJax.js?config=TeX-AMS_CHTML"></script>
@@ -88,7 +90,7 @@
 	
 		<div class="panel-container">
 		    <div id="panel-enunciado-capturado" class="container">
-			left panel
+			<p>Hola!</p>
                     </div>
 	
 		    <div class="splitter">
@@ -171,7 +173,10 @@
         	<h3>Circuito</h3>
         	<p>Esta es la pestaña Circuito.</p>
 		<div class="panel panel-default">
-			<div class="panel-body" id="holaz">A Basic Panel</div>
+			<div class="panel-body" id="holaz">
+			</div>
+                	<button id="btnNext" type="button" onclick="gotoTab('enunciado')">Reiniciar</button>
+                	<button id="btnPrintAll" type="button" onclick="printAll()">Imprimir</button>
   		</div>
 	</div>
 </div>

@@ -8,6 +8,7 @@ var gDuplicatedInputs = false;
 var gDuplicatedOutputs = false;
 var gQmcHashmap = {};
 var gKarnaughHashmap = {};
+var gStatementHeight = 0;
 var currentTab = "Intro";
 var truthTable;
 var validationFunctions = {
