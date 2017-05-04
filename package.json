@@ -1,0 +1,39 @@
+{
+  "name": "boole-web",
+  "version": "1.0.0",
+  "description": "Boole-Web is a web based new version of Boole-Deusto that takes inspiration in the original one, but relies on the power of the new web-based technologies and leverages the years of user experience with the original Boole-Deusto to update its interface, interaction style, and set of features.",
+  "main": "index.html",
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "browserify": "^14.3.0",
+    "logidrom": "git://github.com/cruzeneko/logidrom.git#1df49613399214eab3d045d974b025f3e4172c62",
+    "quill": "^1.2.4",
+    "chai": "^3.4.1",
+    "eslint": "^1.10.3",
+    "esprima": "^2.7.1",
+    "onml": "^0.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "bower install ; browserify js/logidrom.js > js/logidrom_b.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cruzeneko/Boole-Web.git"
+  },
+  "keywords": [
+    "Boole",
+    "Deusto",
+    "Combinational",
+    "Circuit",
+    "Computer",
+    "Design"
+  ],
+  "author": "Eneko Cruz for Weblab-Deusto",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cruzeneko/Boole-Web/issues"
+  },
+  "homepage": "https://github.com/cruzeneko/Boole-Web#readme"
+}

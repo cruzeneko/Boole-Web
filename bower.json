@@ -1,0 +1,31 @@
+{
+  "name": "Boole-Web",
+  "homepage": "https://github.com/cruzeneko/Boole-Web",
+  "description": "Boole-Web is a web based new version of Boole-Deusto that takes inspiration in the original one, but relies on the power of the new web-based technologies and leverages the years of user experience with the original Boole-Deusto to update its interface, interaction style, and set of features.",
+  "main": "index.html",
+  "keywords": [
+    "Combinational",
+    "Computer",
+    "Design",
+    "Boole",
+    "Deusto"
+  ],
+  "authors": [
+    "Eneko Cruz for Weblab Deusto"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jspdf-autotable": "^2.3.1",
+    "jspdf": "MrRio/jsPDF#^1.3.4",
+    "canvg": "canvg/canvg",
+    "slick-carousel": "kenwheeler/slick#^1.6.0"
+  }
+}
