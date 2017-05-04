@@ -623,7 +623,7 @@ function setupInputOutputControlListeners() {
     var inputs = 0; //initlal text box count
     $("#add_input").click(function(e){ //on add input button click
 	//alert("clicked add in");
-        e.preventDefault();
+        //e.preventDefault();
         if(inputs < max_in_fields-1){ //max input box allowed
             inputs++; //text box increment
             gDeclaredInputCount++;
@@ -635,7 +635,7 @@ function setupInputOutputControlListeners() {
     var outputs = 0;
     $("#add_output").click(function(e){ //on add input button click
         //alert("clicked add out");
-	e.preventDefault();
+	//e.preventDefault();
         if(outputs < max_out_fields-1){ //max input box allowed
             outputs++; //text box increment
             gDeclaredOutputCount++;
