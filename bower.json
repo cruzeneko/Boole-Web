@@ -25,10 +25,7 @@
   "dependencies": {
     "jspdf-autotable": "^2.3.1",
     "jspdf": "MrRio/jsPDF#^1.3.4",
-    "logidrom": "https://github.com/cruzeneko/logidrom.git#1df49613399214eab3d045d974b025f3e4172c62",
     "canvg": "canvg/canvg",
-    "bootstrap": "^3.3.7",
-    "quill": "^1.2.4",
     "slick-carousel": "kenwheeler/slick#^1.6.0"
   }
 }

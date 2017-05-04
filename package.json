@@ -7,8 +7,7 @@
     "bootstrap": "^3.3.7",
     "browserify": "^14.3.0",
     "logidrom": "git://github.com/cruzeneko/logidrom.git#1df49613399214eab3d045d974b025f3e4172c62",
-    "quill": "^1.2.4",
-    "slick-carousel": "github:kenwheeler/slick"
+    "quill": "^1.2.4"
   },
   "devDependencies": {},
   "scripts": {
