@@ -1,11 +1,11 @@
 'use strict';
 
-var lib = require('../bower_components/logidrom/lib/render-assign'),
+var lib = require('../node_modules/logidrom/lib/render-assign'),
     fs = require('fs'),
-    onml = require('../bower_components/logidrom/node_modules/onml'),
+    onml = require('../node_modules/onml'),
     // jsof = require('jsof'),
-    esprima = require('../bower_components/logidrom/node_modules/esprima'),
-    expect = require('../bower_components/logidrom/node_modules/chai').expect;
+    esprima = require('../node_modules/esprima'),
+    expect = require('../node_modules/chai').expect;
 
 
 
