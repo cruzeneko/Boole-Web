@@ -15,7 +15,7 @@ var KMapFillingLUTs = [null, _1VarKMapFillingLUT, _2VarKMapFillingLUT, _3VarKMap
 function getKMapIndexByInput(ordinal, noOfVars) {
   var LUT = KMapFillingLUTs[noOfVars];
   console.log("Ordinal " + ordinal + " gets mapped to " + LUT[ordinal] );
-  alert("Called motherfucker!");
+  //alert("Called motherfucker!");
   return LUT[ordinal];
 }
 

@@ -245,16 +245,23 @@ function preopVKCircuit(){
     //debugger;
     var inputs = [];
     var formulae = [];
+
     for(var i = 0; i< Object.keys(gInputHashmap).length; i++) {
         inputs[i] = gInputHashmap[i];
     }
+
+    //Alternative 1: Renders all the circuits in one svg. More adequate for displaying.
+    /*
     for(var i = 0; i<gKarnaughMapObjects.length; i++){
         var currentFormula = gKarnaughMapObjects[i].getLastSolution();
         var prefixNotationFormula = tokenizeAndDisplayNewFormula(currentFormula, inputs, [gOutputHashmap[i]]);
         formulae[i] = [gOutputHashmap[i], prefixNotationFormula];
     }
     test("holaz", formulae);
-    /*
+    */
+
+    //Alternative 2: Renders each circuit in a separate div. More adequate for printing.
+
     for(var i = 0; i<gKarnaughMapObjects.length; i++) {
         var formula = gKarnaughMapObjects[i].getLastSolution();
         console.log("Dealing with formula " + formula);
@@ -262,7 +269,6 @@ function preopVKCircuit(){
         test("holaz",[[gOutputHashmap[i],sol]]);
         console.log("Solution is: " + sol);
     }
-    */
 }
 
 
@@ -327,7 +333,12 @@ function posopStatementStatement(){
 
 
 function posopStatementTable(){
-    statementHeight = document.getElementById('panel-enunciado-capturado').clientHeight;
+    var children = document.getElementById('panel-enunciado-capturado').children;
+    for (var i = 0; i < children.length; i++) {
+        statementHeight+=children[i].clientHeight;
+    }
+    
+    truthTableWidth = document.getElementById('tablaVerdad').clientHeight * 0.75;
 }
 
 

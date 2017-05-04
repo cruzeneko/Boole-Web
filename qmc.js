@@ -893,7 +893,6 @@ function QuineMcCluskey(parentDivId, columns, language) {
   };
 
   this.setInputVarNames = function(names) {
-    console.log("Called bitch!");
     console.log(names);
     this.data.varNames = names;
   }

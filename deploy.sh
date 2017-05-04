@@ -22,8 +22,8 @@ cd $wd
 # Slick
 bower install kenwheeler/slick
 
-# Drom/Logidrom
-bower install drom/logidrom
+# cruzeneko/Logidrom
+bower install https://github.com/cruzeneko/logidrom.git#1df49613399214eab3d045d974b025f3e4172c62
 cd bower_components/logidrom
 npm install
 cd $wd
@@ -34,3 +34,12 @@ browserify js/logidrom.js > js/logidrom_b.js
 
 # JSPdf
 bower install MrRio/jsPDF
+
+
+# JSPdf-autotable
+bower install jspdf-autotable
+
+
+# Canvg (js to canvas)
+bower install canvg/canvg
+

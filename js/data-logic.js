@@ -108,9 +108,9 @@ function placeInSingleCellTable(doc, html) {
     //Render the autotable and place it in the document, with 
     doc.autoTable(res.columns, res.rows, 
     {
-        startY: doc.autoTableEndPosY() + 10,
+        startY: nextY,
         pageBreak: 'auto',
-        theme: 'plain',
+        theme: 'stripped',
         headerStyles: {fontStyle: 'normal'}
     });
 }
@@ -166,7 +166,7 @@ function centeredText(doc, yOffset, text) {
 
 function printAll() {
     var doc = new jsPDF('p', 'pt');
-    var title, date, titleSize, subtitleSize, startY, nextX, nextY, interSectionSpacing, dateOptions;
+    var title, date, titleSize, subtitleSize, startY, nextX, nextY, interSectionSpacing, dateOptions, pageWidth;
     var specialElementHandlers = {
 	'#editor': function(element, renderer){
 		return true;
@@ -181,7 +181,7 @@ function printAll() {
     defaultFontSize = 11;
     sectionHeadingSize = 14;
     interSectionSpacing = 32;
-
+    pageWidth = Math.floor(doc.internal.pageSize.width)
     doc.setFontSize(titleSize);
     centeredText(doc, startY, "Titulo del Problema");
     doc.setFontSize(subtitleSize);
@@ -198,7 +198,13 @@ function printAll() {
         'width': doc.internal.pageSize.width - 2 * nextX, 
         'elementHandlers': specialElementHandlers
     });
-    nextY += 0.45 * statementHeight + interSectionSpacing;
+    nextY += 0.75 * statementHeight + interSectionSpacing;
+
+    //Check if nextY is about to overflow page boundaries and create a new page if so.
+    if( nextY + 75 > doc.internal.pageSize.height) {
+        doc.addPage();
+        nextY = startY;
+    }
 
     doc.setFontSize(sectionHeadingSize);
     nextY+=sectionHeadingSize/2;
@@ -231,9 +237,205 @@ function printAll() {
     doc.setFont("courier");
     doc.text(inputs, nextX + 100, inY);
     doc.text(outputs, nextX + 100, outY);
+    nextY+=defaultFontSize*2;
 
+    //Produce an autotable table from the fake table
+    var truthtable = document.getElementById("tablaVerdad");
+    var res = doc.autoTableHtmlToJson(truthtable);
+
+    nextY += interSectionSpacing;
+
+    doc.setFontSize(sectionHeadingSize);
+    doc.setFont("helvetica");
+    doc.setFontType("normal");
+    nextY+=sectionHeadingSize/2;
+    doc.text("Tabla de Verdad", nextX, nextY);
+    nextY += sectionHeadingSize*2;
+
+    //Render the autotable and place it in the document, with
+    doc.autoTable(res.columns, res.rows,
+    {
+       startY: nextY,
+       margin: {left: 36+(pageWidth-truthTableWidth)/2, right: 36+(pageWidth-truthTableWidth)/2},
+       pageBreak: 'auto',
+       theme: 'striped',
+       headerStyles: {
+           fontStyle: 'normal',
+           lineWidth: 1,
+           lineColor: [0, 0, 0],
+           halign: 'center'
+       },
+       bodyStyles: {
+          lineWidth: 1,
+          lineColor: [0,0,0],
+          halign: 'center'
+      },
+      drawCell: function(cell, data) {
+          var rows = data.table.rows;
+          if (data.column.index < gDeclaredInputCount) {
+              doc.setFillColor(180, 210, 255);
+          }
+      }
+    });
+
+    nextY = doc.autoTableEndPosY() + interSectionSpacing;
+    //Check if nextY is about to overflow page boundaries and create a new page if so.
+    if( nextY + 75 > doc.internal.pageSize.height) {
+        doc.addPage();
+        nextY = startY;
+    }
+
+
+    nextY+=sectionHeadingSize/2;
+    doc.text("Diagramas Veitch-Karnaugh", nextX, nextY);
+    nextY = renderVKDiagramsInGrid(doc, 0, nextY) + interSectionSpacing;
+
+    doc.text("Circuito", nextX, nextY);
+    nextY+=sectionHeadingSize/2;
+    nextY = renderCircuitDiagramsInGrid(doc, 0, nextY);
+    //doc.text("Hola Holita!", nextX, nextY);
     //placeInSingleCellTable(doc, docHtml)
     doc.save('sample-file.pdf');
+}
+
+function renderSingleSvgElement(doc, startX, startY, sizeX, sizeY, svgElement) {
+    svgElementClone = svgElement.cloneNode(true)
+    svgElementClone.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+    var fakeDiv =  document.createElement("div");
+    fakeDiv.appendChild(svgElementClone);      
+    
+    var svg = fakeDiv.innerHTML;
+
+    if (svg){
+        svg = svg.replace(/\r?\n|\r/g, '').trim();
+    }
+
+    var canvas = document.createElement('canvas');
+    canvas.setAttribute("width", sizeX);
+    canvas.setAttribute("height", sizeY);
+    var context = canvas.getContext('2d');
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    canvg(canvas, svg);
+
+    var imgData = canvas.toDataURL('image/png');
+    doc.addImage(imgData, 'PNG', startX, startY, sizeX, sizeY);
+    console.log("Drawing an element at ("+startX+","+startY+")");
+
+}
+
+function renderVKDiagramsInGrid(doc, startX, startY) {
+    var nextX = startX;
+    var nextY = startY;
+    var offsetX = 0;
+    var offsetY = 0;
+    var pageHeight = Math.floor(doc.internal.pageSize.height);
+    var pageWidth = Math.floor(doc.internal.pageSize.width);
+    
+    //One can safely assume that all VK elements are the same height/width, since they have the same inputs/outputs.
+    //Therefore, use the first to calculate margins and related dimensions.
+
+    var firstSvgContainer = document.getElementById("vk-" + gOutputHashmap[0] + "-div");
+    var firstVKSvg = firstSvgContainer.firstChild;
+    var firstVKSvgHeight = Math.floor(firstVKSvg.getAttribute("height"))*0.75;
+    var firstVKSvgWidth = Math.floor(firstVKSvg.getAttribute("width"))*0.75; 
+
+    //Assuming two VK diagrams per row (two columns), calculate margins.
+    //First calculate total margin (both sides plus centre) and divide it between sides and
+    //centre (70% both sides + 30% centre)
+    var totalMarginTmp = pageWidth - 2*firstVKSvgWidth;
+    var margin = (totalMarginTmp*0.70)/2;
+    var centerMargin  = (totalMarginTmp*0.30);
+
+    for( var i = 0; i < Math.ceil(gDeclaredOutputCount/2); i++) {
+        //Check if we're about to overflow the page vertically. If so, we add a new page.
+        if(nextY + firstVKSvgHeight > pageHeight) {
+            nextY = 36;
+            doc.addPage();
+        }
+        
+        offsetX = margin;
+        for(var j = 0 ; j < 2 ; j++){
+            var currentSvgContainer = document.getElementById("vk-" + gOutputHashmap[2*i + j] + "-div");
+            if(currentSvgContainer != null){
+                renderSingleSvgElement(doc, nextX + offsetX , nextY , firstVKSvgWidth, firstVKSvgHeight, currentSvgContainer.firstChild);
+            }
+            offsetX += firstVKSvgWidth + centerMargin;
+        }
+        nextY += firstVKSvgHeight;
+    }
+    return nextY;
+}
+
+function renderCircuitDiagramsInGrid(doc, startX, startY) {
+    var nextX = startX;
+    var nextY = startY;
+    var offsetX = 0;
+    var offsetY = 0;
+    var pageHeight = Math.floor(doc.internal.pageSize.height);
+    var pageWidth = Math.floor(doc.internal.pageSize.width);
+
+    var svgElements = document.getElementById("holaz").childNodes;
+    //One cannot assume that all diagrams are the same dimensions, therefore, one must calculate margins for
+    //each circuit diagram pair.
+
+    for(var i = 0; i<Math.ceil(gDeclaredOutputCount/2); i++) {
+
+        var thisHeight, nextHeight, thisWidth, nextWidth;
+        var margin, centerSpace;
+        thisHeight = nextHeight = thisWidth = nextWidth = 0;
+
+        var thisSvg = svgElements[2*i  +1];
+        var nextSvg = svgElements[2*i+1+2];
+
+        var thereIsAPair = nextSvg != null;
+
+        var thisHeight = Math.floor(thisSvg.getAttribute("height"))*0.75;
+        var thisWidth = Math.floor(thisSvg.getAttribute("width"))*0.75;
+
+        if(thereIsAPair) {
+            var nextHeight = Math.floor(nextSvg.getAttribute("height"))*0.75;      
+            var nextWidth = Math.floor(nextSvg.getAttribute("width"))*0.75;
+        }
+      
+        //Check if this pair will overflow the page. If so, get a new page and start drawing there
+        var maxHeight = Math.max(thisHeight, nextHeight);
+        if(nextY + maxHeight > pageHeight) {
+            doc.addPage();
+            nextY = 36;
+        }
+
+        //Calculate margin for this circuit pair: If there are two circuits to render remaining, then
+        //margin will be 70% of the total space not taken by circuits divided by two. The centre space will
+        //be the remaining 30%.
+
+        var totalSpaceTmp = pageWidth - (thisWidth+nextWidth);        
+        if(thereIsAPair) {
+            margin = (totalSpaceTmp*0.70)/2;
+            centerSpace = totalSpaceTmp*0.30;
+        }
+        else {
+            margin = totalSpaceTmp/2;
+            centerSpace = 0;
+        }
+        renderSingleSvgElement(doc, nextX+margin, nextY, thisWidth, thisHeight, thisSvg);
+        
+        if(thereIsAPair) {
+            renderSingleSvgElement(doc, nextX+margin+thisWidth+centerSpace, nextY, nextWidth, nextHeight, nextSvg);        
+        }
+
+        nextY += Math.max(thisHeight, nextHeight);
+    }
+    return nextY;
+} 
+
+function isInput(string) {
+    for(var i = 0; i<Object.keys(gInputHashmap).length; i++) {
+        if(string === gInputHashmap[i]){
+            return true;
+        }
+    }
+    return false;
 }
 
 function setupEventListeners() {
@@ -323,13 +525,14 @@ function tableCreate(){
     
     //Initialize the structure that will hold data
     truthTable = new Array(gDeclaredInputCount);
-
+    
     var header = tbl.insertRow();
     for(var i = 0; i < gDeclaredInputCount; i++){
             var td = header.insertCell();
             td.className = "tv-th";
             td.appendChild(document.createTextNode(gInputHashmap[i]));
     }
+
     for(var i = 0; i < gDeclaredOutputCount; i++){
             var td = header.insertCell();
             td.className = "tv-th";
