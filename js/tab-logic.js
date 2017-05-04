@@ -269,6 +269,9 @@ function preopVKCircuit(){
         test("holaz",[[gOutputHashmap[i],sol]]);
         console.log("Solution is: " + sol);
     }
+
+    var circuitPanel = document.getElementById("circuitPanel");
+    
 }
 
 
