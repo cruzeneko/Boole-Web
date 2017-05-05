@@ -321,6 +321,7 @@ function posopIntroVK(){
 
 
 function posopIntroCircuit(){
+    posopVKCircuit(); //Debug only
     //throw "Transición no permitida realizada";
 }
 
@@ -402,7 +403,162 @@ function posopVKVK(){
 
 
 function posopVKCircuit(){
-    //Nothing yet
+    var realIn = ["realIn1","realIn2","realIn3","realIn4","realIn5","realIn6"];
+    var realOut = ["realOut1", "realOut2", "realOut3", "realOut4", "realOut5", "realOut6"];
+    var sysIn = ["sysIn1", "sysIn2", "sysIn3"];
+    var sysOut = ["sysOut1", "sysOut2", "sysOut3"];
+
+    var sysInDiv = document.createElement('div');
+    sysInDiv.id = "sysInDiv";
+
+    var sysOutDiv = document.createElement('div');
+    sysOutDiv.id = "sysOutDiv";
+
+    var realInDiv = document.createElement('div');
+    realInDiv.id = "realInDiv";
+
+    var realOutDiv = document.createElement('div');
+    realOutDiv.id = "realOutDiv";
+
+    var systemIODiv = document.getElementById("systemIOcol");
+    var realIODiv = document.getElementById("realIOcol");
+
+    for(var i = 0; i<sysIn.length; i++) {
+        var newDraggableInDiv = document.createElement('div');
+        var portText = document.createElement('tt');
+        newDraggableInDiv.className = "draggable-in";
+        newDraggableInDiv.color = "red";
+        portText.innerHTML = sysIn[i];
+        newDraggableInDiv.appendChild(portText);
+        sysInDiv.appendChild(newDraggableInDiv);
+    }
+
+    for(var i = 0; i<sysOut.length; i++) {
+        var newDraggableOutDiv = document.createElement('div');
+        var portText = document.createElement('tt');
+        newDraggableOutDiv.className = "draggable-out";
+        newDraggableOutDiv.color = "red";
+        portText.innerHTML = sysOut[i];
+        newDraggableOutDiv.appendChild(portText);
+        sysOutDiv.appendChild(newDraggableOutDiv);
+    }
+
+    for(var i = 0; i<realIn.length; i++) {
+        var newDroppableInDiv = document.createElement('div');
+        var portText = document.createElement('tt');
+        newDroppableInDiv.className = "droppable-in";
+        newDroppableInDiv.color = "red";
+        portText.innerHTML = realIn[i];
+        newDroppableInDiv.appendChild(portText);
+        realInDiv.appendChild(newDroppableInDiv);
+    }
+
+    for(var i = 0; i<realOut.length; i++) {
+        var newDroppableOutDiv = document.createElement('div');
+        var portText = document.createElement('tt');
+        newDroppableOutDiv.className = "droppable-out";
+        newDroppableOutDiv.color = "red";
+        portText.innerHTML = realOut[i];
+        newDroppableOutDiv.appendChild(portText);
+        realOutDiv.appendChild(newDroppableOutDiv);
+    }
+
+
+    //Make elements draggable
+    $('#integration-modal').on('shown.bs.modal', function() {
+        $(".draggable-in").draggable({ 
+            revert: true,
+            start: function(event, ui) {
+                $(this).parent().attr('full', 'false');
+                $(".droppable-out").fadeTo( "fast", 0.33 );
+            },
+            stop: function(event, ui) {
+                $(".droppable-out").fadeTo( "fast", 1);
+            }
+        });
+        $(".draggable-out").draggable({ 
+            revert: true, 
+            start: function(event, ui) {
+                $(this).parent().attr('full', 'false');
+                $(".droppable-in").fadeTo( "fast", 0.33 );
+            },
+            stop: function(event, ui) {
+                $(".droppable-in").fadeTo( "fast", 1);
+            }
+        });
+        
+        $(".draggable-in").on('mousedown', function(event) { 
+            $('.container').css('z-index','1');
+            $( this ).css('z-index','1000');
+            $( this ).css({position: 'relative'});
+        });
+        $(".draggable-out").on('mousedown', function(event) {
+            $('.container').css('z-index','1');
+            $( this ).css('z-index','1000');
+            $( this ).css({position: 'relative'});
+        });
+
+        $(".droppable-in").attr('full', 'false');
+        $(".droppable-out").attr('full', 'false');
+
+        $(".droppable-in").droppable({
+            activeClass: 'ui-state-hover',
+            hoverClass: 'ui-state-active',
+            // uncomment the line below to only accept the .correct class..
+            // Note: the "drop" function will not be called if not ".correct"
+            //  accept : '.correct',
+            drop: function(event, ui) {
+                // alternative method:
+                // if (ui.draggable.find('p').text() == "1") {
+                if (ui.draggable.is('.draggable-in') && $(this).attr('full') === 'false') {
+                    $(this).addClass('ui-state-highlight').find('p').html('You got it!');
+                    $(this).attr('full', 'true');
+                    $(this).append(ui.draggable.css({position: 'static'}));
+                } else {
+                    $('.droppable-in > p').html('Not that one!')
+                    setTimeout(function(){ $('.droppable-in > p').html('Drop here'); }, 1000);
+                }
+            }
+        });
+ 
+        $(".droppable-out").droppable({
+            activeClass: 'ui-state-hover',
+            hoverClass: 'ui-state-active',
+            // uncomment the line below to only accept the .correct class..
+            // Note: the "drop" function will not be called if not ".correct"
+            //  accept : '.correct',
+            drop: function(event, ui) {
+                // alternative method:
+                // if (ui.draggable.find('p').text() == "1") {
+                if (ui.draggable.is('.draggable-out') && $(this).attr('full') === 'false') {
+                    $(this).addClass('ui-state-highlight').find('p').html('You got it!');
+                    $(this).attr('full', 'true');
+                    $(this).append(ui.draggable.css({position: 'static'}));
+                } else {
+                    $('.droppable-in > p').html('Not that one!')
+                    setTimeout(function(){ $('.droppable-out > p').html('Drop here'); }, 1000);
+                }
+            }
+        });
+    });
+
+    //Debug only
+    //systemIODiv.appendChild(debugCreateP("System In"));
+    //systemIODiv.appendChild(debugCreateP("System Out"));
+    //realIODiv.appendChild(debugCreateP("Real In"));
+    //realIODiv.appendChild(debugCreateP("Real Out"));
+    
+    systemIODiv.appendChild(sysInDiv);
+    systemIODiv.appendChild(sysOutDiv);
+    realIODiv.appendChild(realInDiv);
+    realIODiv.appendChild(realOutDiv);
+    console.log("Finished");
+}
+
+function debugCreateP(text){
+    var p2 = document.createElement('p');
+    p2.innerHTML = text;
+    return p2;
 }
 
 

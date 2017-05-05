@@ -8,7 +8,9 @@
         <meta name="description" content="Boole Web">
         <meta name="author" content="Weblab Deusto">
         <link rel="stylesheet" href="css/styles.css">
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
         <script src="js/data-logic.js"></script>
         <script src="js/tab-logic.js"></script>
         <script src="js/solucion.js"></script>
@@ -180,10 +182,10 @@
 			</div>
                 	<button type="button" class="btn" id="btnNext" type="button" onclick="gotoTab('enunciado')">Reiniciar</button>
                 	<button type="button" class="btn" id="btnPrintAll" type="button" onclick="printAll()">Imprimir</button>
-			<button type="button" class="btn" data-toggle="modal" data-target="#myModal">Open Large Modal</button>
+			<button type="button" class="btn" data-toggle="modal" data-target="#integration-modal">Open Large Modal</button>
   		</div>
 	</div>
-        <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal fade" id="integration-modal" role="dialog">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -191,10 +193,27 @@
           				<h4 class="modal-title">Modal Header</h4>
         			</div>
 				<div class="modal-body">
-					<p>This is a large modal.</p>
+					<div class="row">
+ 						<div class="col-sm-6">
+							<div class="panel panel-primary">
+								<div class="panel-heading">System I/O</div>
+								<div id="systemIOcol" class="panel-body"></div>
+							</div>
+						</div>
+                                                <div class="col-sm-6">
+                                                        <div class="panel panel-primary">
+                                                                <div class="panel-heading">Real I/O</div>
+                                                                <div id="realIOcol" class="panel-body"></div>
+                                                        </div>
+                                                </div>
+					</div>
 				</div>
         			<div class="modal-footer">
           				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-default">
+          					<span class="glyphicon glyphicon-flash"></span>
+						Ir a Weblab
+        				</button>
         			</div>
 			</div>
 		</div>

@@ -215,3 +215,39 @@ overflow:auo;
 .tv-td-mod {
 
 }
+
+.draggable-in { 
+    padding: 0.5em; 
+    float: left;
+    margin: 10px 10px 10px 10px; 
+    background: #73AD21; 
+    border-radius: 10px; 
+}
+
+.draggable-out { 
+    padding: 0.5em; 
+    float: left;
+    margin: 10px 10px 10px 10px; 
+    background: red; 
+    border-radius: 10px;  
+}
+
+.droppable-in { 
+    width: 75px; 
+    height: 75px; 
+    padding: 0.5em; 
+    float: left; 
+    margin: 10px; 
+    background-color: PaleGreen; 
+    border-radius:10px
+}
+
+.droppable-out { 
+    width: 75px; 
+    height: 75px; 
+    padding: 0.5em; 
+    float: left; 
+    margin: 10px; 
+    background-color: OrangeRed; 
+    border-radius:10px
+}
