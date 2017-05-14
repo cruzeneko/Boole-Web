@@ -405,8 +405,16 @@ function posopVKVK(){
 function posopVKCircuit(){
     var realIn = ["realIn1","realIn2","realIn3","realIn4","realIn5","realIn6"];
     var realOut = ["realOut1", "realOut2", "realOut3", "realOut4", "realOut5", "realOut6"];
-    var sysIn = ["sysIn1", "sysIn2", "sysIn3"];
-    var sysOut = ["sysOut1", "sysOut2", "sysOut3"];
+    var sysIn = ["a" , "b",  "c"];
+    var sysOut = ["b", "c" , "d"];
+
+    for(var i = 0; i<Object.keys(gInputHashmap).length; i++) {
+        sysIn[i] = gInputHashmap[i];
+    }
+
+    for(var i = 0; i<Object.keys(gOutputHashmap).length; i++) {
+        sysOut[i] = gOutputHashmap[i];
+    }
 
     var sysInDiv = document.createElement('div');
     sysInDiv.id = "sysInDiv";
@@ -431,6 +439,7 @@ function posopVKCircuit(){
         portText.innerHTML = sysIn[i];
         newDraggableInDiv.appendChild(portText);
         sysInDiv.appendChild(newDraggableInDiv);
+
     }
 
     for(var i = 0; i<sysOut.length; i++) {
@@ -466,6 +475,27 @@ function posopVKCircuit(){
 
     //Make elements draggable
     $('#integration-modal').on('shown.bs.modal', function() {
+        var max = -1;
+        $(".draggable-in").each(function() {
+            var h = $(this).height();
+            var w = $(this).width(); 
+            max = h > max ? h : max;
+            max = w > max ? w : max;
+        });
+        $(".draggable-out").each(function() {
+            var h = $(this).height();
+            var w = $(this).width();
+            max = h > max ? h : max;
+            max = w > max ? w : max;
+        });
+        $(".draggable-in").height(max); $(".draggable-in").width(max);
+        $(".draggable-out").height(max); $(".draggable-out").width(max);
+        $(".droppable-in").height($(".droppable-in").height()+max);
+        $(".droppable-out").height($(".droppable-out").height()+max);
+	$(".droppable-in").width($(".droppable-in").height());
+        $(".droppable-out").width($(".droppable-out").height());
+
+
         $(".draggable-in").draggable({ 
             revert: true,
             start: function(event, ui) {
@@ -542,17 +572,12 @@ function posopVKCircuit(){
         });
     });
 
-    //Debug only
-    //systemIODiv.appendChild(debugCreateP("System In"));
-    //systemIODiv.appendChild(debugCreateP("System Out"));
-    //realIODiv.appendChild(debugCreateP("Real In"));
-    //realIODiv.appendChild(debugCreateP("Real Out"));
-    
     systemIODiv.appendChild(sysInDiv);
     systemIODiv.appendChild(sysOutDiv);
     realIODiv.appendChild(realInDiv);
     realIODiv.appendChild(realOutDiv);
-    console.log("Finished");
+
+    $("#btnOpenExternal").innerHTML += externalServiceActionName
 }
 
 function debugCreateP(text){

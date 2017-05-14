@@ -222,6 +222,8 @@ overflow:auo;
     margin: 10px 10px 10px 10px; 
     background: #73AD21; 
     border-radius: 10px; 
+    display: table-cell;
+    text-align:center;
 }
 
 .draggable-out { 
@@ -229,7 +231,9 @@ overflow:auo;
     float: left;
     margin: 10px 10px 10px 10px; 
     background: red; 
-    border-radius: 10px;  
+    border-radius: 10px;
+    text-align:center;  
+    vertical-align: middle;
 }
 
 .droppable-in { 
@@ -237,9 +241,10 @@ overflow:auo;
     height: 75px; 
     padding: 0.5em; 
     float: left; 
-    margin: 10px; 
+    margin: 10px ; 
     background-color: PaleGreen; 
-    border-radius:10px
+    border-radius:10px;
+    text-alignment: center;
 }
 
 .droppable-out { 

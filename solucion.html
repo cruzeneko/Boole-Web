@@ -8,19 +8,24 @@
         <meta name="description" content="Boole Web">
         <meta name="author" content="Weblab Deusto">
         <link rel="stylesheet" href="css/styles.css">
-
+	<link rel="localization" hreflang="es" href="lang/es.json" type="application/vnd.oftn.l10n+json"/>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
         <script src="js/data-logic.js"></script>
         <script src="js/tab-logic.js"></script>
         <script src="js/solucion.js"></script>
         <script src="js/logidrom_b.js"></script>
+        <script src="js/internationalization.js"></script>
+	<script src="js/onload.js"></script>
+        <script src="js/control-facade.js"></script>
+        <script src="js/controller.js"></script>
 	<link rel="stylesheet" href="node_modules/quill/dist/quill.snow.css">
 	<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
 	<script src="bower_components/jspdf/dist/jspdf.min.js"></script>
         <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="bower_components/jspdf-autotable/dist/jspdf.plugin.autotable.js"></script>
 	<script src="node_modules/quill/dist/quill.js"></script> 
+        <script src="js/i18n.js"></script>
 	<script type="text/javascript" src="bower_components/canvg/rgbcolor.js"></script> 
 	<script type="text/javascript" src="bower_components/canvg/StackBlur.js"></script>
 	<script type="text/javascript" src="bower_components/canvg/canvg.js"></script> 
@@ -36,27 +41,27 @@
 
 <body>
 <ul class="tab">
-  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Intro')" id="inicio">Inicio</a></li>
-  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Statement')" id="enunciado">Enunciado y Configuración</a></li>
-  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Table')" id="tabla">Tabla de Verdad</a></li>
-  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'VK')" id="vk">Diagrama V-K</a></li>
-  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Circuit')" id="circuito">Circuito</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Intro')" id="tabStart">Start</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Statement')" id="tabStatement">Statement and Configuration</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Table')" id="tabTable">Truth table</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'VK')" id="tabVK">Karnaugh Maps</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Circuit')" id="tabCircuit">Circuit</a></li>
 </ul>
 
 <div id="Intro" class="tabcontent">
 	<div class="container">
-		<h3>Inicio</h3>
+		<h3 id="hdgStart">Start</h3>
 		<p>Esta es la pestaña Inicio.</p>
 		<p>En esta pestaña se puede mostrar una pequeña introducción a Boole.</p>
 		<div style="position: absolute; bottom: 10%; right: 10%;">
-        		<button id="btnNext" class="btn-primary" type="button" onclick="gotoTab('enunciado')">Siguiente</button>
+        		<button id="btnNextToStatement" class="btn-primary" type="button" onclick="gotoTab('enunciado')">Next</button>
 		</div>
 	</div>
 </div>
 
 <div id="Statement" class="tabcontent">
 	<div class="container">
-		<h3>Enunciado</h3>
+		<h3 id="hdgStatement">Statement</h3>
 		<div  class="row">
 			<div id="editor" class="row-sm-6">
 				<p>Puedes escribir aquí el enunciado...</p>
@@ -85,17 +90,17 @@
 		</div>
 	</div>
 	<div style="position: absolute; bottom: 10%; right: 10%;">
-		<button id="btnNext" type="button" class="btn-primary" onclick="gotoTab('tabla')">Siguiente</button>
+		<button id="btnNextToTable" type="button" class="btn-primary" onclick="gotoTab('tabla')">Next</button>
 	</div>
 </div>
 
 <div id="Table" class="tabcontent">
 	<div class="container">
-		<h3>Tabla de Verdad</h3>
+		<h3 id="hdgTable">Truth Table</h3>
 	
 		<div class="panel-container">
 		    <div id="panel-enunciado-capturado" class="container">
-			<p>Hola!</p>
+			<p>Placeholder</p>
                     </div>
 	
 		    <div class="splitter">
@@ -146,13 +151,13 @@
 
 	</div>	
 	<div style="position: absolute; bottom: 10%; right: 10%;">
-        	<button id="btnNext" type="button" onclick="gotoTab('vk')">Siguiente</button>
+        	<button id="btnNextToVK" type="button" onclick="gotoTab('vk')">Next</button>
 	</div>
 </div>
 
 <div id="VK" class="tabcontent">
 	<div class="container">
-        	<h3>Diagrama V-K</h3>
+        	<h3 id="hdgVK">Karnaugh Map</h3>
         	<p>Esta es la pestaña Diagrama V-K.</p>
         	<div class="panel-container">
         		<div id="captured-truthtable-panel" class="panel-left">
@@ -169,7 +174,7 @@
 
 	</div>
 	<div style="position: absolute; bottom: 10%; right: 10%;">
-	        <button id="btnNext" type="button" onclick="gotoTab('circuito')">Reiniciar</button>
+	        <button id="btnNextToCircuit" type="button" onclick="gotoTab('circuito')">Next</button>
 	</div>
 </div>
 
@@ -210,9 +215,8 @@
 				</div>
         			<div class="modal-footer">
           				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-					<button type="button" class="btn btn-default">
+					<button type="button" class="btn btn-default" id="btnOpenExternal">
           					<span class="glyphicon glyphicon-flash"></span>
-						Ir a Weblab
         				</button>
         			</div>
 			</div>
@@ -221,7 +225,7 @@
 </div>
 
 	<script>
-		document.getElementById("inicio").click();
+		document.getElementById("tabStart").click();
 	</script>
 
 </body>

@@ -1,4 +1,5 @@
 /*
+   "type"		    : string: either "config" or "reset".
    "statement"              : html string
    "inputVars"              : integer
    "outputVars"             : integer
@@ -9,8 +10,21 @@
    "weblabAvailableOutputs" : Array of Strings
 */
 
-function configureNewExercise( var config ) {
 
+function receiveMessage(e) {
+    var type = e.data.type;
+    
+    if(type === "config") {
+        configureNewExercise( e.data );
+    }
+    else if(type === "reset") {
+        resetApplication( e.data );
+    }
+}
+
+
+function configureNewExercise( config ) {
+    configure(config);
 }
 
 function resetApplication( ) {
