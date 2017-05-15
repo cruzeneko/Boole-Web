@@ -29,5 +29,9 @@
 	"Restart" : "Reiniciar",
 	"Print" : "Imprimir",
 	"Delete" : "Eliminar",
-	"Add Input" : "Anadir Entrada"
+	"Add Input" : "Anadir Entrada",
+	"Fill in the problem statement and the inputs and outputs" : "Ingresa el enunciado del problema y las entradas y salidas",
+	"Fill in the truth table from the statement" : "Ingresa la tabla de verdad a partir del enunciado",
+	"You can write your statement here" : "Puedes escribir aqui el enunciado",
+	"Minterm canonical formulae" : "Como se llama esta formula?"
 }

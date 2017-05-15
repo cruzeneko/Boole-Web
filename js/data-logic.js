@@ -31,16 +31,30 @@ function validateTabSwitchToTruthTable() {
 
 function createAndPopulateKMaps() {
     console.log("Populating all");
-    $('.slider').not('.slick-initialized').slick();
-    //$('.slider').slick('unslick');
     var kMapSlider = document.getElementById("vkSlider");
     var j = 0;
+    $('#panel-vks').carousel({
+        interval: false
+    });
+
     for(var i = gDefinedOutputCount - 1; i >=0 ; i--) {
         //createAndPopulateSingleKMap(kMapSlider, gOutputHashmap[i]);
-        $('.slider').slick('slickAdd','<div id="vkdiv'+i+'"><p>'+gOutputHashmap[i]+'</p></div>', 0);
+	var newDiv = document.createElement('div');
+	var newP = document.createElement('p');
+	newP.innerHTML+=gOutputHashmap[i];
+	newDiv.appendChild(newP);
+        newDiv.setAttribute("id", "vkdiv"+i);
+	newDiv.className += "item";
+	if(i == 0){
+	    newDiv.className += " active";
+	}
+	newDiv.style.marginLeft = newDiv.style.marginRight = "50px";
+
+	kMapSlider.appendChild(newDiv);
         createAndPopulateSingleKMap(document.getElementById("vkdiv"+i), gOutputHashmap[i], i);
     }
-    $('.slider').slick('slickGoTo', 0);
+    $("#panel-vks").carousel("pause").removeData();
+    $("#panel-vks").carousel(0);
 }
 
 function createAndPopulateSingleKMap(parentDiv, outputName, outputOrdinal) {

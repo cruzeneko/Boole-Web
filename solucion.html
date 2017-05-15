@@ -62,11 +62,11 @@
 	<div class="container">
 		<h3 id="hdgStatement">Statement</h3>
 		<div class="panel panel-primary">
-			<div class="panel-heading">Fill in the problem statement and the inputs and outputs</div>
+			<div class="panel-heading" id="hdgSubStatement">Fill in the problem statement and the inputs and outputs</div>
 			<div class="panel-body">
 				<div class="row">
 					<div id="editor" class="row-sm-6">
-						<p>Puedes escribir aquí el enunciado...</p>
+						<p id="statementPrompt">You can write your statement here</p>
   						<p><br></p>
 					</div>
 					<script>
@@ -77,14 +77,14 @@
 							<div class="panel-body">
 								<div class="row">
 									<div class="col-sm-6">
-               				        				<p>  Entradas</p>
+               				        				<p id="hdgInputCol">Inputs</p>
 										<div class="input_fields_wrap" id="add_input_wrap">
-											<button class="add_field_button" id="add_input">Add Input</button>
+											<button class="add_field_button" id="add_input">Add input</button>
 											<div><input type="text" class="form-control" name="mytext[]" idx="0" id="input0"></div>
 										</div>
 									</div>
 			                			        <div class="col-sm-6">
-										<p>  Salidas</p>
+										<p id="hdgOutputCol">Outputs</p>
 	        					                	<div class="input_fields_wrap" id="add_output_wrap">
 	             						        	        <button class="add_field_button" id="add_output">Add output</button>
 	               		        				        	<div><input type="text" class="form-control" name="mytext[]" idx="0" id="output0"></div>
@@ -111,7 +111,7 @@
 			<div class="panel-heading">Fill in the truth table from the statement</div>
 			<div class="panel-body">		
 				<div class="panel-container">
-					<div id="panel-enunciado-capturado" class="container">
+					<div id="panel-enunciado-capturado" class="panel-left">
 						<p>Placeholder</p>
 	        	            	</div>
 			
@@ -154,7 +154,7 @@
 				<script src="js/jquery-resizable.js"></script>
 				<script>
 				    $("#panel-enunciado-capturado").resizable({
-					handleSelector: "statementTableSplitter",
+					handleSelector: ".splitter",
 					resizeHeight: false
 				    });
 				</script>
@@ -182,12 +182,21 @@
         		<div id="captured-truthtable-panel" class="panel-left">
 			</div>
 	
-		    	<div class="splitter"></div>
+		    	<div class="asplitter"></div>
        	     
-       	     		<div id="panel-vks" class="panel-right">
-		        	<div id="vkSlider" class="slider">
-                    			<div><p>Arrastrar</p></div>
-                		</div> 
+       	     		<div id="panel-vks" class="panel-right carousel slide">
+		        	<div id="vkSlider" class="carousel-inner" role="listbox">
+                		</div>
+				
+				<!-- Left and right controls -->
+				<a class="left carousel-control" href="#panel-vks" role="button" data-slide="prev">
+					<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      					<span class="sr-only">Previous</span>
+    				</a>
+    				<a class="right carousel-control" href="#panel-vks" role="button" data-slide="next">
+      					<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      					<span class="sr-only">Next</span>
+    				</a>
             		</div>
         	</div>
 
@@ -199,14 +208,14 @@
 
 <div id="Circuit" class="tabcontent">
 	<div class="container">
-        	<h3>Circuito</h3>
+        	<h3 id="hdgCircuit">Circuito</h3>
         	<p>Esta es la pestaña Circuito.</p>
 		<div id="circuitPanel" class="panel panel-default">
 			<div class="panel-body" id="holaz">
 			</div>
-                	<button type="button" class="btn" id="btnNext" type="button" onclick="gotoTab('enunciado')">Reiniciar</button>
-                	<button type="button" class="btn" id="btnPrintAll" type="button" onclick="printAll()">Imprimir</button>
-			<button type="button" class="btn" data-toggle="modal" data-target="#integration-modal">Open Large Modal</button>
+                	<button type="button" class="btn" id="btnRestart" type="button" onclick="gotoTab('enunciado')">Restart</button>
+                	<button type="button" class="btn" id="btnPrintAll" type="button" onclick="printAll()">Print</button>
+			<button type="button" class="btn" id="btnExternalSvc" data-toggle="modal" data-target="#integration-modal">Open external service</button>
   		</div>
 	</div>
         <div class="modal fade" id="integration-modal" role="dialog">
