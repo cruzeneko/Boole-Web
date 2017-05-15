@@ -18,10 +18,11 @@ function loaded()
 
 var internationalizableTags = 
 [
-	"tabStart", "tabStatement", "tabTable", "tabVK", "tabCircuit","btnNextToStatement",
-	"btnNextToTable", "btnNextToVK", "btnNextToCircuit", "btnRestart", "btnPrint", 
-	"hdgStart", "hdgStatement", "hdgTable", "hdgVK" , "hdgCircuit",
-
+	"tabStart", "tabStatement", "tabTable", "tabVK", "tabCircuit",
+	"btnNextToStatement", "btnNextToTable", "btnNextToVK", 
+	"btnNextToCircuit", "btnRestart", "btnPrintAll", "hdgStart", 
+	"hdgStatement", "hdgTable", "hdgVK" , "hdgCircuit", "add_input",
+	"add_output", "btnFill0", "btnFill1", "btnFillX", "btnClear"
 ];
 
 function localizeAll() {
@@ -29,7 +30,6 @@ function localizeAll() {
     if (lang != "") String.locale = lang;
     
     for(var i = 0; i<internationalizableTags.length; i++) {
-        console.log("Internationalizing tag " + internationalizableTags[i]);
 	localizeHTMLTag(internationalizableTags[i]);
     }
 
@@ -44,6 +44,7 @@ var _ = function (string) {
 
 function localizeHTMLTag(tagId)
 {
+	console.log("Internationalizing tag " + tagId);
 	tag = document.getElementById(tagId);
 	tag.innerHTML = _(tag.innerHTML);
 }

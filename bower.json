@@ -26,6 +26,7 @@
     "jspdf-autotable": "^2.3.1",
     "jspdf": "MrRio/jsPDF#^1.3.4",
     "canvg": "canvg/canvg",
-    "slick-carousel": "kenwheeler/slick#^1.6.0"
+    "slick-carousel": "kenwheeler/slick#^1.6.0",
+    "MathJax": "^2.7.1"
   }
 }

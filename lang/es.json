@@ -27,5 +27,7 @@
 	"Solve" : "Resolver",
 	"Circuit" : "Circuito",
 	"Restart" : "Reiniciar",
-	"Print" : "Imprimir"
+	"Print" : "Imprimir",
+	"Delete" : "Eliminar",
+	"Add Input" : "Anadir Entrada"
 }

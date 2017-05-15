@@ -183,7 +183,7 @@ function printAll() {
     interSectionSpacing = 32;
     pageWidth = Math.floor(doc.internal.pageSize.width)
     doc.setFontSize(titleSize);
-    centeredText(doc, startY, "Titulo del Problema");
+    centeredText(doc, startY, "Problem title");
     doc.setFontSize(subtitleSize);
     nextY = startY + 4*subtitleSize;
     centeredText(doc, nextY, "subtitulo");
@@ -504,6 +504,74 @@ function addIndividualOutputDataListener(ElementId) {
         evaluateOutputStatus(elementid);
     });
 }
+
+function clearAllFormulae( ) {
+    $("#formulaeContainer").empty();
+}
+
+function addSOPToPage(sop) {
+    var targetDiv = document.getElementById("formulaeContainer");
+    var formulaDiv = document.createElement('div');
+    //formulaDiv.className = "text-center"
+    formulaDiv.innerHTML = sop;
+    targetDiv.appendChild(formulaDiv);
+
+    //Instruct MathJax to typeset the whole page
+    MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+}
+
+function reEvaluateSumOfProductsFormulae(truthTable) {
+    //Begin by clearing all (possibly outdated) formulae
+    clearAllFormulae();    
+
+    //We'll need to produce one sum of products per declared output
+    for( var i = 0; i < gDeclaredOutputCount; i++ ) {
+        //Start by checking that each output column of the truth table is defined.
+	//as a sum of minterms cannot be produced if an output is undefined for a
+	//particular configuration
+
+        var thisSOPIsDefined = true;
+        for(var j = 0 ; j < truthTable.length; j++) {
+	    if(typeof truthTable[j][gDeclaredInputCount + i] == "undefined" ) {
+                thisSOPIsDefined = false;
+                break;
+            }
+        }
+
+	//If we cannot calculate this sum of minterms, then proceed to the next one
+        if(!thisSOPIsDefined) continue;
+
+        sumOfMinterms = "";
+	sumOfMinterms += ("$" + gOutputHashmap[i] + " = ");
+        for(var j = 0; j < truthTable.length; j++) {
+        if(truthTable[j][gDeclaredInputCount+i] == "1"){    
+                var thisMinterm = "";
+                for (var k = gDeclaredInputCount-1 ; k >= 0 ; k--) {
+                    var thisVar = gInputHashmap[gDeclaredInputCount-1-k];
+                        if( ( ( 1 << k ) & j ) != 0 ) {
+                            //Conjunctive clause not inverted
+                            thisMinterm+=thisVar;
+                        }
+                        else {
+                            //Conjunctive clause is inverted
+                            thisMinterm+=("\\overline{"+thisVar+"}");
+                        }
+                }
+                sumOfMinterms += thisMinterm;
+                if( j < truthTable.length-1){
+                   sumOfMinterms += "+";
+                }
+            }
+        }
+        if(sumOfMinterms.charAt(sumOfMinterms.length - 1) == "+"){
+        sumOfMinterms = sumOfMinterms.substring(0, sumOfMinterms.length - 1);
+        }
+        sumOfMinterms += "$";
+        console.log("One of the sums of minterms is " + sumOfMinterms);        
+        addSOPToPage(sumOfMinterms)
+    }
+}
+
 function toggleTruthValue(element) {
     var newValue;
     //alert("InnerHTML: " + element.innerHTML);
@@ -515,6 +583,8 @@ function toggleTruthValue(element) {
         element.innerHTML = newValue = "X";
     }
     truthTable[element.getAttribute("i")][element.getAttribute("j")] = newValue;
+
+    reEvaluateSumOfProductsFormulae(truthTable);
 }
 
 function tableCreate(){
@@ -627,8 +697,9 @@ function setupInputOutputControlListeners() {
         if(inputs < max_in_fields-1){ //max input box allowed
             inputs++; //text box increment
             gDeclaredInputCount++;
-            $("#add_input_wrap").append('<div><input type="text" class="form-control" name="mytext[]" idx='+inputs+' id="input'+inputs+'"/><a href="#" class="remove_input">Eliminar</a></div>');
-            addIndividualInputDataListener('input'+inputs);
+            $("#add_input_wrap").append('<div><input type="text" class="form-control" name="mytext[]" idx='+inputs+' id="input'+inputs+'"/><a href="#" id="inDelete'+inputs +'" class="remove_input">Eliminar</a></div>');
+            localizeHTMLTag("inDelete"+inputs);
+	    addIndividualInputDataListener('input'+inputs);
         }
     });
 
@@ -639,8 +710,9 @@ function setupInputOutputControlListeners() {
         if(outputs < max_out_fields-1){ //max input box allowed
             outputs++; //text box increment
             gDeclaredOutputCount++;
-            $("#add_output_wrap").append('<div><input type="text" class="form-control" name="mytext[]" idx='+outputs+' id="output'+outputs+'"/><a href="#" class="remove_output">Eliminar</a></div>');
-            addIndividualOutputDataListener('output'+outputs);
+            $("#add_output_wrap").append('<div><input type="text" class="form-control" name="mytext[]" idx='+outputs+' id="output'+outputs+'"/><a href="#" id="outDelete'+outputs +'" class="remove_output">Delete</a></div>');
+            localizeHTMLTag("outDelete"+outputs);
+	    addIndividualOutputDataListener('output'+outputs);
         }
     });
 
