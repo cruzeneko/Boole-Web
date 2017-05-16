@@ -23,8 +23,8 @@ var internationalizableTags =
 	"btnNextToCircuit", "btnRestart", "btnPrintAll", "hdgStart", 
 	"hdgStatement", "hdgTable", "hdgVK" , "hdgCircuit", "add_input",
 	"add_output", "btnFill0", "btnFill1", "btnFillX", "btnClear",
-	"hdgSubStatement", "hdgInputCol", "hdgOutputCol",
-	"btnExternalSvc"
+	"subHdgStatement", "subHdgTable", "subHdgVK", "hdgInputCol", 
+	"hdgOutputCol", "btnExternalSvc"
 ];
 
 function localizeAll() {
