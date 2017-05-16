@@ -1,29 +1,41 @@
 var gKarnaughMapObjects = [];
 var gBooleanExpressionStrings = [];
+var gLastError;
+
+
+function isTruthTableComplete(table) {
+    for(var i = 0; i < table.length; i++){
+        for(var j = 0; j<table[i].length; j++){
+           if(typeof table[i][j] == undefined)
+               return false;
+        }
+    }
+    return true;
+}
 
 function validateTabSwitchToTruthTable() {
     if(gDefinedOutputCount < gDeclaredOutputCount && gDefinedInputCount < gDeclaredInputCount) {
-        alert("Error: Hay entradas y salidas no definidas!");
+	gLastError = _("Hay entradas y salidas no definidas!");
         return false;
     }
     if(gDefinedInputCount < gDeclaredInputCount) {
-        alert("Error: Hay entradas no definidas!");
+        gLastError = _("Hay entradas no definidas!");
         return false;
     }
     if(gDefinedOutputCount < gDeclaredOutputCount) {
-        alert("Error: Hay salidas no definidas!");
+        gLastError = _("Hay salidas no definidas!");
         return false;
     }
     if(gDuplicatedOutputs && gDuplicatedInputs) {
-        alert("Error: Hay entradas y salidas duplicadas");
+        gLastError = _("Hay entradas y salidas duplicadas");
         return false;
     }
     if(gDuplicatedInputs) {
-        alert("Error: Hay entradas duplicadas");
+        gLastError = _("Hay entradas duplicadas");
         return false;
     }
     if(gDuplicatedOutputs) {
-        alert("Error: hay salidas duplicadas");
+        gLastError = _("Hay salidas duplicadas");
         return false;
     }
     return true;

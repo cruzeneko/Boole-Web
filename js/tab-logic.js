@@ -5,106 +5,117 @@ ValidationStatus = {
 };
 
 function validIntroIntro(){
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validIntroStatement(){
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validIntroTable(){
-    return false;
+    return ValidationStatus.DISALLOWED;
 }
 
 
 function validIntroVK(){
-    return false;
+    return ValidationStatus.DISALLOWED;
 }
 
 
 function validIntroCircuit(){
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validStatementIntro(){
     //Must warn that data will be lost
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validStatementStatement(){
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validStatementTable(){
     evaluateInputOutputStatus();
-    return validateTabSwitchToTruthTable();
+    var allowed = validateTabSwitchToTruthTable();
+    if(allowed) return ValidationStatus.ALLOWED;
+    else return ValidationStatus.DISALLOWED;
+
 }
 
 function validStatementVK(){
-    return false;
+    return ValidationStatus.DISALLOWED;
 }
 
 function validStatementCircuit(){
-    return false;
+    return ValidationStatus.DISALLOWED;
 }
 
 
 function validTableIntro(){
     //Must warn that data will be lost
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validTableStatement(){
     //Must warn that data will be lost
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validTableTable(){
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 function validTableVK(){
-    return true;
+    var tableIsFull = isTruthTableComplete(truthTable)
+    debugger;
+    if(tableIsFull){ 
+        ValidationStatus.ALLOWED;
+    }
+    else{
+        gLastError = _("You must fill the truth table before creating Karnaugh Maps from it");
+        return ValidationStatus.DISALLOWED;
+    }
 }
 
 
 function validTableCircuit(){
-    return false;
+    return ValidationStatus.DISALLOWED;
 }
 
 
 function validVKIntro(){
     //Must warn that data will be lost
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validVKStatement(){
     //Must warn that data will be lost
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validVKTable(){
     //Must warn that data will be lost
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validVKVK(){
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validVKCircuit(){
-    var allowed = true;
+    var allowed = ValidationStatus.ALLOWED;
     console.log("Have to check " + gKarnaughMapObjects.length + " objects to validate");
     for(var i = 0; i<gKarnaughMapObjects.length; i++) {
         allowed = allowed && gKarnaughMapObjects[i].hasKnownSolution();
@@ -116,30 +127,30 @@ function validVKCircuit(){
 
 function validCircuitIntro(){
     //Must warn that data will be lost
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validCircuitStatement(){
     //Must warn that data will be lost
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validCircuitTable(){
     //Must warn that data will be lost
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validCircuitVK(){
     //Must warn that data will be lost
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 
 function validCircuitCircuit(){
-    return true;
+    return ValidationStatus.ALLOWED;
 }
 
 

@@ -35,5 +35,7 @@
 	"You can write your statement here" : "Puedes escribir aqui el enunciado",
 	"Minterm canonical formulae" : "Como se llama esta formula?",
 	"Inputs:": "Entradas:",
-	"Outputs:" : "Salidas:"
+	"Outputs:" : "Salidas:",
+	"Operation not allowed": "Operacion no permitida",
+	"You must fill the truth table before creating Karnaugh Maps from it" : "Debes rellenar la tabla de verdad antes de definir diagramas de Veitch-Karnaugh"
 }

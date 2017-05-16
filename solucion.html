@@ -11,6 +11,7 @@
 	<link rel="localization" hreflang="es" href="lang/es.json" type="application/vnd.oftn.l10n+json"/>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+        <script src="js/modal-system.js"></script>
         <script src="js/data-logic.js"></script>
         <script src="js/tab-logic.js"></script>
         <script src="js/solucion.js"></script>
@@ -283,6 +284,22 @@
 	<script>
 		document.getElementById("tabStart").click();
 	</script>
+<div class="modal fade" id="infoModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                        <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title" id="infoModalTitle">Error</h4>
+                        </div>
+                        <div class="modal-body">
+                                <p id="infoModalText"></p>
+                        </div>
+                        <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        </div>
+                </div>
+        </div>
+</div>
 
 </body>
 </html>

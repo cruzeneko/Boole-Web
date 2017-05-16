@@ -11,13 +11,14 @@ var gKarnaughHashmap = {};
 var gSystemTitle;
 var currentTab = "Intro";
 var truthTable;
+var modalMgr = new ModalManager();
 
 var validationFunctions = {
-                                "Intro":     {"Intro":validIntroIntro,     "Statement":validIntroStatement,     "Table":validIntroTable,       "VK": validIntroVK,   "Circuit":validIntroCircuit},
-                                "Statement": {"Intro":validStatementIntro, "Statement":validStatementStatement, "Table":validStatementTable,   "VK": validTableVK,   "Circuit":validTableCircuit},
-                                "Table":     {"Intro":validTableIntro,     "Statement":validTableStatement,     "Table":validTableTable,       "VK": validTableVK,   "Circuit":validTableCircuit},
-                                "VK":        {"Intro":validVKIntro,        "Statement":validVKStatement,        "Table":validVKTable,          "VK": validVKVK,      "Circuit":validVKCircuit},
-                                "Circuit":   {"Intro":validCircuitIntro,   "Statement":validCircuitStatement,   "Table":validCircuitTable,     "VK": validCircuitVK, "Circuit":validCircuitCircuit}
+                                "Intro":     {"Intro":validIntroIntro,     "Statement":validIntroStatement,     "Table":validIntroTable,       "VK": validIntroVK,       "Circuit":validIntroCircuit},
+                                "Statement": {"Intro":validStatementIntro, "Statement":validStatementStatement, "Table":validStatementTable,   "VK": validStatementVK,   "Circuit":validTableCircuit},
+                                "Table":     {"Intro":validTableIntro,     "Statement":validTableStatement,     "Table":validTableTable,       "VK": validTableVK,       "Circuit":validTableCircuit},
+                                "VK":        {"Intro":validVKIntro,        "Statement":validVKStatement,        "Table":validVKTable,          "VK": validVKVK,          "Circuit":validVKCircuit},
+                                "Circuit":   {"Intro":validCircuitIntro,   "Statement":validCircuitStatement,   "Table":validCircuitTable,     "VK": validCircuitVK,     "Circuit":validCircuitCircuit}
                             };
 var preOperationFunctions = {
                                 "Intro":     {"Intro":preopIntroIntro,     "Statement":preopIntroStatement,     "Table":preopIntroTable,       "VK": preopIntroVK,       "Circuit":preopIntroCircuit},
@@ -40,8 +41,17 @@ var truthTableWidth = 0;
 
 function validateTabSwitch(TabName) {
     var allowed;
-    allowed =  validationFunctions[currentTab][TabName]();
-    console.log("Validating: " + currentTab + " -> " + TabName + ": " + (allowed? "allowed":"not allowed"));
+    debugger;
+    allowed = validationFunctions[currentTab][TabName]();
+    console.log("Validating: " + currentTab + " -> " + TabName + ": ");
+    
+    if(allowed == ValidationStatus.ALLOWED)
+        console.log("allowed");
+    else if(allowed == ValidationStatus.DISALLOWED)
+        console.log("not allowed");
+    else if(allowed == ValidationStatus.DATA_LOSS)
+        console.log("data loss will occur. Standing by for user");
+
     return allowed;
 }
 
@@ -61,7 +71,8 @@ function postOperateOnTabSwitch(TabName) {
 function openTab(evt, TabName) {
     var i, tabcontent, tablinks;
 
-    if(validateTabSwitch(TabName)){
+    var allowed = validateTabSwitch(TabName);
+    if(allowed == ValidationStatus.ALLOWED){
 
         //Pre-operate on the tab switch
         preOperateOnTabSwitch(TabName);
@@ -85,6 +96,11 @@ function openTab(evt, TabName) {
         //Post-operate on the tab switch
         postOperateOnTabSwitch(TabName);
     }
+    else{
+        modalMgr.displayInfoModal(_("Operation not allowed"), gLastError)
+    }
+
+
 }
 
 function gotoTab(TabId) {
