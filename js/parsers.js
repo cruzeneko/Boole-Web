@@ -123,12 +123,12 @@ function ExprPrefixParser(){
         ret = expr;
         return ret;
     }
-    this.parseZeroLiteralExpr = function (expr, ins, out) {
+    this.parseLiteralZeroExpr = function (expr, ins, out) {
         var ret = [];
         ret = "0";
         return ret;
     }
-    this.parseOneLiteralExpr = function (expr, ins, out) {
+    this.parseLiteralOneExpr = function (expr, ins, out) {
         var ret = [];
         ret = "1";
         return ret;
@@ -182,12 +182,12 @@ function ExprVHDLParser(){
         ret = expr;
         return ret;
     }
-    this.parseZeroLiteralExpr = function (expr, ins, out) {
+    this.parseLiteralZeroExpr = function (expr, ins, out) {
         var ret = "";
         ret = "0";
         return ret;
     }
-    this.parseOneLiteralExpr = function (expr, ins, out) {
+    this.parseLiteralZeroExpr = function (expr, ins, out) {
         var ret = "";
         ret = "1";
         return ret;

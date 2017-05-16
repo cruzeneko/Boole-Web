@@ -1,3 +1,9 @@
+ValidationStatus = {
+	ALLOWED: 0,
+	DISALLOWED: 1,
+	DATA_LOSS: 2
+};
+
 function validIntroIntro(){
     return true;
 }
@@ -173,6 +179,9 @@ function preopStatementStatement(){
 
 
 function preopStatementTable(){
+    //Transfer title
+    gSystemTitle = document.getElementById("tbTitle").value;
+
     //Clear and append table
     var truthTablePanel = document.getElementById("truthtable-panel");
     while (truthTablePanel.firstChild) {
@@ -264,13 +273,13 @@ function preopVKCircuit(){
 
     for(var i = 0; i<gKarnaughMapObjects.length; i++) {
         var formula = gKarnaughMapObjects[i].getLastSolution();
+        gBooleanExpressionStrings[i] = formula;
         console.log("Dealing with formula " + formula);
-        var sol = tokenizeAndDisplayNewFormula(formula, inputs, [gOutputHashmap[i]]);
-        test("holaz",[[gOutputHashmap[i],sol]]);
-        console.log("Solution is: " + sol);
-    }
 
-    var circuitPanel = document.getElementById("circuitPanel");
+        var sol = parseFormulaToPrefixNotation(formula, inputs, [gOutputHashmap[i]]);
+	test("holaz",[[gOutputHashmap[i],sol]]);
+        //console.log("Solution is: " + sol);
+    }
     
 }
 

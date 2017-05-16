@@ -197,7 +197,7 @@ function printAll() {
     interSectionSpacing = 32;
     pageWidth = Math.floor(doc.internal.pageSize.width)
     doc.setFontSize(titleSize);
-    centeredText(doc, startY, "Problem title");
+    centeredText(doc, startY, gSystemTitle);
     doc.setFontSize(subtitleSize);
     nextY = startY + 4*subtitleSize;
     centeredText(doc, nextY, "subtitulo");
@@ -205,7 +205,7 @@ function printAll() {
 
     //Actual content starts here:
     doc.setFontSize(sectionHeadingSize);					// Render section heading for statement section
-    doc.text("Enunciado", nextX, nextY);
+    doc.text(_("Statement"), nextX, nextY);
     nextY+=sectionHeadingSize/2;
 
     doc.fromHTML(document.getElementById('panel-enunciado-capturado').innerHTML, nextX, nextY, {
@@ -222,7 +222,7 @@ function printAll() {
 
     doc.setFontSize(sectionHeadingSize);
     nextY+=sectionHeadingSize/2;
-    doc.text("Entradas y Salidas", nextX, nextY);
+    doc.text(_("Entradas y Salidas"), nextX, nextY);
     nextY += sectionHeadingSize*2;
 
     var inputs, outputs;
@@ -244,10 +244,10 @@ function printAll() {
     doc.setFontType("bold");
     var inY, outY;
     inY = nextY;
-    doc.text("Entradas: ", nextX, nextY);
+    doc.text(_("Inputs:"), nextX, nextY);
     nextY+=defaultFontSize*2;
     outY = nextY;
-    doc.text("Salidas: ", nextX, nextY);
+    doc.text(_("Outputs:"), nextX, nextY);
     doc.setFont("courier");
     doc.text(inputs, nextX + 100, inY);
     doc.text(outputs, nextX + 100, outY);
@@ -263,7 +263,7 @@ function printAll() {
     doc.setFont("helvetica");
     doc.setFontType("normal");
     nextY+=sectionHeadingSize/2;
-    doc.text("Tabla de Verdad", nextX, nextY);
+    doc.text(_("Truth Table"), nextX, nextY);
     nextY += sectionHeadingSize*2;
 
     //Render the autotable and place it in the document, with
@@ -301,14 +301,13 @@ function printAll() {
 
 
     nextY+=sectionHeadingSize/2;
-    doc.text("Diagramas Veitch-Karnaugh", nextX, nextY);
+    doc.text(_("Karnaugh Maps"), nextX, nextY);
     nextY = renderVKDiagramsInGrid(doc, 0, nextY) + interSectionSpacing;
 
-    doc.text("Circuito", nextX, nextY);
+    doc.text(_("Circuit"), nextX, nextY);
     nextY+=sectionHeadingSize/2;
     nextY = renderCircuitDiagramsInGrid(doc, 0, nextY);
-    //doc.text("Hola Holita!", nextX, nextY);
-    //placeInSingleCellTable(doc, docHtml)
+
     doc.save('sample-file.pdf');
 }
 

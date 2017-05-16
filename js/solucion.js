@@ -8,8 +8,10 @@ var gDuplicatedInputs = false;
 var gDuplicatedOutputs = false;
 var gQmcHashmap = {};
 var gKarnaughHashmap = {};
+var gSystemTitle;
 var currentTab = "Intro";
 var truthTable;
+
 var validationFunctions = {
                                 "Intro":     {"Intro":validIntroIntro,     "Statement":validIntroStatement,     "Table":validIntroTable,       "VK": validIntroVK,   "Circuit":validIntroCircuit},
                                 "Statement": {"Intro":validStatementIntro, "Statement":validStatementStatement, "Table":validStatementTable,   "VK": validTableVK,   "Circuit":validTableCircuit},
@@ -32,7 +34,6 @@ var postOperationFunctions = {
                                 "Circuit":   {"Intro":posopCircuitIntro,   "Statement":posopCircuitStatement,   "Table":posopCircuitTable,     "VK": posopCircuitVK, "Circuit":posopCircuitCircuit}
                             };
 
-function validateIntroIntro(){}
 
 var statementHeight = 0;
 var truthTableWidth = 0;
@@ -58,10 +59,8 @@ function postOperateOnTabSwitch(TabName) {
 
 
 function openTab(evt, TabName) {
-    // Declare all variables
     var i, tabcontent, tablinks;
 
-    //alert("Declared: " + gDeclaredOutputCount+ "Defined outputs: " + gDefinedOutputCount);
     if(validateTabSwitch(TabName)){
 
         //Pre-operate on the tab switch
