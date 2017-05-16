@@ -6,8 +6,11 @@ function ModalManager() {
         $("#infoModal").modal();
     }
 
-    function displayOverrideConfirmModal(divName, heading, text, overrideFunction) {
-
+    this.displayOverrideConfirmModal = function(heading, text, overrideFunction) {
+        document.getElementById("dataLossWarnModalTitle").innerHTML = heading;
+        document.getElementById("dataLossWarnModalText").innerHTML = text;
+        document.getElementById("dataLossWarnModalProceedButton").onclick = overrideFunction;
+        $("#dataLossWarnModal").modal();
     }
 
 

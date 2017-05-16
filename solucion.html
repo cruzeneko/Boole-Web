@@ -52,9 +52,22 @@
 
 <div id="Intro" class="tabcontent">
 	<div class="container">
-		<h3 id="hdgStart">Start</h3>
-		<p>Esta es la pestaña Inicio.</p>
-		<p>En esta pestaña se puede mostrar una pequeña introducción a Boole.</p>
+		<h3 id="hdgStart">Welcome to Boole-Web!</h3>
+		<p id="startPart1">
+			Boole-Web is a simple digital electronics and design educational tool developed at the University of Deusto
+			that will (hopefully) replace the outdated Boole-Deusto tool.
+		</p>
+		<p id="startPart2">
+			We hope that you are productive using this tool and ask you to report any issues you may find to eneko.cruz@opendeusto.es,
+			luis.rodriguezgil@deusto.es or zubia@deusto.es.
+		</p><br><br><br><br><br><br><br>
+		<p>
+			P.S.: Si te ha gustado este software y quieres trabajar en algo similar el plazo de solicitud de Becas de Colaboracion esta
+			abierto. Mas informacion en:
+		</p>	
+			<a href="http://www.deusto.es/cs/Satellite/deusto/es/universidad-deusto/admision-y-becas-1/becas-y-ayudas-4">
+			http://www.deusto.es/cs/Satellite/deusto/es/universidad-deusto/admision-y-becas-1/becas-y-ayudas-4
+			</a>
 		<div style="position: absolute; bottom: 10%; right: 10%;">
         		<button id="btnNextToStatement" class="btn-primary" type="button" onclick="gotoTab('enunciado')">Next</button>
 		</div>
@@ -194,7 +207,7 @@
 	<div class="container">
         	<h3 id="hdgVK">Karnaugh Map</h3>
 		<div class="panel panel-primary">
-			<div id="subHdgVK" class="panel-heading">Solve the Veitch-Karnaugh diagrams below</div>
+			<div id="subHdgVK" class="panel-heading">Solve the Karnaugh maps below</div>
 			<div class="panel-body">
 		        	<div class="panel-container">
         				<div id="captured-truthtable-panel" class="panel-left">
@@ -229,10 +242,9 @@
 	<div class="container">
 
 		<div class="panel panel-primary">
-			<div class="panel-heading">The logic logic circuit for the systems are listed below</div>
+			<div id="hdgCircuit" class="panel-heading">The logic circuits for the systems are listed below</div>
 			<div class="panel-body">
-		        	<h3 id="hdgCircuit">Circuit</h3>
-	        		<p>Esta es la pestaña Circuito.</p>
+		        	<h3 id="subHdgCircuit">Circuit</h3>
 				<div id="circuitPanel" class="panel panel-default">
 					<div class="panel-body" id="holaz">
 					</div>
@@ -284,22 +296,49 @@
 	<script>
 		document.getElementById("tabStart").click();
 	</script>
-<div class="modal fade" id="infoModal" role="dialog">
-        <div class="modal-dialog modal-sm">
-                <div class="modal-content">
-                        <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                <h4 class="modal-title" id="infoModalTitle">Error</h4>
-                        </div>
-                        <div class="modal-body">
-                                <p id="infoModalText"></p>
-                        </div>
-                        <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
-                </div>
+
+<!-- Modals: info modal -->
+	<div class="modal fade" id="infoModal" role="dialog">
+	        <div class="modal-dialog modal-sm">
+	                <div class="modal-content">
+	                        <div class="modal-header">
+	                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+	                                <h4 class="modal-title" id="infoModalTitle">Error</h4>
+	                        </div>
+	                        <div class="modal-body">
+	                                <p id="infoModalText"></p>
+	                        </div>
+	                        <div class="modal-footer">
+	                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                        </div>
+	                </div>
+	        </div>
+	</div>
+
+<!-- Modals: warn modal-->
+
+	<div class="modal fade" id="dataLossWarnModal" tabindex="-1" role="dialog">
+        	<div class="modal-dialog">
+            		<div class="modal-content">
+            	
+	                <div class="modal-header">
+       	             		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    		<h4 class="modal-title" id="dataLossWarnModalTitle">Confirm Delete</h4>
+                	</div>
+            
+                	<div class="modal-body" id="dataLossWarnModalText">
+                    		<p>You are about to delete one track, this procedure is irreversible.</p>
+                    		<p>Do you want to proceed?</p>
+                	</div>
+                
+                	<div class="modal-footer">
+                    		<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                    		<a class="btn btn-default btn-ok" id="dataLossWarnModalProceedButton">Delete</a>
+                	</div>
+            	</div>
         </div>
-</div>
+
+
 
 </body>
 </html>

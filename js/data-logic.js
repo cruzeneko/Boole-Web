@@ -6,7 +6,7 @@ var gLastError;
 function isTruthTableComplete(table) {
     for(var i = 0; i < table.length; i++){
         for(var j = 0; j<table[i].length; j++){
-           if(typeof table[i][j] == undefined)
+           if(typeof table[i][j] == "undefined")
                return false;
         }
     }
@@ -820,8 +820,7 @@ function generateVHDLProgramForExpressions(expr, portCorrespondence, entityName,
     return ret;
 }
 
-function downloadUnlinkedVHDL(){
-    alert("Called!");
+function createUnlinkedVHDL(){
     var inPorts = [];
     var outPorts = [];
 
@@ -831,14 +830,34 @@ function downloadUnlinkedVHDL(){
     for(var i=0; i<Object.keys(gOutputHashmap).length; i++){
         outPorts[i] = gOutputHashmap[i];
     }
-    debugger;
-    generateVHDLProgramForExpressions(gBooleanExpressionStrings, 
-    				      undefined,
-                                      "HolaHolita",
-                                      undefined,
-                                      inPorts,
-                                      outPorts
+
+    vhdlCode = generateVHDLProgramForExpressions(gBooleanExpressionStrings, 
+    				                 undefined,
+                                                 gSystemTitle.replace(/ /g,''),
+                                                 undefined,
+                                                 inPorts,
+                                                 outPorts
                                       );
+    return vhdlCode;
+
+}
+
+function downloadUnlinkedVHDL() {
+    var vhdlCode = createUnlinkedVHDL(undefined);
+    triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhdl" , vhdlCode);
+}
+
+function triggerStringAsFileDownload(filename, text) {
+    var element = document.createElement('a');
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    element.setAttribute('download', filename);
+
+    element.style.display = 'none';
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
 }
 
 function downloadLinkedVHDL(){

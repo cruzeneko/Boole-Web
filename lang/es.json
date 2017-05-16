@@ -37,5 +37,9 @@
 	"Inputs:": "Entradas:",
 	"Outputs:" : "Salidas:",
 	"Operation not allowed": "Operacion no permitida",
-	"You must fill the truth table before creating Karnaugh Maps from it" : "Debes rellenar la tabla de verdad antes de definir diagramas de Veitch-Karnaugh"
+	"You must fill the truth table before creating Karnaugh Maps from it" : "Debes rellenar la tabla de verdad antes de definir diagramas de Veitch-Karnaugh",
+	"The logic circuits for the systems are listed below" : "Los circuitos combinacionales se listan a continuación",
+	"This tab switch is not allowed" : "Este cambio de pestaña no está permitido",
+	"Solve the Karnaugh maps below" : "Resuelve los diagramas Veitch-Karnaugh a continuacion"
 }
+

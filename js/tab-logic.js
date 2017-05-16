@@ -15,23 +15,36 @@ function validIntroStatement(){
 
 
 function validIntroTable(){
+    gLastError = _("This tab switch is not allowed");
     return ValidationStatus.DISALLOWED;
 }
 
 
 function validIntroVK(){
+    gLastError = _("This tab switch is not allowed");
     return ValidationStatus.DISALLOWED;
 }
 
 
 function validIntroCircuit(){
-    return ValidationStatus.ALLOWED;
+    gLastError = _("This tab switch is not allowed");
+    return ValidationStatus.DISALLOWED;
 }
 
 
 function validStatementIntro(){
+
+
     //Must warn that data will be lost
-    return ValidationStatus.ALLOWED;
+    //triggerTabSwitch
+    modalMgr.displayOverrideConfirmModal(
+                                         _("Confirm"), 
+                                         "Statement data will be lost. Do you want to continue?", 
+                                         function(){
+                                             document.getElementById("tabStart").click();
+                                         });
+
+    return ValidationStatus.DATA_LOSS;
 }
 
 
@@ -49,10 +62,12 @@ function validStatementTable(){
 }
 
 function validStatementVK(){
+    gLastError = _("This tab switch is not allowed");
     return ValidationStatus.DISALLOWED;
 }
 
 function validStatementCircuit(){
+    gLastError = _("This tab switch is not allowed");
     return ValidationStatus.DISALLOWED;
 }
 
@@ -75,9 +90,8 @@ function validTableTable(){
 
 function validTableVK(){
     var tableIsFull = isTruthTableComplete(truthTable)
-    debugger;
     if(tableIsFull){ 
-        ValidationStatus.ALLOWED;
+        return ValidationStatus.ALLOWED;
     }
     else{
         gLastError = _("You must fill the truth table before creating Karnaugh Maps from it");
@@ -87,6 +101,7 @@ function validTableVK(){
 
 
 function validTableCircuit(){
+    gLastError = _("This tab switch is not allowed");
     return ValidationStatus.DISALLOWED;
 }
 
@@ -126,8 +141,8 @@ function validVKCircuit(){
 
 
 function validCircuitIntro(){
-    //Must warn that data will be lost
-    return ValidationStatus.ALLOWED;
+    modalMgr.xxxtodoxxx
+    return ValidationStatus.DATA_LOSS;
 }
 
 
@@ -231,6 +246,7 @@ function preopTableTable(){
 
 
 function preopTableVK(){
+    $("#vkSlider").empty();
     createAndPopulateKMaps();
     document.getElementById("captured-truthtable-panel").innerHTML = document.getElementById("truthtable-panel").innerHTML;
 }

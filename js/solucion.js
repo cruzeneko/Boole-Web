@@ -41,7 +41,7 @@ var truthTableWidth = 0;
 
 function validateTabSwitch(TabName) {
     var allowed;
-    debugger;
+
     allowed = validationFunctions[currentTab][TabName]();
     console.log("Validating: " + currentTab + " -> " + TabName + ": ");
     
@@ -68,33 +68,37 @@ function postOperateOnTabSwitch(TabName) {
 }
 
 
+function triggerTabSwitch(evt, TabName) {
+    var i, tabcontent, tablinks;
+
+    preOperateOnTabSwitch(TabName);
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the link that opened the tab
+    document.getElementById(TabName).style.display = "block";
+    evt.currentTarget.className += " active";
+
+    //Post-operate on the tab switch
+    postOperateOnTabSwitch(TabName);
+}
+
 function openTab(evt, TabName) {
     var i, tabcontent, tablinks;
 
     var allowed = validateTabSwitch(TabName);
     if(allowed == ValidationStatus.ALLOWED){
-
-        //Pre-operate on the tab switch
-        preOperateOnTabSwitch(TabName);
-
-        // Get all elements with class="tabcontent" and hide them
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-
-        // Get all elements with class="tablinks" and remove the class "active"
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-    
-        // Show the current tab, and add an "active" class to the link that opened the tab
-        document.getElementById(TabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    
-        //Post-operate on the tab switch
-        postOperateOnTabSwitch(TabName);
+        triggerTabSwitch(evt, TabName);
     }
     else{
         modalMgr.displayInfoModal(_("Operation not allowed"), gLastError)
