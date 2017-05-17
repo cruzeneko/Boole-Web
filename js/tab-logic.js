@@ -41,7 +41,8 @@ function validStatementIntro(){
                                          _("Confirm"), 
                                          "Statement data will be lost. Do you want to continue?", 
                                          function(){
-                                             document.getElementById("tabStart").click();
+                                            triggerTabSwitch("Intro");
+                                            modalMgr.hideAllModals();
                                          });
 
     return ValidationStatus.DATA_LOSS;

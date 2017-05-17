@@ -68,8 +68,8 @@ function postOperateOnTabSwitch(TabName) {
 }
 
 
-function triggerTabSwitch(evt, TabName) {
-    var i, tabcontent, tablinks;
+function triggerTabSwitch(TabName) {
+    var i, tabcontent, tablinks, targetTab;
 
     preOperateOnTabSwitch(TabName);
 
@@ -86,21 +86,22 @@ function triggerTabSwitch(evt, TabName) {
     }
 
     // Show the current tab, and add an "active" class to the link that opened the tab
-    document.getElementById(TabName).style.display = "block";
-    evt.currentTarget.className += " active";
+    targetTab = document.getElementById(TabName);
+    targetTab.style.display = "block";
+    document.getElementById(targetTab.getAttribute("tab")).className += " active";
 
     //Post-operate on the tab switch
     postOperateOnTabSwitch(TabName);
 }
 
-function openTab(evt, TabName) {
+function openTab(TabName) {
     var i, tabcontent, tablinks;
 
     var allowed = validateTabSwitch(TabName);
     if(allowed == ValidationStatus.ALLOWED){
-        triggerTabSwitch(evt, TabName);
+        triggerTabSwitch(TabName);
     }
-    else{
+    else if(allowed == ValidationStatus.DISALLOWED){
         modalMgr.displayInfoModal(_("Operation not allowed"), gLastError)
     }
 

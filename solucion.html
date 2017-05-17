@@ -43,14 +43,14 @@
 
 <body>
 <ul class="tab">
-  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Intro')" id="tabStart">Start</a></li>
-  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Statement')" id="tabStatement">Statement and Configuration</a></li>
-  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Table')" id="tabTable">Truth table</a></li>
-  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'VK')" id="tabVK">Karnaugh Maps</a></li>
-  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab(event, 'Circuit')" id="tabCircuit">Circuit</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab('Intro')" id="tabStart">Start</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab('Statement')" id="tabStatement">Statement and Configuration</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab('Table')" id="tabTable">Truth table</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab('VK')" id="tabVK">Karnaugh Maps</a></li>
+  	<li><a href="javascript:void(0)" class="tablinks" onclick="openTab('Circuit')" id="tabCircuit">Circuit</a></li>
 </ul>
 
-<div id="Intro" class="tabcontent">
+<div id="Intro" tab="tabStart" class="tabcontent">
 	<div class="container">
 		<h3 id="hdgStart">Welcome to Boole-Web!</h3>
 		<p id="startPart1">
@@ -74,7 +74,7 @@
 	</div>
 </div>
 
-<div id="Statement" class="tabcontent">
+<div id="Statement" tab="tabStatement" class="tabcontent">
 	<div class="container">
 		<h3 id="hdgStatement">Statement</h3>
 		<div class="panel panel-primary">
@@ -131,7 +131,7 @@
 </div>
 
 
-<div id="Table" class="tabcontent">
+<div id="Table" tab="tabTable" class="tabcontent">
 	<div class="container">
 		<h3 id="hdgTable">Truth Table</h3>
 
@@ -203,7 +203,7 @@
 	</div>
 </div>
 
-<div id="VK" class="tabcontent">
+<div id="VK" tab="tabVK" class="tabcontent">
 	<div class="container">
         	<h3 id="hdgVK">Karnaugh Map</h3>
 		<div class="panel panel-primary">
@@ -238,7 +238,7 @@
 	</div>
 </div>
 
-<div id="Circuit" class="tabcontent">
+<div id="Circuit" tab="tabCircuit" class="tabcontent">
 	<div class="container">
 
 		<div class="panel panel-primary">

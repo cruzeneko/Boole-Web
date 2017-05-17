@@ -13,5 +13,9 @@ function ModalManager() {
         $("#dataLossWarnModal").modal();
     }
 
+    this.hideAllModals = function() {
+        $('#infoModal').modal('hide');
+        $('#dataLossWarnModal').modal('hide');
+    }
 
 }
