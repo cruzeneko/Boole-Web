@@ -33,13 +33,10 @@ function validIntroCircuit(){
 
 
 function validStatementIntro(){
-
-
-    //Must warn that data will be lost
-    //triggerTabSwitch
+    //Warn about data loss. If okay, continue
     modalMgr.displayOverrideConfirmModal(
                                          _("Confirm"), 
-                                         "Statement data will be lost. Do you want to continue?", 
+                                         _("Statement data will be lost. Do you want to continue?"), 
                                          function(){
                                             triggerTabSwitch("Intro");
                                             modalMgr.hideAllModals();
@@ -74,14 +71,30 @@ function validStatementCircuit(){
 
 
 function validTableIntro(){
-    //Must warn that data will be lost
-    return ValidationStatus.ALLOWED;
+    //Warn about data loss. If okay, continue
+    modalMgr.displayOverrideConfirmModal(
+                                         _("Confirm"),
+                                         _("The statement and the truth table will be lost. Do you want to continue?"),
+                                         function(){
+                                            triggerTabSwitch("Intro");
+                                            modalMgr.hideAllModals();
+                                         });
+
+    return ValidationStatus.DATA_LOSS;
 }
 
 
 function validTableStatement(){
-    //Must warn that data will be lost
-    return ValidationStatus.ALLOWED;
+    //Warn about data loss. If okay, continue
+    modalMgr.displayOverrideConfirmModal(
+                                         _("Confirm"),
+                                         _("The truth table  will be lost. Do you want to continue?"),
+                                         function(){
+                                            triggerTabSwitch("Statement");
+                                            modalMgr.hideAllModals();
+                                         });
+
+    return ValidationStatus.DATA_LOSS;
 }
 
 
@@ -108,20 +121,44 @@ function validTableCircuit(){
 
 
 function validVKIntro(){
-    //Must warn that data will be lost
-    return ValidationStatus.ALLOWED;
+    //Warn about data loss. If okay, continue
+    modalMgr.displayOverrideConfirmModal(
+                                         _("Confirm"),
+                                         _("Statement, truth table and Karnaugh maps will be lost. Do you want to continue?"),
+                                         function(){
+                                            triggerTabSwitch("Intro");
+                                            modalMgr.hideAllModals();
+                                         });
+
+    return ValidationStatus.DATA_LOSS;
 }
 
 
 function validVKStatement(){
-    //Must warn that data will be lost
-    return ValidationStatus.ALLOWED;
+    //Warn about data loss. If okay, continue
+    modalMgr.displayOverrideConfirmModal(
+                                         _("Confirm"),
+                                         _("Karnaugh maps and truth table will be lost. Do you want to continue?"),
+                                         function(){
+                                            triggerTabSwitch("Statement");
+                                            modalMgr.hideAllModals();
+                                         });
+
+    return ValidationStatus.DATA_LOSS;
 }
 
 
 function validVKTable(){
-    //Must warn that data will be lost
-    return ValidationStatus.ALLOWED;
+    //Warn about data loss. If okay, continue
+    modalMgr.displayOverrideConfirmModal(
+                                         _("Confirm"),
+                                         _("Karnaugh maps and table will be lost. Do you want to continue?"),
+                                         function(){
+                                            triggerTabSwitch("Table");
+                                            modalMgr.hideAllModals();
+                                         });
+
+    return ValidationStatus.DATA_LOSS;
 }
 
 
@@ -142,26 +179,58 @@ function validVKCircuit(){
 
 
 function validCircuitIntro(){
-    modalMgr.xxxtodoxxx
+    //Warn about data loss. If okay, continue
+    modalMgr.displayOverrideConfirmModal(
+                                         _("Confirm"),
+                                         _("The whole system will be lost. Do you want to continue?"),
+                                         function(){
+                                            triggerTabSwitch("Intro");
+                                            modalMgr.hideAllModals();
+                                         });
+
     return ValidationStatus.DATA_LOSS;
 }
 
 
 function validCircuitStatement(){
-    //Must warn that data will be lost
-    return ValidationStatus.ALLOWED;
+//Warn about data loss. If okay, continue
+    modalMgr.displayOverrideConfirmModal(
+                                         _("Confirm"),
+                                         _("The whole system will be lost. Do you want to continue?"),
+                                         function(){
+                                            triggerTabSwitch("Statement");
+                                            modalMgr.hideAllModals();
+                                         });
+
+    return ValidationStatus.DATA_LOSS;
 }
 
 
 function validCircuitTable(){
-    //Must warn that data will be lost
-    return ValidationStatus.ALLOWED;
+    //Warn about data loss. If okay, continue
+    modalMgr.displayOverrideConfirmModal(
+                                         _("Confirm"),
+                                         _("Karnaugh maps and the circuit will be lost. Do you want to continue?"),
+                                         function(){
+                                            triggerTabSwitch("Table");
+                                            modalMgr.hideAllModals();
+                                         });
+
+    return ValidationStatus.DATA_LOSS;
 }
 
 
 function validCircuitVK(){
-    //Must warn that data will be lost
-    return ValidationStatus.ALLOWED;
+    //Warn about data loss. If okay, continue
+    modalMgr.displayOverrideConfirmModal(
+                                         _("Confirm"),
+                                         _("Circuit representations will be lost. Do you want to continue?"),
+                                         function(){
+                                            triggerTabSwitch("VK");
+                                            modalMgr.hideAllModals();
+                                         });
+
+    return ValidationStatus.DATA_LOSS;
 }
 
 

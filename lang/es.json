@@ -40,6 +40,16 @@
 	"You must fill the truth table before creating Karnaugh Maps from it" : "Debes rellenar la tabla de verdad antes de definir diagramas de Veitch-Karnaugh",
 	"The logic circuits for the systems are listed below" : "Los circuitos combinacionales se listan a continuación",
 	"This tab switch is not allowed" : "Este cambio de pestaña no está permitido",
-	"Solve the Karnaugh maps below" : "Resuelve los diagramas Veitch-Karnaugh a continuacion"
+	"Solve the Karnaugh maps below" : "Resuelve los diagramas Veitch-Karnaugh a continuacion",
+        "Circuit representations will be lost. Do you want to continue?" : "Se perderan los circuitos logicos. Continuar?",
+	"Confirm" : "Confirmar",
+	"Karnaugh maps and table will be lost. Do you want to continue?":"Se perderan diagramas de Veitch-Karnaugh y tabla de verdad. Continuar?",
+	"Karnaugh maps and the circuit will be lost. Do you want to continue?" : "Se perderan diagramas de Veitch-Karnaugh y circuitos. Continuar?",
+	"Karnaugh maps and truth table will be lost. Do you want to continue?" : "Se perderan diagramas de Veitch-Karnaugh y tabla de verdad. Continuar?",
+	"Statement data will be lost. Do you want to continue?":"Se perdera el enunciad. Continuar?",
+	"Statement, truth table and Karnaugh maps will be lost. Do you want to continue?": "Se perdera enunciado, tabla y diagramas de Veitch-Karnaugh. Continuar?",
+	"The statement and the truth table will be lost. Do you want to continue?" : "Se perderan enunciado y tabla de verdad. Continuar?",
+	"The truth table  will be lost. Do you want to continue?" : "Se perdera la tabla de verdad. Continuar?",
+	"The whole system will be lost. Do you want to continue?" : "Se pedera el sistema completo. Continuar?"
 }
 
