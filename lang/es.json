@@ -50,6 +50,7 @@
 	"Statement, truth table and Karnaugh maps will be lost. Do you want to continue?": "Se perdera enunciado, tabla y diagramas de Veitch-Karnaugh. Continuar?",
 	"The statement and the truth table will be lost. Do you want to continue?" : "Se perderan enunciado y tabla de verdad. Continuar?",
 	"The truth table  will be lost. Do you want to continue?" : "Se perdera la tabla de verdad. Continuar?",
-	"The whole system will be lost. Do you want to continue?" : "Se pedera el sistema completo. Continuar?"
+	"The whole system will be lost. Do you want to continue?" : "Se pedera el sistema completo. Continuar?",
+	"Title" : "Titulo"
 }
 

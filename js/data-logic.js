@@ -410,8 +410,8 @@ function renderCircuitDiagramsInGrid(doc, startX, startY) {
         var margin, centerSpace;
         thisHeight = nextHeight = thisWidth = nextWidth = 0;
 
-        var thisSvg = svgElements[2*i  +1];
-        var nextSvg = svgElements[2*i+1+2];
+        var thisSvg = svgElements[2*i +2+1];
+        var nextSvg = svgElements[2*i+1];
 
         var thereIsAPair = nextSvg != null;
 
@@ -756,6 +756,38 @@ function getAssociatedPortByCorrespondence( port, correspondence) {
     else return correspondence[port];
 }
 
+function generateVHDLInputs(inports) {
+    var ret;
+
+    if(typeof inports != "undefined")
+    for(var i=0;i<inports.length;i++){
+        ret+=            "\t\t";
+        ret+=                    inports[i]+" : in std_logic;\n";
+    }
+    return ret;
+}
+
+function generateVHDLInouts(inoutports){
+    var ret = "";
+    if(typeof inoutports != "undefined")
+        for(var i=0;i<inoutports.length;i++){
+            ret+=            "\t\t";
+            ret+=                    inoutports[i]+" : inout std_logic;\n";
+        }
+    return ret;
+}
+
+function generateVHDLOutputs(outports){
+    var ret = "";
+    if(typeof outports != "undefined")
+        for(var i=0;i<outports.length;i++){
+            ret+=            "\t\t";
+            ret+=                    outports[i]+" : out std_logic;\n";
+        }
+    return ret;
+}
+
+
 // Generates the VHDL program text for an expression expressed in prefix notation
 // using JS objects.
 //
@@ -782,11 +814,9 @@ function generateVHDLProgramForExpressions(expr, portCorrespondence, entityName,
     ret +=               "\t";
     ret +=                   "Port (\n";
     
-    if(typeof inports != "undefined")
-    for(var i=0;i<inports.length;i++){
-        ret+=            "\t\t";
-        ret+=                    inports[i]+" : in std_logic;\n";
-    }
+    ret+= generateVHDLInputs(inports);
+    ret+= generateVHDLInouts(inputports);
+    ret+= generateVHDLOutputs(outports);
 
     if(typeof inoutports != "undefined")
     for(var i=0;i<inoutports.length;i++){
@@ -797,7 +827,7 @@ function generateVHDLProgramForExpressions(expr, portCorrespondence, entityName,
     if(typeof outports != "undefined")
     for(var i=0;i<outports.length;i++){
         ret+=            "\t\t";
-        ret+=                    outports[i]+" : in std_logic;\n";
+        ret+=                    outports[i]+" : out std_logic;\n";
     }
 
     ret +=               "\t\t";
@@ -884,4 +914,12 @@ function parseFormulaToVHDLNotations(expr, ins, outs) {
 
     return VHDLParser.nextRecursionLevel(expr, ins, outs);
 
+}
+
+exports._test = {
+    parseFormulaToVHDLNotations: parseFormulaToVHDLNotations,
+    parseFormulaToPrefixNotation: parseFormulaToPrefixNotation,
+    generateVHDLInputs: generateVHDLInputs,
+    generateVHDLInouts: generateVHDLInouts,
+    generateVHDLOutputs: generateVHDLOutputs
 }

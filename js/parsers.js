@@ -9,7 +9,7 @@ function ExprGenericParser(concreteParser) {
         expr = expr.replace(/\u00B7/g, "&");//Logical conjunction
         expr = expr.replace(/ /g, "" );     //Spaces    
 
-        console.log("Sanitized expression: " + expr);
+        //console.log("Sanitized expression: " + expr);
 
         //First build a regex that will accept input names only
         var inputRegexStr = "^(";
@@ -21,18 +21,18 @@ function ExprGenericParser(concreteParser) {
         }    
         inputRegexStr += ")$";
         var inputRegex = new RegExp(inputRegexStr);
-        console.log("var name regex: " + inputRegex);
+        //console.log("var name regex: " + inputRegex);
 
         //Then work out how many parentheses are in each token if the expression is split in "|" and "&"
         var tokensAnd = expr.split("&"); var numParenthesesAnd = 0; var couldBeAndExpr = true;
         var tokensOr = expr.split("|"); var numParenthesesOr = 0; var couldBeOrExpr = true;
 
-        console.log("Checking for and");
+        //console.log("Checking for and");
         if(tokensAnd.length <= 1) couldBeAndExpr = false;
         for (var i = 0; i<tokensAnd.length; i++) {
             var token = tokensAnd[i];
-            console.log("token " + token + "has " + (token.match(/[(]/g) || []).length + "(s");
-            console.log("token " + token + "has " + (token.match(/[)]/g) || []).length + ")s");
+            //console.log("token " + token + "has " + (token.match(/[(]/g) || []).length + "(s");
+            //console.log("token " + token + "has " + (token.match(/[)]/g) || []).length + ")s");
             if( (token.match(/[(]/g) || []).length != (token.match(/[)]/g) || []).length ) {
                 couldBeAndExpr = false;
                 break;
@@ -60,7 +60,7 @@ function ExprGenericParser(concreteParser) {
         var isLiteralExpr = (inputRegex.test(expr));
 
         if(isParenExpr) {
-            console.log("expr -> expr & expr");
+            //console.log("expr -> expr & expr");
             return setParser.parseParenExpr(expr, ins, out);
         }
         else if(couldBeAndExpr) {
@@ -195,3 +195,6 @@ function ExprVHDLParser(){
 
 }
 
+exports.ExprGenericParser = ExprGenericParser;
+exports.ExprPrefixParser = ExprPrefixParser;
+exports.ExprVHDLParser = ExprVHDLParser;

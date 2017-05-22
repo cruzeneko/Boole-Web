@@ -19,12 +19,13 @@ function loaded()
 var internationalizableTags = 
 [
 	"tabStart", "tabStatement", "tabTable", "tabVK", "tabCircuit",
-	"btnNextToStatement", "btnNextToTable", "btnNextToVK", 
-	"btnNextToCircuit", "btnRestart", "btnPrintAll", "hdgStart", 
+	/*"btnNextToStatement", "btnNextToTable", "btnNextToVK",*/ 
+	/*"btnNextToCircuit",*/ "btnRestart", "btnPrintAll", "hdgStart", 
 	"hdgStatement", "hdgTable", "hdgVK" , "hdgCircuit", "add_input",
 	"add_output", "btnFill0", "btnFill1", "btnFillX", "btnClear",
 	"subHdgStatement", "subHdgTable", "subHdgVK", "hdgInputCol", 
-	"hdgOutputCol", "btnExternalSvc", "hdgCircuit", "subHdgCircuit"
+	"hdgOutputCol", "btnExternalSvc", "hdgCircuit", "subHdgCircuit",
+	"titlePrompt"
 ];
 
 function localizeAll() {
