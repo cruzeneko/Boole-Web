@@ -1,7 +1,7 @@
 {
-  "name": "Boole-Web",
+  "name": "booleweb",
   "homepage": "https://github.com/cruzeneko/Boole-Web",
-  "description": "Boole-Web is a web based new version of Boole-Deusto that takes inspiration in the original one, but relies on the power of the new web-based technologies and leverages the years of user experience with the original Boole-Deusto to update its interface, interaction style, and set of features.",
+  "description": "Boole-Web is a web based new version of Boole-Deusto that takes inspiration in the original one.",
   "main": "index.html",
   "keywords": [
     "Combinational",
