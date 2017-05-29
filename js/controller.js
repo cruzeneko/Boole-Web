@@ -27,41 +27,56 @@ function configure(config_json) {
     for(var i = 0; i<inputCount; i++) {
         var currentInput = document.getElementById("input"+i);
         jQuery._data( document.getElementById("add_input"),"events").click[0].handler();
-        currentInput.value = inputNames[i];
+        currentInput.value = ((inputNames!=null) ? inputNames[i] : "");
         if(inputsAreReadOnly) {
             currentInput.readOnly = true;
+            var currentRemove = document.getElementById("inDelete"+i);
+            if(currentRemove!=null){
+                currentRemove.remove();
+            }
         }
     }
     for(var i = 0; i<outputCount; i++) {
         var currentOutput = document.getElementById("output"+i);
         jQuery._data( document.getElementById("add_output"),"events").click[0].handler();
-        currentOutput.value = outputNames[i];
+        currentOutput.value = ((outputNames!=null) ? outputNames[i] : "");;
         if(outputsAreReadOnly) {
             currentOutput.readOnly = true;
+            var currentRemove = document.getElementById("outDelete"+i);
+            if(currentRemove!=null){
+		currentRemove.remove();
+            }
         }
     }
-
     
     var inputRemoveControls = document.getElementsByClassName("remove_input");
     var outputRemoveControls = document.getElementsByClassName("remove_output");
 
     if(inputCountIsReadOnly) {
-        for (var i = 0; i<inputRemoveControls; i++) {
+        for (var i = 0; i<inputRemoveControls.length; i++) {
             var toRemove = inputRemoveControls[i];
             inputRemoveControls[i].parentNode.removeChild(toRemove);
         }
-        document.getElementById("add_input").disabled = true
+        document.getElementById("add_input").disabled = true;
+        document.getElementById("input"+inputCount).remove();
+        if(!inputsAreReadOnly)
+	    document.getElementById("inDelete"+inputCount).remove();
     }
     
     if(outputCountIsReadOnly) {
-        for (var i = 0; i<outputRemoveControls; i++) {
+        for (var i = 0; i<outputRemoveControls.length; i++) {
             var toRemove = outputRemoveControls[i];
             outputRemoveControls[i].parentNode.removeChild(toRemove); 
         }
-        document.getElementById("add_output").disabled = true
+        document.getElementById("add_output").disabled = true;
+        document.getElementById("output"+outputCount).remove();
+        if(!outputsAreReadOnly)
+	    document.getElementById("outDelete"+outputCount).remove();
     }
     
     gRealAvailableInputs = config.availableRealWorldInputs;
     gRealAvailableOutputs = config.availableRealWorldOutputs;
+
+
 
 }

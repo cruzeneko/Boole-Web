@@ -839,7 +839,7 @@ function generateVHDLProgramForExpressions(expr, portCorrespondence, entityName,
     ret +=                   "Port (\n";
     
     ret+= generateVHDLInputs(inports);
-    ret+= generateVHDLInouts(inputports);
+    ret+= generateVHDLInouts(inoutports);
     ret+= generateVHDLOutputs(outports);
 
     if(typeof inoutports != "undefined")

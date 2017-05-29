@@ -16,21 +16,21 @@ function validIntroStatement(){
 
 function validIntroTable(){
     gLastError =  _("This tab switch is not allowed.");
-    gLastError += ". ";
+    gLastError += " ";
     gLastError += _("You must declare inputs and outputs first.");
     return ValidationStatus.DISALLOWED;
 }
 
 
 function validIntroVK(){
-    gLastError = _("This tab switch is not allowed");
+    gLastError = _("This tab switch is not allowed.");
     
     return ValidationStatus.DISALLOWED;
 }
 
 
 function validIntroCircuit(){
-    gLastError = _("This tab switch is not allowed");
+    gLastError = _("This tab switch is not allowed.");
     return ValidationStatus.DISALLOWED;
 }
 
@@ -63,14 +63,16 @@ function validStatementTable(){
 }
 
 function validStatementVK(){
-    gLastError = _("This tab switch is not allowed");
+    gLastError = _("This tab switch is not allowed.");
+    gLastError += " ";
     gLastError += _("You must fill in the truth table first");
     return ValidationStatus.DISALLOWED;
 }
 
 function validStatementCircuit(){
-    gLastError = _("This tab switch is not allowed");
-    gLastError += _("You must fill in the truth table and solve Karnaugh maps first");
+    gLastError = _("This tab switch is not allowed.");
+    gLastError += " ";
+    gLastError += _("You must fill in the truth table and solve Karnaugh maps first.");
     return ValidationStatus.DISALLOWED;
 }
 
@@ -113,15 +115,16 @@ function validTableVK(){
         return ValidationStatus.ALLOWED;
     }
     else{
-        gLastError = _("You must fill the truth table before creating Karnaugh Maps from it");
+        gLastError = _("You must fill the truth table before creating Karnaugh Maps from it.");
         return ValidationStatus.DISALLOWED;
     }
 }
 
 
 function validTableCircuit(){
-    gLastError = _("This tab switch is not allowed");
-    gLastError += _("You must solve Karnaugh maps first");
+    gLastError = _("This tab switch is not allowed.");
+    gLastError += " ";
+    gLastError += _("You must solve Karnaugh maps first.");
     return ValidationStatus.DISALLOWED;
 }
 
