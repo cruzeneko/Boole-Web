@@ -478,31 +478,43 @@ function updateOutputStatus(elementid) {
 }
 
 function evaluateInputStatus(elementid) {
-    var idx = document.getElementById(elementid).getAttribute("idx");
-    gInputHashmap[idx] = document.getElementById(elementid).value;
+ var index = 0;
+    $(".inputform").each(function() {
+        gInputHashmap[index++] = this.value;
+    });
+
     gDefinedInputCount = 0;
     gDuplicatedInputs = false; //Assume correct;
-    for(var i = 0; i<=gDeclaredInputCount; i++){
-        if(gInputHashmap[i]!="" && gInputHashmap[i]!=null){
-            gDefinedInputCount+=1;
-        }
-        if(i!=idx){
-            gDuplicatedInputs = gDuplicatedInputs || (gInputHashmap[i] == document.getElementById(elementid).value);
+
+    for(var i = 0; i<Object.keys(gInputHashmap).length; i++){
+        if(gInputHashmap[i] != "" && typeof gInputHashmap[i] != "undefined" && gInputHashmap[i]!=null){
+            gDefinedInputCount++;
+            for(var j = 0; j<Object.keys(gInputHashmap).length; j++){
+                if(i!=j) {
+                    gDuplicatedInputs = gDuplicatedInputs || (gInputHashmap[i] == gInputHashmap[j])
+                }
+            }
         }
     }
 }
 
 function evaluateOutputStatus(elementid) {
-    var idx = document.getElementById(elementid).getAttribute("idx");
-    gOutputHashmap[idx] = document.getElementById(elementid).value;
+    var index = 0;
+    $(".outputform").each(function() {
+        gOutputHashmap[index++] = this.value;
+    });
+    
     gDefinedOutputCount = 0;
     gDuplicatedOutputs = false; //Assume correct;
-    for(var i = 0; i<=gDeclaredOutputCount; i++){
-        if(gOutputHashmap[i]!="" && gOutputHashmap[i]!=null){
-            gDefinedOutputCount+=1;
-        }
-        if(i!=idx){
-            gDuplicatedOutputs = gDuplicatedOutputs || (gOutputHashmap[i] == document.getElementById(elementid).value);
+
+    for(var i = 0; i<Object.keys(gOutputHashmap).length; i++){
+        if(gOutputHashmap[i] != "" && typeof gOutputHashmap[i] != "undefined" && gOutputHashmap[i]!=null){
+            gDefinedOutputCount++;
+            for(var j = 0; j<Object.keys(gOutputHashmap).length; j++){
+                if(i!=j) {
+                    gDuplicatedOutputs = gDuplicatedOutputs || (gOutputHashmap[i] == gOutputHashmap[j])
+                }
+            }
         }
     }
 }
@@ -575,11 +587,11 @@ function reEvaluateSumOfProductsFormulae(truthTable) {
                     var thisVar = gInputHashmap[gDeclaredInputCount-1-k];
                         if( ( ( 1 << k ) & j ) != 0 ) {
                             //Conjunctive clause not inverted
-                            thisMinterm+=thisVar;
+                            thisMinterm+=thisVar + "~";
                         }
                         else {
                             //Conjunctive clause is inverted
-                            thisMinterm+=("\\overline{"+thisVar+"}");
+                            thisMinterm+=("\\overline{"+thisVar+"} ~");
                         }
                 }
                 sumOfMinterms += thisMinterm;
@@ -722,7 +734,7 @@ function setupInputOutputControlListeners() {
         if(inputs < max_in_fields-1){ //max input box allowed
             inputs++; //text box increment
             gDeclaredInputCount++;
-            $("#add_input_wrap").append('<div><input type="text" class="form-control" name="mytext[]" idx='+inputs+' id="input'+inputs+'"/><a href="#" id="inDelete'+inputs +'" class="remove_input">Eliminar</a></div>');
+            $("#add_input_wrap").append('<div><input type="text" class="form-control inputform" name="mytext[]" idx='+inputs+' id="input'+inputs+'"/><a href="#" id="inDelete'+inputs +'" class="remove_input">Delete</a></div>');
             localizeHTMLTag("inDelete"+inputs);
 	    addIndividualInputDataListener('input'+inputs);
         }
@@ -735,7 +747,7 @@ function setupInputOutputControlListeners() {
         if(outputs < max_out_fields-1){ //max input box allowed
             outputs++; //text box increment
             gDeclaredOutputCount++;
-            $("#add_output_wrap").append('<div><input type="text" class="form-control" name="mytext[]" idx='+outputs+' id="output'+outputs+'"/><a href="#" id="outDelete'+outputs +'" class="remove_output">Delete</a></div>');
+            $("#add_output_wrap").append('<div><input type="text" class="form-control outputform" name="mytext[]" idx='+outputs+' id="output'+outputs+'"/><a href="#" id="outDelete'+outputs +'" class="remove_output">Delete</a></div>');
             localizeHTMLTag("outDelete"+outputs);
 	    addIndividualOutputDataListener('output'+outputs);
         }
