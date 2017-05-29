@@ -73,7 +73,7 @@ function ExprGenericParser(concreteParser) {
             return setParser.parseNotExpr(expr, ins, out);
         }
         else if(isZeroExpr) {
-            return setParser.parseZeroLiteralExpr(expr, ins, out);
+            return setParser.parseLiteralZeroExpr(expr, ins, out);
         }
         else if(isLiteralExpr) {
             return setParser.parseLiteralExpr(expr, ins, out);
@@ -187,7 +187,7 @@ function ExprVHDLParser(){
         ret = "0";
         return ret;
     }
-    this.parseLiteralZeroExpr = function (expr, ins, out) {
+    this.parseLiteralOneExpr = function (expr, ins, out) {
         var ret = "";
         ret = "1";
         return ret;

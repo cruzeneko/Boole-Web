@@ -738,6 +738,12 @@ function setupInputOutputControlListeners() {
             localizeHTMLTag("inDelete"+inputs);
 	    addIndividualInputDataListener('input'+inputs);
         }
+        else{
+            gLastError = _("You have reached the maximum number of inputs.");
+            gLastError += " "
+            gLastError += _("Try deleting an input first.");
+            modalMgr.displayInfoModal(_("Cannot add input!"), gLastError)
+        }
     });
 
     var outputs = 0;
@@ -750,6 +756,12 @@ function setupInputOutputControlListeners() {
             $("#add_output_wrap").append('<div><input type="text" class="form-control outputform" name="mytext[]" idx='+outputs+' id="output'+outputs+'"/><a href="#" id="outDelete'+outputs +'" class="remove_output">Delete</a></div>');
             localizeHTMLTag("outDelete"+outputs);
 	    addIndividualOutputDataListener('output'+outputs);
+        }
+        else{
+            gLastError = _("You have reached the maximum number of outputs.");
+            gLastError += " "
+            gLastError += _("Try deleting an output first.");
+            modalMgr.displayInfoModal(_("Cannot add output!"), gLastError)
         }
     });
 

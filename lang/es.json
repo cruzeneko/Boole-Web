@@ -51,6 +51,12 @@
 	"The statement and the truth table will be lost. Do you want to continue?" : "Se perderan enunciado y tabla de verdad. Continuar?",
 	"The truth table  will be lost. Do you want to continue?" : "Se perdera la tabla de verdad. Continuar?",
 	"The whole system will be lost. Do you want to continue?" : "Se pedera el sistema completo. Continuar?",
-	"Title" : "Titulo"
+	"Title" : "Titulo",
+	"Cannot add input!": "Imposible agregar entrada!",
+	"You have reached the maximum number of inputs." : "Has alcanzado el maximo numero de entradas.",
+	"Try deleting an input first." : "Prueba eliminando una entrada.",
+	"Cannot add output!": "Imposible agregar salida!",
+        "You have reached the maximum number of outputs." : "Has alcanzado el maximo numero de salidas.",
+        "Try deleting an output first." : "Prueba eliminando una salida."
 }
 
