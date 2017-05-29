@@ -1,8 +1,9 @@
 function configure(config_json) {
     var config = JSON.parse(config_json);
+    if(config.type != "config")
+        return;
 
     //Set up statement
-
     var statement = config.statement;
     var statementIsEditable = config.statementIsEditable;
     
@@ -73,10 +74,29 @@ function configure(config_json) {
         if(!outputsAreReadOnly)
 	    document.getElementById("outDelete"+outputCount).remove();
     }
+}
+
+
+function configure(integration_config_json) {
+    var integrationConfig = JSON.parse(integration_config_json);
+    if(config.type != "integrationConfig")
+        return;
+
+    document.getElementById("btnExternalSvc").innerHTML = config.externalSvcBtnText;
+    document.getElementById("btnLaunchExternalSvc").innerHTML = config.launchSvcBtnText;
+
+    if(!config.downloadUnlinkedVHDLBtnEnabled){
+        document.getElementById("btnUnlinkedVHDL").disabled = true;    
+    }
+    if(!config.downloadUnlinkedVHDLBtnPresent){
+        document.getElementById("btnUnlinkedVHDL").remove();
+    }
+    if(!config.downloadLinkedVHDLBtnEnabled){
+        document.getElementById("btnLinkedVHDL").disabled = true;
+    }
+    if(!config.downloadLinkedVHDLBtnPresent){
+        document.getElementById("btnLinkedVHDL").remove();
+    }
     
-    gRealAvailableInputs = config.availableRealWorldInputs;
-    gRealAvailableOutputs = config.availableRealWorldOutputs;
-
-
 
 }
