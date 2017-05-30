@@ -958,8 +958,12 @@ function downloadLinkedVHDL(){
     triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhdl" , vhdlCode);
 }
 
-function openExternalServiceIfAvailable(){
-    
+function callExternalServiceIfAvailable(){
+    var msg = new Object();
+    msg.type = "externalPressed";
+    msg.seq = gExternalServiceTriggeredCount++;
+    msg.vhdl = createLinkedVHDL();
+    parent.postMessage(JSON.stringify(msg),"*");
 }
 
 

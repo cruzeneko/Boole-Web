@@ -74,6 +74,7 @@ function configure(config_json) {
         if(!outputsAreReadOnly)
 	    document.getElementById("outDelete"+outputCount).remove();
     }
+    evaluateInputOutputStatus();
 }
 
 

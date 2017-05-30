@@ -26,6 +26,6 @@ function downloadLinkedVHDLHandler() {
     downloadLinkedVHDL();
 }
 
-function openExternalServiceHandler() {
-    openExternalServiceIfAvailable();
+function callExternalServiceHandler() {
+    callExternalServiceIfAvailable();
 }
