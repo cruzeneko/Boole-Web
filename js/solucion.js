@@ -12,6 +12,8 @@ var gSystemTitle;
 var currentTab = "Intro";
 var truthTable;
 var modalMgr = new ModalManager();
+var gPorts = [];
+var gCorrespondenceHashmap = {}
 
 var validationFunctions = {
                                 "Intro":     {"Intro":validIntroIntro,     "Statement":validIntroStatement,     "Table":validIntroTable,       "VK": validIntroVK,       "Circuit":validIntroCircuit},

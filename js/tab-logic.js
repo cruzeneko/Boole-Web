@@ -518,10 +518,20 @@ function posopVKVK(){
 
 
 function posopVKCircuit(){
-    var realIn = ["realIn1","realIn2","realIn3","realIn4","realIn5","realIn6"];
-    var realOut = ["realOut1", "realOut2", "realOut3", "realOut4", "realOut5", "realOut6"];
-    var sysIn = ["a" , "b",  "c"];
-    var sysOut = ["b", "c" , "d"];
+    var realIn = [];
+    var realOut = [];
+    var sysIn = [];
+    var sysOut = [];
+
+    var j,k;
+    for(var i = j = k = 0; i<gPorts.length; i++) {
+        if(gPorts[i].type == "in"){
+            realIn[j++] = gPorts[i].portReprText;
+        }
+        else if(gPorts[i].type == "out") {
+            realOut[k++] = gPorts[i].portReprText;
+        }
+    }
 
     for(var i = 0; i<Object.keys(gInputHashmap).length; i++) {
         sysIn[i] = gInputHashmap[i];
@@ -659,6 +669,7 @@ function posopVKCircuit(){
                     $(this).addClass('ui-state-highlight').find('p').html('You got it!');
                     $(this).attr('full', 'true');
                     $(this).append(ui.draggable.css({position: 'static'}));
+                    gCorrespondenceHashmap[ui.draggable[0].innerText] = getPortByDescriptiveText($(this)[0].firstChild.innerHTML);
                 } else {
                     $('.droppable-in > p').html('Not that one!')
                     setTimeout(function(){ $('.droppable-in > p').html('Drop here'); }, 1000);
@@ -679,6 +690,7 @@ function posopVKCircuit(){
                     $(this).addClass('ui-state-highlight').find('p').html('You got it!');
                     $(this).attr('full', 'true');
                     $(this).append(ui.draggable.css({position: 'static'}));
+                    gCorrespondenceHashmap[ui.draggable[0].innerText] = getPortByDescriptiveText($(this)[0].firstChild.innerHTML);
                 } else {
                     $('.droppable-in > p').html('Not that one!')
                     setTimeout(function(){ $('.droppable-out > p').html('Drop here'); }, 1000);

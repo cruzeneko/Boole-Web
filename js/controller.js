@@ -77,8 +77,8 @@ function configure(config_json) {
 }
 
 
-function configure(integration_config_json) {
-    var integrationConfig = JSON.parse(integration_config_json);
+function configure_integration(integration_config_json) {
+    var config = JSON.parse(integration_config_json);
     if(config.type != "integrationConfig")
         return;
 
@@ -98,5 +98,5 @@ function configure(integration_config_json) {
         document.getElementById("btnLinkedVHDL").remove();
     }
     
-
+    gPorts = config.ports;
 }

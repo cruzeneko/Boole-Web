@@ -896,8 +896,55 @@ function createUnlinkedVHDL(){
 
 }
 
+function createLinkedVHDL(){
+    var inPorts = []; var j = 0;
+    var inoutPorts = []; var k = 0;
+    var outPorts = []; var l = 0;
+    var ins = [];
+    var outs = [];
+
+    for(var i=0; i<Object.keys(gInputHashmap).length; i++){
+        ins[i] = gInputHashmap[i];
+    }
+    for(var i=0; i<Object.keys(gOutputHashmap).length; i++){
+        outs[i] = gOutputHashmap[i];
+    }
+
+    //Inputs in the hashmap are to be declared as inputs in VHDL. Same applies for outputs and inouts.
+    for (var key in gCorrespondenceHashmap) {
+        var portType = getExternallyDefinedPortType(gCorrespondenceHashmap[key]);
+        if(portType == "in") inPorts[j++] = gCorrespondenceHashmap[key];
+        else if(portType == "out") outPorts[k++] = gCorrespondenceHashmap[key];
+        else if(portType == "inout") inoutPorts[l++] = gCorrespondenceHashmap[key];
+    }
+
+    //Now inputs/outputs that MUST be declared and weren't used must also be transferred.
+    for(var i = 0; i<gPorts.length; i++) {
+        var currentPortName = gPorts[i].portName;
+        if(gPorts[i].InOutIfUnused && !(currentPortName in inPorts || currentPortName in outPorts || currentPortName in inoutPorts )){
+            inoutPorts[k++] = currentPortName;
+        }
+    }
+
+    //Now re-generate the boolean expression strings applying the correspondence
+    var substitutedFormulae = []; var m = 0;
+    for(var i = 0; i < gBooleanExpressionStrings.length; i++) {
+        substitutedFormulae[m++] = substituteByCorrespondenceInFormula(gBooleanExpressionStrings[i], ins, outs)
+    }
+
+    vhdlCode = generateVHDLProgramForExpressions(substitutedFormulae,
+                                                 undefined,
+                                                 gSystemTitle.replace(/ /g,''),
+                                                 inoutPorts,
+                                                 inPorts,
+                                                 outPorts
+                                      );
+    return vhdlCode;
+
+}
+
 function downloadUnlinkedVHDL() {
-    var vhdlCode = createUnlinkedVHDL(undefined);
+    var vhdlCode = createUnlinkedVHDL();
     triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhdl" , vhdlCode);
 }
 
@@ -915,7 +962,8 @@ function triggerStringAsFileDownload(filename, text) {
 }
 
 function downloadLinkedVHDL(){
-
+    var vhdlCode = createLinkedVHDL();
+    triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhdl" , vhdlCode);
 }
 
 function openExternalServiceIfAvailable(){
@@ -938,6 +986,28 @@ function parseFormulaToVHDLNotations(expr, ins, outs) {
 
     return VHDLParser.nextRecursionLevel(expr, ins, outs);
 
+}
+
+function substituteByCorrespondenceInFormula(expr, ins, outs) {
+    var SubstInnerParser = new ExprVHDLParser();
+    var SubstParser = new ExprGenericParser(SubstInnerParser);
+    SubstInnerParser.init(SubstParser);
+
+    return SubstParser.nextRecursionLevel(expr, ins, outs);
+}
+
+function getPortByDescriptiveText(portText) {
+    for(var i = 0; i< gPorts.length; i++) {
+        if(gPorts[i].portReprText == portText)
+            return gPorts[i].portName;
+    }
+}
+
+function getExternallyDefinedPortType(portName) {
+    for(var i = 0; i< gPorts.length; i++) {
+        if(gPorts[i].portName == portName)
+            return gPorts[i].type;
+    }
 }
 
 exports._test = {

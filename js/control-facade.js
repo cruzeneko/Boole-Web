@@ -9,6 +9,9 @@ function addNewInterceptor(fun){
     interceptors[interceptors.length] = fun;
 }
 
+function configureNewIntegration(config){
+    configure_integration(config);
+}
 
 function configureNewExercise( config ) {
     configure(config);
