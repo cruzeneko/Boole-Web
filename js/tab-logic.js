@@ -286,6 +286,7 @@ function preopStatementStatement(){
 function preopStatementTable(){
     //Transfer title
     gSystemTitle = document.getElementById("tbTitle").value;
+    if(gSystemTitle == "") gSystemTitle = _("Untitled");
 
     //Clear and append table
     var truthTablePanel = document.getElementById("truthtable-panel");

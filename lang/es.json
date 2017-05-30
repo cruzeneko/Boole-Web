@@ -69,6 +69,7 @@
 	"Real I/O" : "E/S Real",
 	"System I/O to Real I/O linkage" : "Vinculacion de E/S del sistema a E/S real",
 	"Download VHDL" : "Descargar VHDL",
-	"Close" : "Cerrar"
+	"Close" : "Cerrar",
+	"Untitled" : "Sin titulo"
 }
 

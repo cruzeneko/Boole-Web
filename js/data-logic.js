@@ -781,7 +781,7 @@ function getAssociatedPortByCorrespondence( port, correspondence) {
 }
 
 function generateVHDLInputs(inports) {
-    var ret;
+    var ret = "";
 
     if(typeof inports != "undefined")
     for(var i=0;i<inports.length;i++){
@@ -819,7 +819,7 @@ function generateVHDLOutputs(outports){
 // and an optional correspondence from the ports in the expression to the ports that
 // will appear in the program.
 
-function generateVHDLProgramForExpressions(expr, portCorrespondence, entityName, inoutports, inports, outports){
+function generateVHDLProgramForExpressions(outputToBooleanExpressionHashmap, portCorrespondence, entityName, inoutports, inports, outports){
     var ret = "";
 
     if(typeof inoutports == "undefined" && 
@@ -842,18 +842,6 @@ function generateVHDLProgramForExpressions(expr, portCorrespondence, entityName,
     ret+= generateVHDLInouts(inoutports);
     ret+= generateVHDLOutputs(outports);
 
-    if(typeof inoutports != "undefined")
-    for(var i=0;i<inoutports.length;i++){
-        ret+=            "\t\t";
-        ret+=                    inoutports[i]+" : inout std_logic;\n";
-    } 
-
-    if(typeof outports != "undefined")
-    for(var i=0;i<outports.length;i++){
-        ret+=            "\t\t";
-        ret+=                    outports[i]+" : out std_logic;\n";
-    }
-
     ret +=               "\t\t";
     ret +=                       ");\n";
     ret +=               "end "+ entityName + ";\n";                         
@@ -863,11 +851,11 @@ function generateVHDLProgramForExpressions(expr, portCorrespondence, entityName,
     ret +=               "\t";
     ret +=                   "begin\n";
 
-    for(var i=0; i<gBooleanExpressionStrings.length;i++){
-        var expr = gBooleanExpressionStrings[i];
+    for(var currentOutput in outputToBooleanExpressionHashmap){
+        currentExpr = outputToBooleanExpressionHashmap[currentOutput];
         ret +=            "\t\t";
-        ret +=            outports[i] + "<=" + parseFormulaToVHDLNotations(expr, inports , gOutputHashmap[i]);
-        ret +=            "\n";
+	ret +=            currentOutput + "<=" + parseFormulaToVHDLNotations(currentExpr, inports , currentOutput);
+        ret +=            ";\n";
     }
 
     ret += "end behavioral;"
@@ -877,6 +865,7 @@ function generateVHDLProgramForExpressions(expr, portCorrespondence, entityName,
 function createUnlinkedVHDL(){
     var inPorts = [];
     var outPorts = [];
+    var outputToExprHashmap = {};
 
     for(var i=0; i<Object.keys(gInputHashmap).length; i++){
         inPorts[i] = gInputHashmap[i];
@@ -884,8 +873,11 @@ function createUnlinkedVHDL(){
     for(var i=0; i<Object.keys(gOutputHashmap).length; i++){
         outPorts[i] = gOutputHashmap[i];
     }
+    for(var i=0; i<Object.keys(gOutputHashmap).length; i++){
+        outputToExprHashmap[gOutputHashmap[i]] = gBooleanExpressionStrings[i];
+    }
 
-    vhdlCode = generateVHDLProgramForExpressions(gBooleanExpressionStrings, 
+    vhdlCode = generateVHDLProgramForExpressions(outputToExprHashmap, 
     				                 undefined,
                                                  gSystemTitle.replace(/ /g,''),
                                                  undefined,
@@ -902,6 +894,7 @@ function createLinkedVHDL(){
     var outPorts = []; var l = 0;
     var ins = [];
     var outs = [];
+    var outputToExprHashmap = {};
 
     for(var i=0; i<Object.keys(gInputHashmap).length; i++){
         ins[i] = gInputHashmap[i];
@@ -914,8 +907,8 @@ function createLinkedVHDL(){
     for (var key in gCorrespondenceHashmap) {
         var portType = getExternallyDefinedPortType(gCorrespondenceHashmap[key]);
         if(portType == "in") inPorts[j++] = gCorrespondenceHashmap[key];
-        else if(portType == "out") outPorts[k++] = gCorrespondenceHashmap[key];
-        else if(portType == "inout") inoutPorts[l++] = gCorrespondenceHashmap[key];
+        else if(portType == "inout") inoutPorts[k++] = gCorrespondenceHashmap[key];
+        else if(portType == "out") outPorts[l++] = gCorrespondenceHashmap[key];
     }
 
     //Now inputs/outputs that MUST be declared and weren't used must also be transferred.
@@ -927,12 +920,11 @@ function createLinkedVHDL(){
     }
 
     //Now re-generate the boolean expression strings applying the correspondence
-    var substitutedFormulae = []; var m = 0;
     for(var i = 0; i < gBooleanExpressionStrings.length; i++) {
-        substitutedFormulae[m++] = substituteByCorrespondenceInFormula(gBooleanExpressionStrings[i], ins, outs)
+        outputToExprHashmap[gCorrespondenceHashmap[outs[i]]] = substituteByCorrespondenceInFormula(gBooleanExpressionStrings[i], ins, outs)
     }
 
-    vhdlCode = generateVHDLProgramForExpressions(substitutedFormulae,
+    vhdlCode = generateVHDLProgramForExpressions(outputToExprHashmap,
                                                  undefined,
                                                  gSystemTitle.replace(/ /g,''),
                                                  inoutPorts,
@@ -989,7 +981,7 @@ function parseFormulaToVHDLNotations(expr, ins, outs) {
 }
 
 function substituteByCorrespondenceInFormula(expr, ins, outs) {
-    var SubstInnerParser = new ExprVHDLParser();
+    var SubstInnerParser = new ExprSubstParser();
     var SubstParser = new ExprGenericParser(SubstInnerParser);
     SubstInnerParser.init(SubstParser);
 
