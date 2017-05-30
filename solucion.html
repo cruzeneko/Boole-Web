@@ -247,7 +247,7 @@
 					</div>
 					<button type="button" class="btn" id="btnUnlinkedVHDL" type="button" onclick="downloadUnlinkedVHDLHandler()">Download VHDL</button>
         	        		<button type="button" class="btn" id="btnRestart" type="button" onclick="gotoTab('enunciado')">Restart</button>
-        		        	<button type="button" class="btn" id="btnPrintAll" type="button" onclick="printAll()">Print</button>
+        		        	<button type="button" class="btn" id="btnPrintAll" type="button" onclick="printAll()">Download PDF</button>
 					<button type="button" class="btn" id="btnExternalSvc" data-toggle="modal" data-target="#integration-modal">Open external service</button>
 	  			</div>
 			</div>
@@ -260,26 +260,26 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-          				<h4 class="modal-title">Modal Header</h4>
+          				<h4 id="hdrLinkageModal" class="modal-title">System I/O to Real I/O linkage</h4>
         			</div>
 				<div class="modal-body">
 					<div class="row">
  						<div class="col-sm-6">
 							<div class="panel panel-primary">
-								<div class="panel-heading">System I/O</div>
+								<div id="hdrSysIoPanel" class="panel-heading">System I/O</div>
 								<div id="systemIOcol" class="panel-body"></div>
 							</div>
 						</div>
                                                 <div class="col-sm-6">
                                                         <div class="panel panel-primary">
-                                                                <div class="panel-heading">Real I/O</div>
+                                                                <div id="hdrRealIoPanel" class="panel-heading">Real I/O</div>
                                                                 <div id="realIOcol" class="panel-body"></div>
                                                         </div>
                                                 </div>
 					</div>
 				</div>
         			<div class="modal-footer">
-          				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          				<button type="button" class="btn btn-default" id="linkageModalCloseBtn" data-dismiss="modal">Close</button>
 					<button type="button" class="btn btn-default" id="btnLinkedVHDL" onclick="downloadLinkedVHDLHandler()">Download VHDL</button>
 					<button type="button" class="btn btn-default" id="btnLaunchExternalSvc" onclick="openExternalServiceHandler()">
           					<span class="glyphicon glyphicon-flash"></span>
@@ -306,7 +306,7 @@
 	                                <p id="infoModalText"></p>
 	                        </div>
 	                        <div class="modal-footer">
-	                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                                <button type="button" class="btn btn-default" id="errorModalCloseBtn" data-dismiss="modal">Close</button>
 	                        </div>
 	                </div>
 	        </div>

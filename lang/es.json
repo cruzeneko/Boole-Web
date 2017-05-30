@@ -27,7 +27,7 @@
 	"Solve" : "Resolver",
 	"Circuit" : "Circuito",
 	"Restart" : "Reiniciar",
-	"Print" : "Imprimir",
+	"Download PDF" : "Descargar PDF",
 	"Delete" : "Eliminar",
 	"Add Input" : "Anadir Entrada",
 	"Fill in the problem statement and the inputs and outputs" : "Ingresa el enunciado del problema y las entradas y salidas",
@@ -64,6 +64,11 @@
 	"You must fill the truth table before creating Karnaugh Maps from it." : "Debes completar la tabla antes de poder crear diagramas Veitch-Karnaugh de ella",
 	"You must solve Karnaugh maps first." : "Debes resolver los diagramas Veitch-Karnaugh primero",
 	"Proceed" : "Continuar",
-	"Cancel" : "Cancelar"
+	"Cancel" : "Cancelar",
+        "System I/O" : "E/S Sistema",
+	"Real I/O" : "E/S Real",
+	"System I/O to Real I/O linkage" : "Vinculacion de E/S del sistema a E/S real",
+	"Download VHDL" : "Descargar VHDL",
+	"Close" : "Cerrar"
 }
 
