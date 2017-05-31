@@ -933,7 +933,7 @@ function createLinkedVHDL(){
 
     for(var i = 0; i<gPorts.length; i++){
         if(gPorts[i].alwaysGenerate){
-            var portType = gPorts[i].portType;
+            var portType = gPorts[i].type;
             if(portType == "in") inPorts.add(gPorts[i].portName);
             else if(portType == "inout") inoutPorts.add(gPorts[i].portName);
             else if(portType == "out") outPorts.add(gPorts[i].portName);
@@ -972,7 +972,7 @@ function triggerStringAsFileDownload(filename, text) {
 
 function downloadLinkedVHDL(){
     var vhdlCode = createLinkedVHDL();
-    triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhdl" , vhdlCode);
+    triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhd" , vhdlCode);
 }
 
 function callExternalServiceIfAvailable(){

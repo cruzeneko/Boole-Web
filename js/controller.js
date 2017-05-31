@@ -12,8 +12,14 @@ function configure(config_json) {
         quill.disable();
     }
 
-    document.getElementById("tbTitle").value = config.entityName;
-    document.getElementById("tbTitle").readOnly = !config.entityNameIsModifiable;
+    if(typeof(config.entityName)=="undefined"){
+        document.getElementById("tbTitle").value = "";
+        document.getElementById("tbTitle").readOnly = false;
+    }
+    else{
+        document.getElementById("tbTitle").value = config.entityName;
+        document.getElementById("tbTitle").readOnly = !config.entityNameIsModifiable;
+    }
 
     //Set up inputs: add as many as needed, set them to their value and then flag them
     //read only as needed.
@@ -106,8 +112,19 @@ function configure_integration(integration_config_json) {
         document.getElementById("btnLinkedVHDL").remove();
     }
 
-    gSystemArchitectureType = config.archType;
-    gSystemArchitectureName = config.vhdlEntityName;
+    if(typeof(config.archType) == "undefined"){
+        gSystemArchitectureType = "behavioral";
+    }
+    else{
+        gSystemArchitectureType = config.archType;
+    }
+    
+    if(typeof(config.vhdlEntityName) == "undefined"){
+        gSystemArchitectureName = _("Untitled");
+    }
+    else{
+        gSystemArchitectureName = config.vhdlEntityName;
+    }
 
     gPorts = config.ports;
     

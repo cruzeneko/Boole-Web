@@ -16,6 +16,7 @@ var gPorts = [];
 var gCorrespondenceHashmap = {}
 var gExternalServiceTriggeredCount = 0;
 var gSystemArchitectureType = "behavioral";
+var gSystemArchitectureName = "Untitled";
 
 var validationFunctions = {
                                 "Intro":     {"Intro":validIntroIntro,     "Statement":validIntroStatement,     "Table":validIntroTable,       "VK": validIntroVK,       "Circuit":validIntroCircuit},
