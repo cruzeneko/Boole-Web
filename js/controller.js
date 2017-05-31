@@ -106,7 +106,8 @@ function configure_integration(integration_config_json) {
         document.getElementById("btnLinkedVHDL").remove();
     }
 
-    gSystemArchitectureType = config.archType;    
+    gSystemArchitectureType = config.archType;
+    gSystemArchitectureName = config.vhdlEntityName;
 
     gPorts = config.ports;
     

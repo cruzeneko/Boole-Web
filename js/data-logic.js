@@ -942,7 +942,7 @@ function createLinkedVHDL(){
 
     vhdlCode = generateVHDLProgramForExpressions(outputToExprHashmap,
                                                  undefined,
-                                                 gSystemTitle.replace(/ /g,''),
+                                                 gSystemArchitectureName.replace(/ /g,''),
                                                  Array.from(inoutPorts),
                                                  Array.from(inPorts),
                                                  Array.from(outPorts)
