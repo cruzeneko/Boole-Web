@@ -25,9 +25,15 @@ function configure(config_json) {
     var inputCountIsReadOnly = !config.inputCountIsEditable;
     var outputCountIsReadOnly = !config.outputCountIsEditable;
 
+    for(var i = 0; i<inputCount-1; i++){
+        jQuery._data( document.getElementById("add_input"),"events").click[0].handler();
+    }
+    for(var i = 0; i<outputCount-1; i++){
+        jQuery._data( document.getElementById("add_output"),"events").click[0].handler();
+    }
+
     for(var i = 0; i<inputCount; i++) {
         var currentInput = document.getElementById("input"+i);
-        jQuery._data( document.getElementById("add_input"),"events").click[0].handler();
         currentInput.value = ((inputNames!=null) ? inputNames[i] : "");
         if(inputsAreReadOnly) {
             currentInput.readOnly = true;
@@ -39,7 +45,6 @@ function configure(config_json) {
     }
     for(var i = 0; i<outputCount; i++) {
         var currentOutput = document.getElementById("output"+i);
-        jQuery._data( document.getElementById("add_output"),"events").click[0].handler();
         currentOutput.value = ((outputNames!=null) ? outputNames[i] : "");;
         if(outputsAreReadOnly) {
             currentOutput.readOnly = true;

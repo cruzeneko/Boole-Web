@@ -767,11 +767,11 @@ function setupInputOutputControlListeners() {
 
     
     $(out_wrapper).on("click",".remove_input", function(e){ //user click on remove text
-        e.preventDefault(); $(this).parent('div').remove(); gInputHashmap[inputs]=null; inputs--; gDeclaredInputCount--;
+        e.preventDefault(); $(this).parent('div').remove(); delete gInputHashmap[inputs]; inputs--; gDeclaredInputCount--;
     })
 
     $(in_wrapper).on("click",".remove_output", function(e){ //user click on remove text
-        e.preventDefault(); $(this).parent('div').remove(); gOutputHashmap[outputs]=null; outputs--; gDeclaredOutputCount--; 
+        e.preventDefault(); $(this).parent('div').remove(); delete gOutputHashmap[outputs]; outputs--; gDeclaredOutputCount--; 
     })
 }
 
