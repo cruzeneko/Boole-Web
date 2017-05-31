@@ -807,7 +807,7 @@ function generateVHDLOutputs(outports){
         for(var i=0;i<outports.length;i++){
             ret+=            "\t\t";
             ret+=                    outports[i]+" : out std_logic";
-            if(i == outports.length-1)
+            if(i != outports.length-1)
                 ret+=";"
             ret+="\n";
         }
