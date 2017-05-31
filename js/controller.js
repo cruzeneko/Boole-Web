@@ -12,6 +12,8 @@ function configure(config_json) {
         quill.disable();
     }
 
+    document.getElementById("tbTitle").value = config.entityName;
+    document.getElementById("tbTitle").readOnly = !config.entityNameIsModifiable;
 
     //Set up inputs: add as many as needed, set them to their value and then flag them
     //read only as needed.
