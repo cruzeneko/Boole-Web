@@ -850,7 +850,7 @@ function generateVHDLProgramForExpressions(outputToBooleanExpressionHashmap, por
     ret +=               "end "+ entityName + ";\n";                         
     ret +=               "\n\n";
 
-    ret +=               "architecture behavioral of " + entityName + " is\n";
+    ret +=               "architecture "+gSystemArchitectureType+" of " + entityName + " is\n";
     ret +=               "\t";
     ret +=                   "begin\n";
 
@@ -861,7 +861,7 @@ function generateVHDLProgramForExpressions(outputToBooleanExpressionHashmap, por
         ret +=            ";\n";
     }
 
-    ret += "end behavioral;"
+    ret += "end "+gSystemArchitectureType+";"
     return ret;
 }
 
@@ -892,9 +892,9 @@ function createUnlinkedVHDL(){
 }
 
 function createLinkedVHDL(){
-    var inPorts = []; var j = 0;
-    var inoutPorts = []; var k = 0;
-    var outPorts = []; var l = 0;
+    var inPorts = new Set();
+    var inoutPorts = new Set();
+    var outPorts = new Set();
     var ins = [];
     var outs = [];
     var outputToExprHashmap = {};
@@ -906,19 +906,23 @@ function createLinkedVHDL(){
         outs[i] = gOutputHashmap[i];
     }
 
+    for(var i = 0; i<gPorts.length; i++) {
+        processPortForSelfModifications(gPorts[i]);
+    }
+
     //Inputs in the hashmap are to be declared as inputs in VHDL. Same applies for outputs and inouts.
     for (var key in gCorrespondenceHashmap) {
         var portType = getExternallyDefinedPortType(gCorrespondenceHashmap[key]);
-        if(portType == "in") inPorts[j++] = gCorrespondenceHashmap[key];
-        else if(portType == "inout") inoutPorts[k++] = gCorrespondenceHashmap[key];
-        else if(portType == "out") outPorts[l++] = gCorrespondenceHashmap[key];
+        if(portType == "in") inPorts.add(gCorrespondenceHashmap[key]);
+        else if(portType == "inout") inoutPorts.add(gCorrespondenceHashmap[key]);
+        else if(portType == "out") outPorts.add(gCorrespondenceHashmap[key]);
     }
 
     //Now inputs/outputs that MUST be declared and weren't used must also be transferred.
     for(var i = 0; i<gPorts.length; i++) {
         var currentPortName = gPorts[i].portName;
         if(gPorts[i].InOutIfUnused && !(currentPortName in inPorts || currentPortName in outPorts || currentPortName in inoutPorts )){
-            inoutPorts[k++] = currentPortName;
+            inoutPorts.add(currentPortName);
         }
     }
 
@@ -927,20 +931,30 @@ function createLinkedVHDL(){
         outputToExprHashmap[gCorrespondenceHashmap[outs[i]]] = substituteByCorrespondenceInFormula(gBooleanExpressionStrings[i], ins, outs)
     }
 
+    for(var i = 0; i<gPorts.length; i++){
+        if(gPorts[i].alwaysGenerate){
+            var portType = gPorts[i].portType;
+            if(portType == "in") inPorts.add(gPorts[i].portName);
+            else if(portType == "inout") inoutPorts.add(gPorts[i].portName);
+            else if(portType == "out") outPorts.add(gPorts[i].portName);
+        }
+    }
+
     vhdlCode = generateVHDLProgramForExpressions(outputToExprHashmap,
                                                  undefined,
                                                  gSystemTitle.replace(/ /g,''),
-                                                 inoutPorts,
-                                                 inPorts,
-                                                 outPorts
+                                                 Array.from(inoutPorts),
+                                                 Array.from(inPorts),
+                                                 Array.from(outPorts)
                                       );
+
     return vhdlCode;
 
 }
 
 function downloadUnlinkedVHDL() {
     var vhdlCode = createUnlinkedVHDL();
-    triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhdl" , vhdlCode);
+    triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhd" , vhdlCode);
 }
 
 function triggerStringAsFileDownload(filename, text) {
@@ -1006,6 +1020,26 @@ function getExternallyDefinedPortType(portName) {
     for(var i = 0; i< gPorts.length; i++) {
         if(gPorts[i].portName == portName)
             return gPorts[i].type;
+    }
+}
+
+function mustBeInoutIfUnused(portName){
+    for(var i = 0; i< gPorts.length; i++) {
+        if(gPorts[i].portName == portName)
+            return gPorts[i].InOutIfUnused;
+    }
+}
+
+function isToBeAlwaysGenerated(portName) {
+    for(var i = 0; i< gPorts.length; i++) {
+        if(gPorts[i].portName == portName)
+            return gPorts[i].alwaysGenerate;
+    }
+}
+
+function processPortForSelfModifications(port) {
+    if(port.setOutToInout && port.portType == "out"){
+        port.portType = "inout";
     }
 }
 

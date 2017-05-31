@@ -103,6 +103,9 @@ function configure_integration(integration_config_json) {
     if(!config.downloadLinkedVHDLBtnPresent){
         document.getElementById("btnLinkedVHDL").remove();
     }
-    
+
+    gSystemArchitectureType = config.archType;    
+
     gPorts = config.ports;
+    
 }
