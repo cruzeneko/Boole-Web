@@ -122,3 +122,10 @@ $(document).ready(function() {
 	setupEventListeners();
 	
 });
+
+var getUrlParam = function(name, w){
+    w = w || document;
+    var rx = new RegExp('[\&|\?]'+name+'=([^\&\#]+)'),
+        val = w.location.search.match(rx);
+    return !val ? '':val[1];
+}

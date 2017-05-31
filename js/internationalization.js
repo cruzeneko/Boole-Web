@@ -31,9 +31,12 @@ var internationalizableTags =
 ];
 
 function localizeAll() {
-    var lang = "es";
-    if (lang != "") String.locale = lang;
-    
+    var lang = getUrlParam("lang");
+    if (lang != ""){
+        String.locale = lang;
+    }
+    else String.locale = "es";
+
     for(var i = 0; i<internationalizableTags.length; i++) {
 	localizeHTMLTag(internationalizableTags[i]);
     }
