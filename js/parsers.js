@@ -73,7 +73,7 @@ function ExprGenericParser(concreteParser) {
             return setParser.parseNotExpr(expr, ins, out);
         }
         else if(isZeroExpr) {
-            return setParser.parseZeroLiteralExpr(expr, ins, out);
+            return setParser.parseLiteralZeroExpr(expr, ins, out);
         }
         else if(isLiteralExpr) {
             return setParser.parseLiteralExpr(expr, ins, out);
@@ -187,7 +187,7 @@ function ExprVHDLParser(){
         ret = "0";
         return ret;
     }
-    this.parseLiteralZeroExpr = function (expr, ins, out) {
+    this.parseLiteralOneExpr = function (expr, ins, out) {
         var ret = "";
         ret = "1";
         return ret;
@@ -198,3 +198,64 @@ function ExprVHDLParser(){
 exports.ExprGenericParser = ExprGenericParser;
 exports.ExprPrefixParser = ExprPrefixParser;
 exports.ExprVHDLParser = ExprVHDLParser;
+
+//gCorrespondenceHashmap
+
+function ExprSubstParser(){
+    var superParser;
+
+    this.init = function (fatherParser){
+        this.superParser = fatherParser;
+    }
+
+    this.parseParenExpr = function(expr, ins, out) {
+        var ret = "";
+        ret += "(";
+        ret += this.superParser.nextRecursionLevel(expr.substring(1, expr.length-1), ins, out);
+        ret += ")";
+        return ret;
+    }
+    this.parseAndExpr = function(expr, ins, out) {
+        var ret = "";
+        var tokens = expr.split("&");
+        for(var i = 0; i<tokens.length; i++){
+            ret+= this.superParser.nextRecursionLevel(tokens[i], ins, out);
+            if( i < tokens.length-1) {
+                ret+="&";
+            }
+        }
+        return ret;
+    }
+    this.parseOrExpr = function (expr, ins, out) {
+        var ret = "";
+        var tokens = expr.split("|");
+        for(var i = 0; i<tokens.length; i++){
+            ret+= this.superParser.nextRecursionLevel(tokens[i], ins, out);
+            if( i < tokens.length-1) {
+                ret+="|";
+            }
+        }
+        return ret;
+    }
+    this.parseNotExpr = function (expr, ins, out) {
+        var ret = "";
+        ret = "~" + this.superParser.nextRecursionLevel(expr.substring(1), ins, out);
+        return ret;
+    }
+    this.parseLiteralExpr = function (expr, ins, out) {
+        var ret = "";
+        ret = gCorrespondenceHashmap[expr];
+        return ret;
+    }
+    this.parseLiteralZeroExpr = function (expr, ins, out) {
+        var ret = "";
+        ret = "0";
+        return ret;
+    }
+    this.parseLiteralOneExpr = function (expr, ins, out) {
+        var ret = "";
+        ret = "1";
+        return ret;
+    }
+
+}

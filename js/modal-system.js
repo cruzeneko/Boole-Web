@@ -9,6 +9,8 @@ function ModalManager() {
     this.displayOverrideConfirmModal = function(heading, text, overrideFunction) {
         document.getElementById("dataLossWarnModalTitle").innerHTML = heading;
         document.getElementById("dataLossWarnModalText").innerHTML = text;
+        document.getElementById("dataLossWarnModalProceedButton").innerHTML = _("Proceed");
+        document.getElementById("dataLossWarnModalCancelButton").innerHTML = _("Cancel");
         document.getElementById("dataLossWarnModalProceedButton").onclick = overrideFunction;
         $("#dataLossWarnModal").modal();
     }

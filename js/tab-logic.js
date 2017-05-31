@@ -15,19 +15,22 @@ function validIntroStatement(){
 
 
 function validIntroTable(){
-    gLastError = _("This tab switch is not allowed");
+    gLastError =  _("This tab switch is not allowed.");
+    gLastError += " ";
+    gLastError += _("You must declare inputs and outputs first.");
     return ValidationStatus.DISALLOWED;
 }
 
 
 function validIntroVK(){
-    gLastError = _("This tab switch is not allowed");
+    gLastError = _("This tab switch is not allowed.");
+    
     return ValidationStatus.DISALLOWED;
 }
 
 
 function validIntroCircuit(){
-    gLastError = _("This tab switch is not allowed");
+    gLastError = _("This tab switch is not allowed.");
     return ValidationStatus.DISALLOWED;
 }
 
@@ -60,12 +63,16 @@ function validStatementTable(){
 }
 
 function validStatementVK(){
-    gLastError = _("This tab switch is not allowed");
+    gLastError = _("This tab switch is not allowed.");
+    gLastError += " ";
+    gLastError += _("You must fill in the truth table first");
     return ValidationStatus.DISALLOWED;
 }
 
 function validStatementCircuit(){
-    gLastError = _("This tab switch is not allowed");
+    gLastError = _("This tab switch is not allowed.");
+    gLastError += " ";
+    gLastError += _("You must fill in the truth table and solve Karnaugh maps first.");
     return ValidationStatus.DISALLOWED;
 }
 
@@ -108,14 +115,16 @@ function validTableVK(){
         return ValidationStatus.ALLOWED;
     }
     else{
-        gLastError = _("You must fill the truth table before creating Karnaugh Maps from it");
+        gLastError = _("You must fill the truth table before creating Karnaugh Maps from it.");
         return ValidationStatus.DISALLOWED;
     }
 }
 
 
 function validTableCircuit(){
-    gLastError = _("This tab switch is not allowed");
+    gLastError = _("This tab switch is not allowed.");
+    gLastError += " ";
+    gLastError += _("You must solve Karnaugh maps first.");
     return ValidationStatus.DISALLOWED;
 }
 
@@ -277,6 +286,7 @@ function preopStatementStatement(){
 function preopStatementTable(){
     //Transfer title
     gSystemTitle = document.getElementById("tbTitle").value;
+    if(gSystemTitle == "") gSystemTitle = _("Untitled");
 
     //Clear and append table
     var truthTablePanel = document.getElementById("truthtable-panel");
@@ -509,10 +519,20 @@ function posopVKVK(){
 
 
 function posopVKCircuit(){
-    var realIn = ["realIn1","realIn2","realIn3","realIn4","realIn5","realIn6"];
-    var realOut = ["realOut1", "realOut2", "realOut3", "realOut4", "realOut5", "realOut6"];
-    var sysIn = ["a" , "b",  "c"];
-    var sysOut = ["b", "c" , "d"];
+    var realIn = [];
+    var realOut = [];
+    var sysIn = [];
+    var sysOut = [];
+
+    var j,k;
+    for(var i = j = k = 0; i<gPorts.length; i++) {
+        if(gPorts[i].type == "in"){
+            realIn[j++] = gPorts[i].portReprText;
+        }
+        else if(gPorts[i].type == "out") {
+            realOut[k++] = gPorts[i].portReprText;
+        }
+    }
 
     for(var i = 0; i<Object.keys(gInputHashmap).length; i++) {
         sysIn[i] = gInputHashmap[i];
@@ -650,6 +670,7 @@ function posopVKCircuit(){
                     $(this).addClass('ui-state-highlight').find('p').html('You got it!');
                     $(this).attr('full', 'true');
                     $(this).append(ui.draggable.css({position: 'static'}));
+                    gCorrespondenceHashmap[ui.draggable[0].innerText] = getPortByDescriptiveText($(this)[0].firstChild.innerHTML);
                 } else {
                     $('.droppable-in > p').html('Not that one!')
                     setTimeout(function(){ $('.droppable-in > p').html('Drop here'); }, 1000);
@@ -670,6 +691,7 @@ function posopVKCircuit(){
                     $(this).addClass('ui-state-highlight').find('p').html('You got it!');
                     $(this).attr('full', 'true');
                     $(this).append(ui.draggable.css({position: 'static'}));
+                    gCorrespondenceHashmap[ui.draggable[0].innerText] = getPortByDescriptiveText($(this)[0].firstChild.innerHTML);
                 } else {
                     $('.droppable-in > p').html('Not that one!')
                     setTimeout(function(){ $('.droppable-out > p').html('Drop here'); }, 1000);
@@ -683,7 +705,6 @@ function posopVKCircuit(){
     realIODiv.appendChild(realInDiv);
     realIODiv.appendChild(realOutDiv);
 
-    $("#btnOpenExternal").innerHTML += externalServiceActionName
 }
 
 function debugCreateP(text){

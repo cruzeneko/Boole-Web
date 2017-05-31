@@ -5,10 +5,13 @@ function receiveMessage(e) {
        interceptors[i](e.data);
 }
 
-function addNewInterceptor(var fun){
+function addNewInterceptor(fun){
     interceptors[interceptors.length] = fun;
 }
 
+function configureNewIntegration(config){
+    configure_integration(config);
+}
 
 function configureNewExercise( config ) {
     configure(config);

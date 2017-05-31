@@ -197,6 +197,7 @@ overflow:auo;
     height: 30px;
     text-align: center;
     vertical-align: center;
+    cursor: pointer;
 }
 
 .tv-th {
@@ -224,6 +225,7 @@ overflow:auo;
     border-radius: 10px; 
     display: table-cell;
     text-align:center;
+    cursor: pointer;
 }
 
 .draggable-out { 
@@ -234,6 +236,7 @@ overflow:auo;
     border-radius: 10px;
     text-align:center;  
     vertical-align: middle;
+    cursor: pointer;
 }
 
 .droppable-in { 
@@ -242,8 +245,11 @@ overflow:auo;
     padding: 0.5em; 
     float: left; 
     margin: 10px ; 
-    background-color: PaleGreen; 
+    background-color: white; 
     border-radius:10px;
+    border-style: dotted;
+    border-width: 3px;
+    border-color: green;
     text-alignment: center;
 }
 
@@ -253,6 +259,9 @@ overflow:auo;
     padding: 0.5em; 
     float: left; 
     margin: 10px; 
-    background-color: OrangeRed; 
+    background-color: white;
+    border-style: dotted;
+    border-width: 3px; 
+    border-color: red;
     border-radius:10px
 }

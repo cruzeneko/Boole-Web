@@ -478,31 +478,43 @@ function updateOutputStatus(elementid) {
 }
 
 function evaluateInputStatus(elementid) {
-    var idx = document.getElementById(elementid).getAttribute("idx");
-    gInputHashmap[idx] = document.getElementById(elementid).value;
+ var index = 0;
+    $(".inputform").each(function() {
+        gInputHashmap[index++] = this.value;
+    });
+
     gDefinedInputCount = 0;
     gDuplicatedInputs = false; //Assume correct;
-    for(var i = 0; i<=gDeclaredInputCount; i++){
-        if(gInputHashmap[i]!="" && gInputHashmap[i]!=null){
-            gDefinedInputCount+=1;
-        }
-        if(i!=idx){
-            gDuplicatedInputs = gDuplicatedInputs || (gInputHashmap[i] == document.getElementById(elementid).value);
+
+    for(var i = 0; i<Object.keys(gInputHashmap).length; i++){
+        if(gInputHashmap[i] != "" && typeof gInputHashmap[i] != "undefined" && gInputHashmap[i]!=null){
+            gDefinedInputCount++;
+            for(var j = 0; j<Object.keys(gInputHashmap).length; j++){
+                if(i!=j) {
+                    gDuplicatedInputs = gDuplicatedInputs || (gInputHashmap[i] == gInputHashmap[j])
+                }
+            }
         }
     }
 }
 
 function evaluateOutputStatus(elementid) {
-    var idx = document.getElementById(elementid).getAttribute("idx");
-    gOutputHashmap[idx] = document.getElementById(elementid).value;
+    var index = 0;
+    $(".outputform").each(function() {
+        gOutputHashmap[index++] = this.value;
+    });
+    
     gDefinedOutputCount = 0;
     gDuplicatedOutputs = false; //Assume correct;
-    for(var i = 0; i<=gDeclaredOutputCount; i++){
-        if(gOutputHashmap[i]!="" && gOutputHashmap[i]!=null){
-            gDefinedOutputCount+=1;
-        }
-        if(i!=idx){
-            gDuplicatedOutputs = gDuplicatedOutputs || (gOutputHashmap[i] == document.getElementById(elementid).value);
+
+    for(var i = 0; i<Object.keys(gOutputHashmap).length; i++){
+        if(gOutputHashmap[i] != "" && typeof gOutputHashmap[i] != "undefined" && gOutputHashmap[i]!=null){
+            gDefinedOutputCount++;
+            for(var j = 0; j<Object.keys(gOutputHashmap).length; j++){
+                if(i!=j) {
+                    gDuplicatedOutputs = gDuplicatedOutputs || (gOutputHashmap[i] == gOutputHashmap[j])
+                }
+            }
         }
     }
 }
@@ -575,11 +587,11 @@ function reEvaluateSumOfProductsFormulae(truthTable) {
                     var thisVar = gInputHashmap[gDeclaredInputCount-1-k];
                         if( ( ( 1 << k ) & j ) != 0 ) {
                             //Conjunctive clause not inverted
-                            thisMinterm+=thisVar;
+                            thisMinterm+=thisVar + "~";
                         }
                         else {
                             //Conjunctive clause is inverted
-                            thisMinterm+=("\\overline{"+thisVar+"}");
+                            thisMinterm+=("\\overline{"+thisVar+"} ~");
                         }
                 }
                 sumOfMinterms += thisMinterm;
@@ -722,9 +734,15 @@ function setupInputOutputControlListeners() {
         if(inputs < max_in_fields-1){ //max input box allowed
             inputs++; //text box increment
             gDeclaredInputCount++;
-            $("#add_input_wrap").append('<div><input type="text" class="form-control" name="mytext[]" idx='+inputs+' id="input'+inputs+'"/><a href="#" id="inDelete'+inputs +'" class="remove_input">Eliminar</a></div>');
+            $("#add_input_wrap").append('<div><input type="text" class="form-control inputform" name="mytext[]" idx='+inputs+' id="input'+inputs+'"/><a href="#" id="inDelete'+inputs +'" class="remove_input">Delete</a></div>');
             localizeHTMLTag("inDelete"+inputs);
 	    addIndividualInputDataListener('input'+inputs);
+        }
+        else{
+            gLastError = _("You have reached the maximum number of inputs.");
+            gLastError += " "
+            gLastError += _("Try deleting an input first.");
+            modalMgr.displayInfoModal(_("Cannot add input!"), gLastError)
         }
     });
 
@@ -735,19 +753,25 @@ function setupInputOutputControlListeners() {
         if(outputs < max_out_fields-1){ //max input box allowed
             outputs++; //text box increment
             gDeclaredOutputCount++;
-            $("#add_output_wrap").append('<div><input type="text" class="form-control" name="mytext[]" idx='+outputs+' id="output'+outputs+'"/><a href="#" id="outDelete'+outputs +'" class="remove_output">Delete</a></div>');
+            $("#add_output_wrap").append('<div><input type="text" class="form-control outputform" name="mytext[]" idx='+outputs+' id="output'+outputs+'"/><a href="#" id="outDelete'+outputs +'" class="remove_output">Delete</a></div>');
             localizeHTMLTag("outDelete"+outputs);
 	    addIndividualOutputDataListener('output'+outputs);
+        }
+        else{
+            gLastError = _("You have reached the maximum number of outputs.");
+            gLastError += " "
+            gLastError += _("Try deleting an output first.");
+            modalMgr.displayInfoModal(_("Cannot add output!"), gLastError)
         }
     });
 
     
     $(out_wrapper).on("click",".remove_input", function(e){ //user click on remove text
-        e.preventDefault(); $(this).parent('div').remove(); gInputHashmap[inputs]=null; inputs--; gDeclaredInputCount--;
+        e.preventDefault(); $(this).parent('div').remove(); delete gInputHashmap[inputs]; inputs--; gDeclaredInputCount--;
     })
 
     $(in_wrapper).on("click",".remove_output", function(e){ //user click on remove text
-        e.preventDefault(); $(this).parent('div').remove(); gOutputHashmap[outputs]=null; outputs--; gDeclaredOutputCount--; 
+        e.preventDefault(); $(this).parent('div').remove(); delete gOutputHashmap[outputs]; outputs--; gDeclaredOutputCount--; 
     })
 }
 
@@ -756,33 +780,32 @@ function getAssociatedPortByCorrespondence( port, correspondence) {
     else return correspondence[port];
 }
 
-function generateVHDLInputs(inports) {
-    var ret;
+function generateVHDLPorts(inports, inoutports, outports) {
+    var ret = "";
 
     if(typeof inports != "undefined")
     for(var i=0;i<inports.length;i++){
         ret+=            "\t\t";
-        ret+=                    inports[i]+" : in std_logic;\n";
+        ret+=                    inports[i]+" : in std_logic";
+        if(i !=inports.length-1 || (inoutports.length != 0 || outports.length != 0))ret+=";"
+        ret+="\n";
     }
-    return ret;
-}
 
-function generateVHDLInouts(inoutports){
-    var ret = "";
     if(typeof inoutports != "undefined")
         for(var i=0;i<inoutports.length;i++){
             ret+=            "\t\t";
-            ret+=                    inoutports[i]+" : inout std_logic;\n";
+            ret+=                    inoutports[i]+" : inout std_logic";
+            if(i != inports.length-1 || inoutports.length != 0)ret+=";"
+            ret+="\n";
         }
-    return ret;
-}
 
-function generateVHDLOutputs(outports){
-    var ret = "";
     if(typeof outports != "undefined")
         for(var i=0;i<outports.length;i++){
             ret+=            "\t\t";
-            ret+=                    outports[i]+" : out std_logic;\n";
+            ret+=                    outports[i]+" : out std_logic";
+            if(i != outports.length-1)
+                ret+=";"
+            ret+="\n";
         }
     return ret;
 }
@@ -795,7 +818,7 @@ function generateVHDLOutputs(outports){
 // and an optional correspondence from the ports in the expression to the ports that
 // will appear in the program.
 
-function generateVHDLProgramForExpressions(expr, portCorrespondence, entityName, inoutports, inports, outports){
+function generateVHDLProgramForExpressions(outputToBooleanExpressionHashmap, portCorrespondence, entityName, inoutports, inports, outports){
     var ret = "";
 
     if(typeof inoutports == "undefined" && 
@@ -814,45 +837,32 @@ function generateVHDLProgramForExpressions(expr, portCorrespondence, entityName,
     ret +=               "\t";
     ret +=                   "Port (\n";
     
-    ret+= generateVHDLInputs(inports);
-    ret+= generateVHDLInouts(inputports);
-    ret+= generateVHDLOutputs(outports);
-
-    if(typeof inoutports != "undefined")
-    for(var i=0;i<inoutports.length;i++){
-        ret+=            "\t\t";
-        ret+=                    inoutports[i]+" : inout std_logic;\n";
-    } 
-
-    if(typeof outports != "undefined")
-    for(var i=0;i<outports.length;i++){
-        ret+=            "\t\t";
-        ret+=                    outports[i]+" : out std_logic;\n";
-    }
+    ret+= generateVHDLPorts(inports, inoutports, outports);
 
     ret +=               "\t\t";
     ret +=                       ");\n";
     ret +=               "end "+ entityName + ";\n";                         
     ret +=               "\n\n";
 
-    ret +=               "architecture behavioral of " + entityName + " is\n";
+    ret +=               "architecture "+gSystemArchitectureType+" of " + entityName + " is\n";
     ret +=               "\t";
     ret +=                   "begin\n";
 
-    for(var i=0; i<gBooleanExpressionStrings.length;i++){
-        var expr = gBooleanExpressionStrings[i];
+    for(var currentOutput in outputToBooleanExpressionHashmap){
+        currentExpr = outputToBooleanExpressionHashmap[currentOutput];
         ret +=            "\t\t";
-        ret +=            outports[i] + "<=" + parseFormulaToVHDLNotations(expr, inports , gOutputHashmap[i]);
-        ret +=            "\n";
+	ret +=            currentOutput + "<=" + parseFormulaToVHDLNotations(currentExpr, inports , currentOutput);
+        ret +=            ";\n";
     }
 
-    ret += "end behavioral;"
+    ret += "end "+gSystemArchitectureType+";"
     return ret;
 }
 
 function createUnlinkedVHDL(){
     var inPorts = [];
     var outPorts = [];
+    var outputToExprHashmap = {};
 
     for(var i=0; i<Object.keys(gInputHashmap).length; i++){
         inPorts[i] = gInputHashmap[i];
@@ -860,8 +870,11 @@ function createUnlinkedVHDL(){
     for(var i=0; i<Object.keys(gOutputHashmap).length; i++){
         outPorts[i] = gOutputHashmap[i];
     }
+    for(var i=0; i<Object.keys(gOutputHashmap).length; i++){
+        outputToExprHashmap[gOutputHashmap[i]] = gBooleanExpressionStrings[i];
+    }
 
-    vhdlCode = generateVHDLProgramForExpressions(gBooleanExpressionStrings, 
+    vhdlCode = generateVHDLProgramForExpressions(outputToExprHashmap, 
     				                 undefined,
                                                  gSystemTitle.replace(/ /g,''),
                                                  undefined,
@@ -872,9 +885,70 @@ function createUnlinkedVHDL(){
 
 }
 
+function createLinkedVHDL(){
+    var inPorts = new Set();
+    var inoutPorts = new Set();
+    var outPorts = new Set();
+    var ins = [];
+    var outs = [];
+    var outputToExprHashmap = {};
+
+    for(var i=0; i<Object.keys(gInputHashmap).length; i++){
+        ins[i] = gInputHashmap[i];
+    }
+    for(var i=0; i<Object.keys(gOutputHashmap).length; i++){
+        outs[i] = gOutputHashmap[i];
+    }
+
+    for(var i = 0; i<gPorts.length; i++) {
+        processPortForSelfModifications(gPorts[i]);
+    }
+
+    //Inputs in the hashmap are to be declared as inputs in VHDL. Same applies for outputs and inouts.
+    for (var key in gCorrespondenceHashmap) {
+        var portType = getExternallyDefinedPortType(gCorrespondenceHashmap[key]);
+        if(portType == "in") inPorts.add(gCorrespondenceHashmap[key]);
+        else if(portType == "inout") inoutPorts.add(gCorrespondenceHashmap[key]);
+        else if(portType == "out") outPorts.add(gCorrespondenceHashmap[key]);
+    }
+
+    //Now inputs/outputs that MUST be declared and weren't used must also be transferred.
+    for(var i = 0; i<gPorts.length; i++) {
+        var currentPortName = gPorts[i].portName;
+        if(gPorts[i].InOutIfUnused && !(currentPortName in inPorts || currentPortName in outPorts || currentPortName in inoutPorts )){
+            inoutPorts.add(currentPortName);
+        }
+    }
+
+    //Now re-generate the boolean expression strings applying the correspondence
+    for(var i = 0; i < gBooleanExpressionStrings.length; i++) {
+        outputToExprHashmap[gCorrespondenceHashmap[outs[i]]] = substituteByCorrespondenceInFormula(gBooleanExpressionStrings[i], ins, outs)
+    }
+
+    for(var i = 0; i<gPorts.length; i++){
+        if(gPorts[i].alwaysGenerate){
+            var portType = gPorts[i].type;
+            if(portType == "in") inPorts.add(gPorts[i].portName);
+            else if(portType == "inout") inoutPorts.add(gPorts[i].portName);
+            else if(portType == "out") outPorts.add(gPorts[i].portName);
+        }
+    }
+
+    vhdlCode = generateVHDLProgramForExpressions(outputToExprHashmap,
+                                                 undefined,
+                                                 gSystemArchitectureName.replace(/ /g,''),
+                                                 Array.from(inoutPorts),
+                                                 Array.from(inPorts),
+                                                 Array.from(outPorts)
+                                      );
+
+    return vhdlCode;
+
+}
+
 function downloadUnlinkedVHDL() {
-    var vhdlCode = createUnlinkedVHDL(undefined);
-    triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhdl" , vhdlCode);
+    var vhdlCode = createUnlinkedVHDL();
+    triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhd" , vhdlCode);
 }
 
 function triggerStringAsFileDownload(filename, text) {
@@ -891,11 +965,16 @@ function triggerStringAsFileDownload(filename, text) {
 }
 
 function downloadLinkedVHDL(){
-
+    var vhdlCode = createLinkedVHDL();
+    triggerStringAsFileDownload( gSystemTitle.replace(/ /g,'')+".vhd" , vhdlCode);
 }
 
-function openExternalServiceIfAvailable(){
-    
+function callExternalServiceIfAvailable(){
+    var msg = new Object();
+    msg.type = "externalPressed";
+    msg.seq = gExternalServiceTriggeredCount++;
+    msg.vhdl = createLinkedVHDL();
+    parent.postMessage(JSON.stringify(msg),"*");
 }
 
 
@@ -914,6 +993,48 @@ function parseFormulaToVHDLNotations(expr, ins, outs) {
 
     return VHDLParser.nextRecursionLevel(expr, ins, outs);
 
+}
+
+function substituteByCorrespondenceInFormula(expr, ins, outs) {
+    var SubstInnerParser = new ExprSubstParser();
+    var SubstParser = new ExprGenericParser(SubstInnerParser);
+    SubstInnerParser.init(SubstParser);
+
+    return SubstParser.nextRecursionLevel(expr, ins, outs);
+}
+
+function getPortByDescriptiveText(portText) {
+    for(var i = 0; i< gPorts.length; i++) {
+        if(gPorts[i].portReprText == portText)
+            return gPorts[i].portName;
+    }
+}
+
+function getExternallyDefinedPortType(portName) {
+    for(var i = 0; i< gPorts.length; i++) {
+        if(gPorts[i].portName == portName)
+            return gPorts[i].type;
+    }
+}
+
+function mustBeInoutIfUnused(portName){
+    for(var i = 0; i< gPorts.length; i++) {
+        if(gPorts[i].portName == portName)
+            return gPorts[i].InOutIfUnused;
+    }
+}
+
+function isToBeAlwaysGenerated(portName) {
+    for(var i = 0; i< gPorts.length; i++) {
+        if(gPorts[i].portName == portName)
+            return gPorts[i].alwaysGenerate;
+    }
+}
+
+function processPortForSelfModifications(port) {
+    if(port.setOutToInout && port.type == "out"){
+        port.type = "inout";
+    }
 }
 
 exports._test = {

@@ -336,7 +336,7 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
     parent.appendChild(svg);
 
     svg.onmousedown = function (event) {
-      canvasMouseDown(event);
+      //canvasMouseDown(event);
       //console.log("mouse down");
       event.stopPropagation();
     };
@@ -346,7 +346,7 @@ function KarnaughMap(parentDivId, parentIntermediateDivId, qmcRef, inputVarCount
       event.stopPropagation();
     };
     svg.onmouseup = function (event) {
-      canvasMouseUp(event);
+      //canvasMouseUp(event);
       //console.log("mouse up");
       event.stopPropagation();
     };

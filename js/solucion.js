@@ -12,6 +12,11 @@ var gSystemTitle;
 var currentTab = "Intro";
 var truthTable;
 var modalMgr = new ModalManager();
+var gPorts = [];
+var gCorrespondenceHashmap = {}
+var gExternalServiceTriggeredCount = 0;
+var gSystemArchitectureType = "behavioral";
+var gSystemArchitectureName = "Untitled";
 
 var validationFunctions = {
                                 "Intro":     {"Intro":validIntroIntro,     "Statement":validIntroStatement,     "Table":validIntroTable,       "VK": validIntroVK,       "Circuit":validIntroCircuit},
@@ -117,3 +122,10 @@ $(document).ready(function() {
 	setupEventListeners();
 	
 });
+
+var getUrlParam = function(name, w){
+    w = w || document;
+    var rx = new RegExp('[\&|\?]'+name+'=([^\&\#]+)'),
+        val = w.location.search.match(rx);
+    return !val ? '':val[1];
+}
