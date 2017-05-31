@@ -1039,7 +1039,7 @@ function isToBeAlwaysGenerated(portName) {
 
 function processPortForSelfModifications(port) {
     if(port.setOutToInout && port.portType == "out"){
-        port.portType = "inout";
+        port.type = "inout";
     }
 }
 
