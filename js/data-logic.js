@@ -780,29 +780,25 @@ function getAssociatedPortByCorrespondence( port, correspondence) {
     else return correspondence[port];
 }
 
-function generateVHDLInputs(inports) {
+function generateVHDLPorts(inports, inoutports, outports) {
     var ret = "";
 
     if(typeof inports != "undefined")
     for(var i=0;i<inports.length;i++){
         ret+=            "\t\t";
-        ret+=                    inports[i]+" : in std_logic;\n";
+        ret+=                    inports[i]+" : in std_logic";
+        if(i !=inports.length-1 || (inoutports.length != 0 || outports.length != 0))ret+=";"
+        ret+="\n";
     }
-    return ret;
-}
 
-function generateVHDLInouts(inoutports){
-    var ret = "";
     if(typeof inoutports != "undefined")
         for(var i=0;i<inoutports.length;i++){
             ret+=            "\t\t";
-            ret+=                    inoutports[i]+" : inout std_logic;\n";
+            ret+=                    inoutports[i]+" : inout std_logic";
+            if(i != inports.length-1 || inoutports.length != 0)ret+=";"
+            ret+="\n";
         }
-    return ret;
-}
 
-function generateVHDLOutputs(outports){
-    var ret = "";
     if(typeof outports != "undefined")
         for(var i=0;i<outports.length;i++){
             ret+=            "\t\t";
@@ -841,9 +837,7 @@ function generateVHDLProgramForExpressions(outputToBooleanExpressionHashmap, por
     ret +=               "\t";
     ret +=                   "Port (\n";
     
-    ret+= generateVHDLInputs(inports);
-    ret+= generateVHDLInouts(inoutports);
-    ret+= generateVHDLOutputs(outports);
+    ret+= generateVHDLPorts(inports, inoutports, outports);
 
     ret +=               "\t\t";
     ret +=                       ");\n";
