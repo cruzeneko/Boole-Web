@@ -705,7 +705,6 @@ function posopVKCircuit(){
     realIODiv.appendChild(realInDiv);
     realIODiv.appendChild(realOutDiv);
 
-    $("#btnOpenExternal").innerHTML += externalServiceActionName
 }
 
 function debugCreateP(text){
