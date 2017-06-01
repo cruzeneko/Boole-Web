@@ -780,11 +780,15 @@ function getAssociatedPortByCorrespondence( port, correspondence) {
     else return correspondence[port];
 }
 
+
+
 function generateVHDLPorts(inports, inoutports, outports) {
     var ret = "";
+    var total_ports = inports.length + inoutports.length + outports.length;
+    var port_count = 0;
 
     if(typeof inports != "undefined")
-    for(var i=0;i<inports.length;i++){
+    for(var i=0;i<inports.length;i++,port_count++){
         ret+=            "\t\t";
         ret+=                    inports[i]+" : in std_logic";
         if(i !=inports.length-1 || (inoutports.length != 0 || outports.length != 0))ret+=";"
@@ -792,23 +796,23 @@ function generateVHDLPorts(inports, inoutports, outports) {
     }
 
     if(typeof inoutports != "undefined")
-        for(var i=0;i<inoutports.length;i++){
+        for(var i=0;i<inoutports.length;i++,port_count++){
             ret+=            "\t\t";
             ret+=                    inoutports[i]+" : inout std_logic";
-            if(i != inports.length-1 || inoutports.length != 0)ret+=";"
+            if(port_count < total_ports - 1) ret+=";";
             ret+="\n";
         }
 
     if(typeof outports != "undefined")
-        for(var i=0;i<outports.length;i++){
+        for(var i=0;i<outports.length;i++,port_count++){
             ret+=            "\t\t";
             ret+=                    outports[i]+" : out std_logic";
-            if(i != outports.length-1)
-                ret+=";"
+            if(port_count < total_ports - 1) ret += ";";
             ret+="\n";
         }
     return ret;
 }
+
 
 
 // Generates the VHDL program text for an expression expressed in prefix notation

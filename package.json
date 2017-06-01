@@ -11,6 +11,7 @@
     "esprima": "^2.7.1",
     "i18n": "^0.8.3",
     "logidrom": "git://github.com/cruzeneko/logidrom.git#1df49613399214eab3d045d974b025f3e4172c62",
+    "mocha": "^3.4.1",
     "onml": "^0.3.1",
     "quill": "^1.2.4"
   },
